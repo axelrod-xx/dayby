@@ -1,4 +1,5 @@
 import { requestSignedVideoUpload, uploadVideoToSignedUrl } from '@/src/features/video/uploadService';
+import { env } from '@/src/lib/env';
 import { requireSupabase } from '@/src/lib/supabase';
 
 import type { GroupWithMembership } from '../groups/types';
@@ -68,6 +69,14 @@ async function createUploadKey(input: {
   uri: string;
   sizeBytes?: number;
 }): Promise<string> {
+  if (!env.enableR2Uploads) {
+    if (__DEV__) {
+      return `local-dev/${uuid()}.mp4`;
+    }
+
+    throw new Error('R2 uploads are disabled until native 2-second trimming is enabled.');
+  }
+
   try {
     const signed = await requestSignedVideoUpload({
       contentType: 'video/mp4',

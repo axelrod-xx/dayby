@@ -24,6 +24,7 @@ Phase 1: Auth and Profile foundation.
 - Phase 3 trim preview placeholder route.
 - Phase 4 R2 upload/download signed URL Edge Function stubs.
 - Phase 4 post-to-groups flow with single asset and multiple daily posts.
+- R2 upload guard added: uploads stay disabled until real native 2-second trimming is implemented.
 - Phase 4+ tables for assets, daily posts, votes, winners, generated videos, activity events, reports, and subscriptions.
 - Phase 5 Daily Reel fetch/display route.
 - Phase 6 Vote route and one-vote insert flow.
@@ -56,6 +57,7 @@ Phase 1: Auth and Profile foundation.
 
 - Validate Apple and Google providers after account setup.
 - Add actual native 2-second trimming implementation.
+- After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Deploy R2 Edge Functions after secrets are configured.
 - Add export/save/share for Daily Reel and Monthly Memory.
 - Add actual server-generated Daily/Monthly MP4 cache later.

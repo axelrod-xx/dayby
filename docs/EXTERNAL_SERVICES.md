@@ -48,6 +48,14 @@ Supabase Edge Function stubs added:
 
 They are not deployed yet because R2 server-side secrets are not configured.
 
+Mobile uploads are also guarded by:
+
+```bash
+EXPO_PUBLIC_ENABLE_R2_UPLOADS=false
+```
+
+Keep this `false` until native 2-second trimming outputs a real 2-second MP4. This prevents accidentally uploading the original 10-second capture.
+
 ## GitHub
 
 GitHub repository is not created yet.
