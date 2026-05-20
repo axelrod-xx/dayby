@@ -34,6 +34,7 @@ Phase 8: Preservation and archive foundation.
 - Phase 8 group activity RPC for post/view/download/vote/open/archive_restore.
 - Phase 8 Archive route for quiet and archived groups.
 - Group list now separates active groups from quiet/archive candidates.
+- Phase 9 report form and group detail safety entry point.
 - External service inventory documented.
 
 ## Verified
@@ -53,6 +54,7 @@ Phase 8: Preservation and archive foundation.
 - `/vote/demo/2026-05-20` returns HTTP 200 and contains `Best 2 sec`
 - `/monthly/demo/2026/5` returns HTTP 200 and contains `moments`
 - `/archive` returns HTTP 200 and contains `Archive`
+- `/safety/report?groupId=demo` returns HTTP 200 and contains `Send report`
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
 - Supabase migrations present remotely: `decide_daily_winner_rpc`

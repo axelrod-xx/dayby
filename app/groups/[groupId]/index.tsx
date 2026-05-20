@@ -128,6 +128,20 @@ export default function GroupDetailScreen() {
       </View>
 
       <View style={styles.panel}>
+        <Text style={styles.panelTitle}>Safety</Text>
+        <Text style={styles.panelText}>Report a moment or group issue without calling anyone out.</Text>
+        <View style={styles.action}>
+          <Link
+            href={{ pathname: '/safety/report', params: { groupId: group.id } } as unknown as Href}
+            asChild>
+            <PrimaryButton onPress={() => undefined} variant="light">
+              Report something
+            </PrimaryButton>
+          </Link>
+        </View>
+      </View>
+
+      <View style={styles.panel}>
         <Text style={styles.panelTitle}>Monthly Memory</Text>
         <Text style={styles.panelText}>The kept moments from this month, in order.</Text>
         <View style={styles.action}>
