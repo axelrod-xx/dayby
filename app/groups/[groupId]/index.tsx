@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Link, type Href, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -10,6 +10,7 @@ import {
   listGroupMembers,
 } from '@/src/features/groups/groupService';
 import type { GroupInvite, GroupMemberProfile, GroupWithMembership } from '@/src/features/groups/types';
+import { previousDateString } from '@/src/features/reels/reelService';
 
 export default function GroupDetailScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
@@ -88,6 +89,28 @@ export default function GroupDetailScreen() {
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Today</Text>
         <Text style={styles.panelText}>Capture flow comes next: shoot 10 sec, keep 2 sec.</Text>
+        <View style={styles.action}>
+          <Link href={'/camera' as Href} asChild>
+            <PrimaryButton onPress={() => undefined}>Capture today</PrimaryButton>
+          </Link>
+        </View>
+      </View>
+
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>Yesterday</Text>
+        <Text style={styles.panelText}>Watch the daily reel, then choose the 2 seconds worth keeping.</Text>
+        <View style={styles.action}>
+          <Link
+            href={{
+              pathname: '/daily/[groupId]/[date]',
+              params: { groupId: group.id, date: previousDateString() },
+            }}
+            asChild>
+            <PrimaryButton onPress={() => undefined} variant="light">
+              Open Daily Reel
+            </PrimaryButton>
+          </Link>
+        </View>
       </View>
 
       <View style={styles.panel}>

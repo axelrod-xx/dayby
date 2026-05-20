@@ -4,8 +4,8 @@
 
 ## Supabase
 
-1. Supabase Dashboardでpublishable keyを取得する。
-2. ローカルの`.env.local`に以下を入れる。
+1. publishable keyはローカルの`.env.local`に設定済みです。
+2. 必要に応じて本番用キーへ差し替えてください。
 
 ```bash
 EXPO_PUBLIC_SUPABASE_URL=https://doupguwwpshyjdhsfgtr.supabase.co
@@ -57,9 +57,7 @@ R2_BUCKET=dayby
 
 ## GitHub
 
-1. GitHubで空のrepository `dayby` を作成する。
-2. 作成後、repository URLをこちらに共有する。
-3. こちらで`git remote add origin ...`と`git push`を行う。
+GitHub repository `axelrod-xx/dayby` はremote設定済みです。push前には必ず秘密情報スキャンと`git status --ignored`確認を行います。
 
 ## Values Needed Locally / ローカルに必要な値
 

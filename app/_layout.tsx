@@ -61,6 +61,9 @@ function RootLayoutNav() {
           <Stack.Screen name="groups/[groupId]/index" options={{ headerShown: false }} />
           <Stack.Screen name="camera/index" options={{ headerShown: false }} />
           <Stack.Screen name="trim/index" options={{ headerShown: false }} />
+          <Stack.Screen name="post/index" options={{ headerShown: false }} />
+          <Stack.Screen name="daily/[groupId]/[date]" options={{ headerShown: false }} />
+          <Stack.Screen name="vote/[groupId]/[date]" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>

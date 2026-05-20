@@ -22,7 +22,7 @@ EXPO_PUBLIC_SUPABASE_URL=https://doupguwwpshyjdhsfgtr.supabase.co
 EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 ```
 
-The publishable key must be copied from the Supabase dashboard. Do not use the service role key in the app.
+The publishable key has been added to local `.env.local` for development. Do not use the service role key in the app.
 
 ## Cloudflare R2
 
@@ -51,11 +51,8 @@ They are not deployed yet because R2 server-side secrets are not configured.
 ## GitHub
 
 GitHub repository is not created yet.
+GitHub repository:
 
-Until the remote exists, use local Git commits. After creating the remote repository, add it with:
-
-```bash
-git remote add origin <repo-url>
-git branch -M main
-git push -u origin main
-```
+- `https://github.com/axelrod-xx/dayby.git`
+- Local branch: `master`
+- Remote tracking: `origin/master`

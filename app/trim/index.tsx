@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { type Href, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
@@ -7,6 +7,7 @@ import { PrimaryButton } from '@/src/components/PrimaryButton';
 
 export default function TrimScreen() {
   const { uri, muted } = useLocalSearchParams<{ uri?: string; muted?: string }>();
+  const router = useRouter();
   const [selectedStart] = useState(0);
   const player = useVideoPlayer(uri ?? '', (instance) => {
     instance.loop = true;
@@ -30,8 +31,12 @@ export default function TrimScreen() {
         </Text>
       </View>
 
-      <PrimaryButton disabled onPress={() => undefined}>
-        Continue to groups soon
+      <PrimaryButton
+        disabled={!uri}
+        onPress={() =>
+          router.push({ pathname: '/post', params: { uri: uri ?? '', muted: muted ?? '0' } } as unknown as Href)
+        }>
+        Choose groups
       </PrimaryButton>
     </View>
   );
