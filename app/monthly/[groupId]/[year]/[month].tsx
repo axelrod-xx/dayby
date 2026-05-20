@@ -2,12 +2,13 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { ExportActions } from '@/src/features/export/ExportActions';
+import { recordGroupActivity } from '@/src/features/groups/groupService';
 import {
   calculateMonthlyHighlight,
   listMonthlyMoments,
   type MonthlyMoment,
 } from '@/src/features/monthly/monthlyService';
-import { recordGroupActivity } from '@/src/features/groups/groupService';
 
 const monthName = (year: number, month: number) =>
   new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
@@ -73,6 +74,8 @@ export default function MonthlyMemoryScreen() {
           <Text style={styles.made}>made with dayby</Text>
         </View>
       ) : null}
+
+      {params.groupId ? <ExportActions groupId={params.groupId} videoUri={null} /> : null}
     </ScrollView>
   );
 }

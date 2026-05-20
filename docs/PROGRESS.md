@@ -41,6 +41,7 @@ Phase 8: Preservation and archive foundation.
 - Phase 8 lifecycle RPC for Active / Quiet / Archived / Memory Active / Dormant transitions.
 - EAS build profiles added for iOS/Android development, preview, and production.
 - Local tracked-file secret scanner added.
+- Daily Reel and Monthly Memory export controls added with save/share hooks.
 - External service inventory documented.
 
 ## Verified
@@ -64,6 +65,7 @@ Phase 8: Preservation and archive foundation.
 - `/monthly/demo/2026/5` returns HTTP 200 and contains `moments`
 - `/archive` returns HTTP 200 and contains `Archive`
 - `/safety/report?groupId=demo` returns HTTP 200 and contains `Send report`
+- Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
 - Supabase migrations present remotely: `decide_daily_winner_rpc`

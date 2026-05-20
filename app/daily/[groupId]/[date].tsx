@@ -4,6 +4,7 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 're
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
+import { ExportActions } from '@/src/features/export/ExportActions';
 import { recordGroupActivity } from '@/src/features/groups/groupService';
 import { listDailyMoments, type DailyMoment } from '@/src/features/reels/reelService';
 
@@ -78,6 +79,8 @@ export default function DailyReelScreen() {
           Vote for yesterday
         </PrimaryButton>
       </Link>
+
+      {groupId ? <ExportActions groupId={groupId} videoUri={null} /> : null}
     </ScrollView>
   );
 }
