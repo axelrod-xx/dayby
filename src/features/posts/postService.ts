@@ -4,6 +4,7 @@ import { requireSupabase } from '@/src/lib/supabase';
 
 import { recordGroupActivity } from '../groups/groupService';
 import type { GroupWithMembership } from '../groups/types';
+import { assertTwoSecondUploadReady } from '../video/videoProcessingService';
 
 export type PostableGroup = GroupWithMembership & {
   posted_today: boolean;
@@ -15,6 +16,10 @@ type CreatePostsInput = {
   hasAudio: boolean;
   capturedAt: string;
   sizeBytes?: number;
+  trimStartMs: number;
+  trimDurationMs: number;
+  isNativeTrimmed: boolean;
+  processedAt?: string | null;
 };
 
 const uuid = () => {
@@ -112,6 +117,11 @@ export async function createDailyPosts(input: CreatePostsInput) {
     throw new Error('Choose at least one group.');
   }
 
+  assertTwoSecondUploadReady({
+    isNativeTrimmed: input.isNativeTrimmed,
+    trimDurationMs: input.trimDurationMs,
+  });
+
   const r2Key = await createUploadKey({
     uri: input.uri,
     sizeBytes: input.sizeBytes,
@@ -126,6 +136,10 @@ export async function createDailyPosts(input: CreatePostsInput) {
       has_audio: input.hasAudio,
       captured_at: input.capturedAt,
       size_bytes: input.sizeBytes ?? null,
+      trim_start_ms: input.trimStartMs,
+      trim_duration_ms: input.trimDurationMs,
+      is_native_trimmed: input.isNativeTrimmed,
+      processed_at: input.processedAt ?? null,
     })
     .select('id')
     .single();

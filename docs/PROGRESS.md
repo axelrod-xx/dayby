@@ -35,6 +35,9 @@ Phase 8: Preservation and archive foundation.
 - Phase 8 Archive route for quiet and archived groups.
 - Group list now separates active groups from quiet/archive candidates.
 - Phase 9 report form and group detail safety entry point.
+- Phase 3/4 trim metadata contract: selected start, 2-second duration, native-trim flag, and upload guard.
+- Phase 3 Trim screen now requires processing before choosing groups.
+- Phase 4 Post screen carries trim metadata into `video_assets`.
 - External service inventory documented.
 
 ## Verified
@@ -50,6 +53,8 @@ Phase 8: Preservation and archive foundation.
 - `/groups/join` returns HTTP 200 and contains `Invite code`
 - `/camera` returns HTTP 200 and contains `Camera`
 - `/post` returns HTTP 200 and contains `Post to groups`
+- `/trim?uri=&muted=0` returns HTTP 200 and contains `Process 2 sec`
+- `/post?uri=local-dev/test.mp4&muted=0&trimStartMs=0&trimDurationMs=2000&isNativeTrimmed=0` returns HTTP 200 and shows dev upload guard copy
 - `/daily/demo/2026-05-20` returns HTTP 200 and contains `Daily Reel`
 - `/vote/demo/2026-05-20` returns HTTP 200 and contains `Best 2 sec`
 - `/monthly/demo/2026/5` returns HTTP 200 and contains `moments`
@@ -59,6 +64,7 @@ Phase 8: Preservation and archive foundation.
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
 - Supabase migrations present remotely: `decide_daily_winner_rpc`
 - Supabase migrations present remotely: `record_group_activity_rpc`
+- Supabase migrations present remotely: `add_trim_metadata`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -67,6 +73,7 @@ Phase 8: Preservation and archive foundation.
 - Validate Apple and Google providers after account setup.
 - Use dev email sign-in while Apple/Google provider setup is pending.
 - Add actual native 2-second trimming implementation.
+- Choose and wire native video processing library inside Expo Dev Client.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Deploy R2 Edge Functions after secrets are configured.
 - Add export/save/share for Daily Reel and Monthly Memory.

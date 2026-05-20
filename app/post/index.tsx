@@ -8,7 +8,14 @@ import { createDailyPosts, listPostableGroups, type PostableGroup } from '@/src/
 
 export default function PostToGroupsScreen() {
   const router = useRouter();
-  const { uri, muted } = useLocalSearchParams<{ uri?: string; muted?: string }>();
+  const { isNativeTrimmed, muted, processedAt, trimDurationMs, trimStartMs, uri } = useLocalSearchParams<{
+    isNativeTrimmed?: string;
+    muted?: string;
+    processedAt?: string;
+    trimDurationMs?: string;
+    trimStartMs?: string;
+    uri?: string;
+  }>();
   const [groups, setGroups] = useState<PostableGroup[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
@@ -53,6 +60,10 @@ export default function PostToGroupsScreen() {
         groupIds: Array.from(selectedIds),
         hasAudio: muted !== '1',
         capturedAt: new Date().toISOString(),
+        trimStartMs: Number(trimStartMs ?? 0),
+        trimDurationMs: Number(trimDurationMs ?? 2000),
+        isNativeTrimmed: isNativeTrimmed === '1',
+        processedAt: processedAt || null,
       });
       router.replace('/(tabs)/groups' as Href);
     } catch (error) {
@@ -70,8 +81,17 @@ export default function PostToGroupsScreen() {
       </View>
 
       <View style={styles.soundPill}>
-        <Text style={styles.soundText}>{muted === '1' ? 'Muted export' : 'Original sound'}</Text>
+        <Text style={styles.soundText}>
+          {muted === '1' ? 'Muted export' : 'Original sound'} · {Number(trimStartMs ?? 0) / 1000}s start
+        </Text>
       </View>
+
+      {isNativeTrimmed !== '1' ? (
+        <View style={styles.notice}>
+          <Text style={styles.noticeTitle}>Dev preview</Text>
+          <Text style={styles.noticeCopy}>Native 2-second export is not enabled yet, so real uploads stay blocked.</Text>
+        </View>
+      ) : null}
 
       {loading ? (
         <ActivityIndicator color="#171615" />
@@ -110,7 +130,7 @@ export default function PostToGroupsScreen() {
       )}
 
       <PrimaryButton
-        disabled={selectedIds.size === 0 || availableGroups.length === 0}
+        disabled={selectedIds.size === 0 || availableGroups.length === 0 || !uri}
         loading={posting}
         onPress={() => void post()}>
         Post {selectedIds.size > 0 ? `to ${selectedIds.size}` : ''}
@@ -151,6 +171,24 @@ const styles = StyleSheet.create({
     color: '#3F3A35',
     fontSize: 13,
     fontWeight: '700',
+  },
+  notice: {
+    borderWidth: 1,
+    borderColor: '#E5E1DA',
+    borderRadius: 8,
+    padding: 14,
+    backgroundColor: '#FBFAF7',
+  },
+  noticeTitle: {
+    color: '#171615',
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  noticeCopy: {
+    marginTop: 6,
+    color: '#68625D',
+    fontSize: 14,
+    lineHeight: 20,
   },
   list: {
     gap: 10,
