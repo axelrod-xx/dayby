@@ -47,6 +47,7 @@ Phase 8: Preservation and archive foundation.
 - Expo/EAS project created and linked: `@ryoaxelrod/dayby`.
 - EAS public env vars configured for development, preview, and production.
 - Android development build started on EAS.
+- `react-native-video-trim` added for native 2-second trim/compress in development builds.
 - External service inventory documented.
 
 ## Verified
@@ -82,6 +83,7 @@ Phase 8: Preservation and archive foundation.
 - Unauthenticated Edge Function requests return `401`, confirming JWT protection.
 - EAS project info resolves for `@ryoaxelrod/dayby`.
 - Android development build is in progress: `7039ab95-79ab-4015-a8ff-9537900314c2`.
+- Native trim service typechecks with `react-native-video-trim` dynamic import.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -89,8 +91,9 @@ Phase 8: Preservation and archive foundation.
 
 - Validate Apple and Google providers after account setup.
 - Use dev email sign-in while Apple/Google provider setup is pending.
-- Add actual native 2-second trimming implementation.
-- Choose and wire native video processing library inside Expo Dev Client.
+- Run a fresh Android development build after native video trim dependency commit.
+- Verify native 2-second trim on Android development build.
+- Verify native 2-second trim on iOS development build after Apple signing is ready.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Run signed URL smoke test after Auth rate limit clears or after Apple/Google/dev session is available.
 - Check Android development build result and install the APK when complete.
