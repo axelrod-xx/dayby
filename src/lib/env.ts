@@ -3,6 +3,7 @@ export type PublicEnv = {
   supabasePublishableKey: string;
   apiBaseUrl: string;
   enableR2Uploads: boolean;
+  enableDevAuth: boolean;
 };
 
 const readOptional = (value: string | undefined) => value?.trim() ?? '';
@@ -12,6 +13,7 @@ export const env: PublicEnv = {
   supabasePublishableKey: readOptional(process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY),
   apiBaseUrl: readOptional(process.env.EXPO_PUBLIC_API_BASE_URL),
   enableR2Uploads: process.env.EXPO_PUBLIC_ENABLE_R2_UPLOADS === 'true',
+  enableDevAuth: process.env.EXPO_PUBLIC_ENABLE_DEV_AUTH === 'true',
 };
 
 export const envStatus = {

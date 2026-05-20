@@ -1,14 +1,18 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
 
 export default function SignInScreen() {
   const router = useRouter();
-  const { isSupabaseConfigured, signInWithApple, signInWithGoogle } = useAuth();
-  const [loadingProvider, setLoadingProvider] = useState<'apple' | 'google' | null>(null);
+  const { isDevAuthEnabled, isSupabaseConfigured, signInWithApple, signInWithEmailForDev, signInWithGoogle } =
+    useAuth();
+  const [loadingProvider, setLoadingProvider] = useState<'apple' | 'google' | 'dev' | null>(null);
+  const [showDevForm, setShowDevForm] = useState(false);
+  const [email, setEmail] = useState('dev@dayby.local');
+  const [password, setPassword] = useState('dayby-dev-password');
 
   const run = async (provider: 'apple' | 'google') => {
     try {
@@ -26,11 +30,24 @@ export default function SignInScreen() {
     }
   };
 
+  const runDev = async () => {
+    try {
+      setLoadingProvider('dev');
+      await signInWithEmailForDev({ email, password });
+      router.replace('/profile-setup');
+    } catch (error) {
+      Alert.alert('Dev sign in failed', error instanceof Error ? error.message : 'Please try again.');
+    } finally {
+      setLoadingProvider(null);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.wordmark}>dayby</Text>
-        <Text style={styles.copy}>Your group keeps one moment from each day.</Text>
+        <Text style={styles.copy}>Shoot 10 sec. Keep 2 sec.</Text>
+        <Text style={styles.subcopy}>Your group keeps the month together.</Text>
       </View>
 
       {!isSupabaseConfigured ? (
@@ -56,6 +73,42 @@ export default function SignInScreen() {
           variant="light">
           Continue with Google
         </PrimaryButton>
+
+        {isDevAuthEnabled ? (
+          <View style={styles.devPanel}>
+            <Pressable onPress={() => setShowDevForm((current) => !current)}>
+              <Text style={styles.devToggle}>{showDevForm ? 'Hide dev login' : 'Use dev login'}</Text>
+            </Pressable>
+            {showDevForm ? (
+              <View style={styles.devForm}>
+                <TextInput
+                  autoCapitalize="none"
+                  inputMode="email"
+                  onChangeText={setEmail}
+                  placeholder="dev@dayby.local"
+                  placeholderTextColor="#A49B91"
+                  style={styles.input}
+                  value={email}
+                />
+                <TextInput
+                  onChangeText={setPassword}
+                  placeholder="password"
+                  placeholderTextColor="#A49B91"
+                  secureTextEntry
+                  style={styles.input}
+                  value={password}
+                />
+                <PrimaryButton
+                  disabled={!isSupabaseConfigured || !email.trim() || password.length < 6}
+                  loading={loadingProvider === 'dev'}
+                  onPress={() => void runDev()}
+                  variant="light">
+                  Continue for testing
+                </PrimaryButton>
+              </View>
+            ) : null}
+          </View>
+        ) : null}
       </View>
     </View>
   );
@@ -81,8 +134,14 @@ const styles = StyleSheet.create({
   },
   copy: {
     color: '#57534E',
-    fontSize: 20,
-    lineHeight: 28,
+    fontSize: 24,
+    fontWeight: '800',
+    lineHeight: 30,
+  },
+  subcopy: {
+    color: '#78716C',
+    fontSize: 16,
+    lineHeight: 23,
   },
   notice: {
     borderWidth: 1,
@@ -104,5 +163,32 @@ const styles = StyleSheet.create({
   },
   actions: {
     gap: 12,
+  },
+  devPanel: {
+    marginTop: 6,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E1DA',
+    paddingTop: 16,
+  },
+  devToggle: {
+    color: '#78716C',
+    fontSize: 13,
+    fontWeight: '800',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+  },
+  devForm: {
+    gap: 10,
+    marginTop: 14,
+  },
+  input: {
+    minHeight: 50,
+    borderWidth: 1,
+    borderColor: '#D8D2C8',
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    color: '#171615',
+    fontSize: 16,
+    backgroundColor: '#FFFEFB',
   },
 });

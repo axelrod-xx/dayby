@@ -6,7 +6,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { createContext, type PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 
-import { envStatus } from '@/src/lib/env';
+import { env, envStatus } from '@/src/lib/env';
 import { requireSupabase, supabase } from '@/src/lib/supabase';
 
 import type { Profile } from './types';
@@ -22,7 +22,9 @@ type AuthContextValue = {
   profile: Profile | null;
   isProfileComplete: boolean;
   isSupabaseConfigured: boolean;
+  isDevAuthEnabled: boolean;
   refreshProfile: () => Promise<void>;
+  signInWithEmailForDev: (input: { email: string; password: string }) => Promise<void>;
   signInWithApple: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -137,7 +139,33 @@ export function AuthProvider({ children }: PropsWithChildren) {
       profile,
       isProfileComplete: Boolean(profile?.display_name),
       isSupabaseConfigured: envStatus.hasSupabase,
+      isDevAuthEnabled: env.enableDevAuth,
       refreshProfile,
+      signInWithEmailForDev: async ({ email, password }) => {
+        if (!env.enableDevAuth) {
+          throw new Error('Development email sign-in is disabled.');
+        }
+
+        const client = requireSupabase();
+        const normalizedEmail = email.trim().toLowerCase();
+        const { error: signInError } = await client.auth.signInWithPassword({
+          email: normalizedEmail,
+          password,
+        });
+
+        if (!signInError) {
+          return;
+        }
+
+        const { error: signUpError } = await client.auth.signUp({
+          email: normalizedEmail,
+          password,
+        });
+
+        if (signUpError) {
+          throw signUpError;
+        }
+      },
       signInWithApple: async () => {
         if (Platform.OS === 'ios') {
           const credential = await AppleAuthentication.signInAsync({

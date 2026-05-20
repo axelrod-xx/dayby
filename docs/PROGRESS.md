@@ -13,6 +13,7 @@ Phase 1: Auth and Profile foundation.
 - Cloudflare R2 `dayby` bucket confirmed.
 - Supabase client foundation with missing-config guard.
 - Apple and Google sign-in UI route.
+- Development email sign-in route gated by `EXPO_PUBLIC_ENABLE_DEV_AUTH`.
 - Native iOS Apple Sign In path.
 - Supabase OAuth browser path for Google and non-iOS Apple.
 - Profile setup route with display name and timezone persistence.
@@ -39,6 +40,7 @@ Phase 1: Auth and Profile foundation.
 - Expo Web starts on `http://localhost:8081`
 - `/` returns HTTP 200 and contains `dayby`
 - `/sign-in` returns HTTP 200 and contains `Continue with Apple`
+- `/sign-in` shows dev email login when `EXPO_PUBLIC_ENABLE_DEV_AUTH=true`
 - `/profile-setup` returns HTTP 200 and contains `Set your name`
 - `/groups/create` returns HTTP 200 and contains `Create group`
 - `/groups/join` returns HTTP 200 and contains `Invite code`
@@ -56,6 +58,7 @@ Phase 1: Auth and Profile foundation.
 ## In Progress / Next
 
 - Validate Apple and Google providers after account setup.
+- Use dev email sign-in while Apple/Google provider setup is pending.
 - Add actual native 2-second trimming implementation.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Deploy R2 Edge Functions after secrets are configured.

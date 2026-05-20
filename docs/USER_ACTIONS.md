@@ -1,44 +1,67 @@
 # User Actions / あなたにお願いしたい作業
 
-アカウント所有者権限や秘密鍵が必要な作業です。こちらで実装は進めますが、以下はあなた側で順次お願いします。
+このファイルは、アカウント所有者権限や秘密情報が必要な作業だけをまとめます。
+こちらで実装を進められるものは進め、止まるものだけここに残します。
 
 ## Supabase
 
-1. publishable keyはローカルの`.env.local`に設定済みです。
-2. 必要に応じて本番用キーへ差し替えてください。
+現在のプロジェクト:
 
-```bash
-EXPO_PUBLIC_SUPABASE_URL=https://doupguwwpshyjdhsfgtr.supabase.co
-EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<Supabaseのpublishable key>
-EXPO_PUBLIC_API_BASE_URL=<Edge FunctionまたはAPIのURL。未確定なら空でOK>
-```
+- Project: `dayby`
+- URL: `https://doupguwwpshyjdhsfgtr.supabase.co`
+- Local env: `.env.local` に publishable key 設定済み
 
-3. Supabase AuthでApple providerを有効化する。
-4. Supabase AuthでGoogle providerを有効化する。
-5. iOS/Androidのbundle idとredirect URLが確定したらSupabase Authへ追加する。
-6. service role keyはアプリコードや`EXPO_PUBLIC_`に絶対に入れない。
+お願いしたいこと:
+
+1. Supabase Auth の Apple provider を有効化する
+2. Supabase Auth の Google provider を有効化する
+3. service role key はアプリコード、GitHub、`EXPO_PUBLIC_` には絶対に入れない
+
+Apple provider の入力方針:
+
+- `Client IDs`: `app.dayby.mobile`
+- `Secret Key (for OAuth)`: ネイティブiOSログインだけなら空でよい
+- `Allow users without an email`: OFF
+
+Google provider の入力方針:
+
+- `Client IDs`: Google Cloud で作成した OAuth Client ID を入れる
+- 例: `xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com`
+- `app.dayby.mobile` は Client ID ではないので入れない
+- `Client Secret`: ネイティブ iOS/Android クライアントだけなら空でよい
+- `Skip nonce checks`: iOS Google ネイティブログインで必要なら ON
+- `Allow users without an email`: OFF
 
 ## Apple
 
-1. Apple Developer Accountを用意する。
-2. iOS bundle identifier `app.dayby.mobile` を作成する。
-3. Sign in with Appleを有効化する。
-4. 後でTestFlight用にApp Store Connectを使える状態にする。
+1. Apple Developer Account を用意する
+2. Bundle ID `app.dayby.mobile` を作成する
+3. Sign in with Apple を有効化する
+4. TestFlight / App Store Connect の準備を進める
 
 ## Google
 
-1. Google Cloud projectを用意する。
-2. OAuth consent screenを設定する。
-3. iOS / Android用OAuth clientを作成する。
-4. Supabase AuthのGoogle providerへ必要なclient情報を入れる。
+1. Google Cloud project を用意する
+2. OAuth consent screen を設定する
+3. iOS 用 OAuth Client ID を作成する
+   - Bundle ID: `app.dayby.mobile`
+4. Android 用 OAuth Client ID は development build の SHA-1 が確定してから追加する
+5. 作成した Client ID を Supabase Auth Google provider に入れる
 
 ## Cloudflare R2
 
-1. R2 bucket `dayby` はprivateのままにする。
-2. 署名URL発行用のR2 access keyを作成する。
-3. 作成した値はSupabase Edge Functionのsecretsに入れる。アプリ側には入れない。
+現在の bucket:
 
-必要なserver-side secrets:
+- Bucket: `dayby`
+- 推奨: private bucket + signed URL
+
+お願いしたいこと:
+
+1. R2 の server-side access key を作成する
+2. 下記を Supabase Edge Function の secrets に設定する
+3. アプリ側 `.env.local` や GitHub には入れない
+
+必要な server-side secrets:
 
 ```bash
 R2_ACCOUNT_ID=
@@ -47,26 +70,30 @@ R2_SECRET_ACCESS_KEY=
 R2_BUCKET=dayby
 ```
 
-4. 選外動画の短期削除用lifecycle ruleは後で設定する。
-
 ## Expo / EAS
 
-1. Expo accountを用意する。
-2. app slug / ownerを決める。
-3. iOS/AndroidのDevelopment Buildを作る段階でEAS setupを行う。
+1. Expo account を用意する
+2. EAS development build を iOS / Android 両方で作成する
+3. ネイティブカメラ、Appleログイン、Googleログイン、動画トリミングは実機または dev build で確認する
 
 ## GitHub
 
-GitHub repository `axelrod-xx/dayby` はremote設定済みです。push前には必ず秘密情報スキャンと`git status --ignored`確認を行います。
+Repository:
 
-## Values Needed Locally / ローカルに必要な値
+- `axelrod-xx/dayby`
 
-取得できたら`.env.local`に入れてください。
+こちらで push 前に必ず確認すること:
+
+- `.env.local` を stage しない
+- service role key / R2 secret / Apple secret / Google secret を commit しない
+- `git status --short --ignored` で ignore 状態を確認する
+
+## 開発中の一時対応
+
+Apple / Google 設定が完了するまで、ローカルだけで使える開発用メールログインを有効化しています。
 
 ```bash
-EXPO_PUBLIC_SUPABASE_URL=https://doupguwwpshyjdhsfgtr.supabase.co
-EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-EXPO_PUBLIC_API_BASE_URL=
+EXPO_PUBLIC_ENABLE_DEV_AUTH=true
 ```
 
-R2 secretsやSupabase service role keyは、モバイルアプリ用の`.env.local`に入れないでください。
+この値は `.env.local` のみで使い、本番や GitHub には入れません。
