@@ -82,7 +82,8 @@ Phase 8: Preservation and archive foundation.
 - Supabase secrets list contains R2 keys: account id, access key id, secret access key, bucket.
 - Unauthenticated Edge Function requests return `401`, confirming JWT protection.
 - EAS project info resolves for `@ryoaxelrod/dayby`.
-- Android development build is in progress: `7039ab95-79ab-4015-a8ff-9537900314c2`.
+- Android development build finished before native trim dependency: `7039ab95-79ab-4015-a8ff-9537900314c2`.
+- Android development build with native trim dependency is in progress: `491f6ff5-6f40-4a5d-bef9-330da0d9d560`.
 - Native trim service typechecks with `react-native-video-trim` dynamic import.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
