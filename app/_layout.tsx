@@ -57,7 +57,10 @@ function RootLayoutNav() {
           <Stack.Screen name="(auth)/sign-in" options={{ headerShown: false }} />
           <Stack.Screen name="profile-setup" options={{ headerShown: false }} />
           <Stack.Screen name="groups/create" options={{ headerShown: false }} />
+          <Stack.Screen name="groups/join" options={{ headerShown: false }} />
           <Stack.Screen name="groups/[groupId]/index" options={{ headerShown: false }} />
+          <Stack.Screen name="camera/index" options={{ headerShown: false }} />
+          <Stack.Screen name="trim/index" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>

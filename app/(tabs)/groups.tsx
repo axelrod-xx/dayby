@@ -49,9 +49,16 @@ export default function GroupsScreen() {
             <PrimaryButton onPress={() => undefined}>Set profile</PrimaryButton>
           </Link>
         ) : (
-          <Link href="/groups/create" asChild>
-            <PrimaryButton onPress={() => undefined}>Create group</PrimaryButton>
-          </Link>
+          <View style={styles.actionGrid}>
+            <Link href="/groups/create" asChild>
+              <PrimaryButton onPress={() => undefined}>Create group</PrimaryButton>
+            </Link>
+            <Link href="/groups/join" asChild>
+              <PrimaryButton onPress={() => undefined} variant="light">
+                Enter code
+              </PrimaryButton>
+            </Link>
+          </View>
         )}
       </View>
 
@@ -107,6 +114,9 @@ const styles = StyleSheet.create({
   },
   action: {
     marginTop: 4,
+  },
+  actionGrid: {
+    gap: 10,
   },
   list: {
     gap: 10,

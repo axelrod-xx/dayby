@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, type Href } from 'expo-router';
 
 import { TodayOverview } from '@/src/features/home/TodayOverview';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
@@ -45,9 +45,14 @@ export default function TabOneScreen() {
               <PrimaryButton onPress={() => undefined}>Set profile</PrimaryButton>
             </Link>
           ) : (
-            <PrimaryButton onPress={() => void signOut()} variant="light">
-              Log out
-            </PrimaryButton>
+            <View style={styles.signedInActions}>
+              <Link href={'/camera' as Href} asChild>
+                <PrimaryButton onPress={() => undefined}>Capture today</PrimaryButton>
+              </Link>
+              <PrimaryButton onPress={() => void signOut()} variant="light">
+                Log out
+              </PrimaryButton>
+            </View>
           )}
         </View>
       </View>
@@ -134,5 +139,8 @@ const styles = StyleSheet.create({
   },
   actionRow: {
     marginTop: 16,
+  },
+  signedInActions: {
+    gap: 10,
   },
 });

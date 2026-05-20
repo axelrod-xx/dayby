@@ -26,3 +26,20 @@ export type GroupMember = {
 export type GroupWithMembership = Group & {
   member_role: GroupMember['role'];
 };
+
+export type GroupMemberProfile = GroupMember & {
+  display_name: string;
+  avatar_url: string | null;
+};
+
+export type GroupInvite = {
+  id: string;
+  group_id: string;
+  code: string;
+  created_by: string;
+  expires_at: string | null;
+  max_uses: number | null;
+  used_count: number;
+  revoked_at: string | null;
+  created_at: string;
+};

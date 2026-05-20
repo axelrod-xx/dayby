@@ -1,6 +1,6 @@
 import { requireSupabase } from '@/src/lib/supabase';
 
-import type { Group, GroupMember, GroupWithMembership } from './types';
+import type { Group, GroupInvite, GroupMember, GroupMemberProfile, GroupWithMembership } from './types';
 
 type CreateGroupInput = {
   name: string;
@@ -132,4 +132,103 @@ export async function createGroup(input: CreateGroupInput): Promise<string> {
   }
 
   return groupId;
+}
+
+const inviteCode = () =>
+  Array.from({ length: 6 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join('');
+
+export async function listGroupMembers(groupId: string): Promise<GroupMemberProfile[]> {
+  const client = requireSupabase();
+  const { data, error } = await client
+    .from('group_members')
+    .select(
+      `
+      id,
+      group_id,
+      user_id,
+      role,
+      joined_at,
+      users (
+        display_name,
+        avatar_url
+      )
+    `,
+    )
+    .eq('group_id', groupId)
+    .order('joined_at', { ascending: true });
+
+  if (error) {
+    throw error;
+  }
+
+  return (data ?? []).map((row) => {
+    const user = Array.isArray(row.users) ? row.users[0] : row.users;
+
+    return {
+      id: row.id,
+      group_id: row.group_id,
+      user_id: row.user_id,
+      role: row.role,
+      joined_at: row.joined_at,
+      display_name: user?.display_name ?? 'dayby friend',
+      avatar_url: user?.avatar_url ?? null,
+    } as GroupMemberProfile;
+  });
+}
+
+export async function listGroupInvites(groupId: string): Promise<GroupInvite[]> {
+  const client = requireSupabase();
+  const { data, error } = await client
+    .from('group_invites')
+    .select('*')
+    .eq('group_id', groupId)
+    .is('revoked_at', null)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return (data ?? []) as GroupInvite[];
+}
+
+export async function createGroupInvite(groupId: string): Promise<GroupInvite> {
+  const client = requireSupabase();
+  const {
+    data: { user },
+  } = await client.auth.getUser();
+
+  if (!user) {
+    throw new Error('You need to sign in before creating an invite.');
+  }
+
+  const { data, error } = await client
+    .from('group_invites')
+    .insert({
+      group_id: groupId,
+      code: inviteCode(),
+      created_by: user.id,
+      max_uses: 20,
+    })
+    .select('*')
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data as GroupInvite;
+}
+
+export async function joinGroupWithCode(code: string): Promise<string> {
+  const client = requireSupabase();
+  const { data, error } = await client.rpc('join_group_with_code', {
+    invite_code: code.trim().toUpperCase(),
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data as string;
 }

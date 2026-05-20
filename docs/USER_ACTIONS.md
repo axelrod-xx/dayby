@@ -1,50 +1,74 @@
-# User Actions
+# User Actions / あなたにお願いしたい作業
 
-These tasks require account ownership or secrets and should be done by the project owner.
+アカウント所有者権限や秘密鍵が必要な作業です。こちらで実装は進めますが、以下はあなた側で順次お願いします。
 
 ## Supabase
 
-1. Enable Apple provider in Supabase Auth.
-2. Enable Google provider in Supabase Auth.
-3. Add mobile redirect URLs once bundle identifiers and URL schemes are finalized.
-4. Copy the publishable key into local `.env.local`.
-5. Keep the service role key private and never paste it into app code.
+1. Supabase Dashboardでpublishable keyを取得する。
+2. ローカルの`.env.local`に以下を入れる。
+
+```bash
+EXPO_PUBLIC_SUPABASE_URL=https://doupguwwpshyjdhsfgtr.supabase.co
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<Supabaseのpublishable key>
+EXPO_PUBLIC_API_BASE_URL=<Edge FunctionまたはAPIのURL。未確定なら空でOK>
+```
+
+3. Supabase AuthでApple providerを有効化する。
+4. Supabase AuthでGoogle providerを有効化する。
+5. iOS/Androidのbundle idとredirect URLが確定したらSupabase Authへ追加する。
+6. service role keyはアプリコードや`EXPO_PUBLIC_`に絶対に入れない。
 
 ## Apple
 
-1. Enroll or use an existing Apple Developer account.
-2. Create the iOS bundle identifier for dayby.
-3. Configure Sign in with Apple.
-4. Prepare App Store Connect access for later TestFlight.
+1. Apple Developer Accountを用意する。
+2. iOS bundle identifier `app.dayby.mobile` を作成する。
+3. Sign in with Appleを有効化する。
+4. 後でTestFlight用にApp Store Connectを使える状態にする。
 
 ## Google
 
-1. Create or use a Google Cloud project.
-2. Configure OAuth consent screen.
-3. Create OAuth clients for iOS and Android.
-4. Add redirect/client values required by Supabase Auth.
+1. Google Cloud projectを用意する。
+2. OAuth consent screenを設定する。
+3. iOS / Android用OAuth clientを作成する。
+4. Supabase AuthのGoogle providerへ必要なclient情報を入れる。
 
 ## Cloudflare R2
 
-1. Keep the `dayby` R2 bucket private.
-2. Create an access key for server-side signing only.
-3. Decide lifecycle rules for short-lived non-winner clips later.
-4. Do not make the bucket public.
+1. R2 bucket `dayby` はprivateのままにする。
+2. 署名URL発行用のR2 access keyを作成する。
+3. 作成した値はSupabase Edge Functionのsecretsに入れる。アプリ側には入れない。
+
+必要なserver-side secrets:
+
+```bash
+R2_ACCOUNT_ID=
+R2_ACCESS_KEY_ID=
+R2_SECRET_ACCESS_KEY=
+R2_BUCKET=dayby
+```
+
+4. 選外動画の短期削除用lifecycle ruleは後で設定する。
 
 ## Expo / EAS
 
-1. Create or use an Expo account.
-2. Decide app slug and owner.
-3. Later, run EAS setup for iOS and Android development builds.
+1. Expo accountを用意する。
+2. app slug / ownerを決める。
+3. iOS/AndroidのDevelopment Buildを作る段階でEAS setupを行う。
 
-## Values Needed Locally
+## GitHub
 
-Add these to `.env.local` when available:
+1. GitHubで空のrepository `dayby` を作成する。
+2. 作成後、repository URLをこちらに共有する。
+3. こちらで`git remote add origin ...`と`git push`を行う。
+
+## Values Needed Locally / ローカルに必要な値
+
+取得できたら`.env.local`に入れてください。
 
 ```bash
-EXPO_PUBLIC_SUPABASE_URL=
+EXPO_PUBLIC_SUPABASE_URL=https://doupguwwpshyjdhsfgtr.supabase.co
 EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 EXPO_PUBLIC_API_BASE_URL=
 ```
 
-Do not add R2 secrets or Supabase service role keys to `.env.local` for the mobile app.
+R2 secretsやSupabase service role keyは、モバイルアプリ用の`.env.local`に入れないでください。

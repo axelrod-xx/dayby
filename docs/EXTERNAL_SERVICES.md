@@ -12,6 +12,8 @@ Applied migrations:
 
 - `initial_phase_1`
 - `allow_group_owner_read`
+- `group_invite_join_rpc`
+- `memory_core_schema`
 
 Local app value still needed:
 
@@ -38,6 +40,13 @@ R2_PUBLIC_BASE_URL=
 ```
 
 R2 keys belong only in server-side functions or deployment secrets. They must not be prefixed with `EXPO_PUBLIC_`.
+
+Supabase Edge Function stubs added:
+
+- `r2-upload-url`
+- `r2-download-url`
+
+They are not deployed yet because R2 server-side secrets are not configured.
 
 ## GitHub
 
