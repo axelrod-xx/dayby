@@ -12,6 +12,7 @@ import {
 } from '@/src/features/groups/groupService';
 import type { GroupInvite, GroupMemberProfile, GroupWithMembership } from '@/src/features/groups/types';
 import { previousDateString } from '@/src/features/reels/reelService';
+import { currentWeekStartString } from '@/src/features/weekly/weeklyService';
 
 export default function GroupDetailScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
@@ -23,6 +24,7 @@ export default function GroupDetailScreen() {
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1;
+  const weekStart = currentWeekStartString(now);
 
   const load = async () => {
     if (!groupId) {
@@ -158,6 +160,23 @@ export default function GroupDetailScreen() {
         </View>
       </View>
 
+      <View style={styles.subtlePanel}>
+        <Text style={styles.subtleTitle}>This week is taking shape</Text>
+        <Text style={styles.panelText}>A small preview exists, but the month is the memory.</Text>
+        <View style={styles.action}>
+          <Link
+            href={{
+              pathname: '/weekly/[groupId]/[weekStart]',
+              params: { groupId: group.id, weekStart },
+            }}
+            asChild>
+            <PrimaryButton onPress={() => undefined} variant="light">
+              Peek this week
+            </PrimaryButton>
+          </Link>
+        </View>
+      </View>
+
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Members</Text>
         <View style={styles.list}>
@@ -226,10 +245,20 @@ const styles = StyleSheet.create({
     borderTopColor: '#E5E1DA',
     paddingTop: 18,
   },
+  subtlePanel: {
+    borderTopWidth: 1,
+    borderTopColor: '#EEEAE3',
+    paddingTop: 16,
+  },
   panelTitle: {
     color: '#171615',
     fontSize: 18,
     fontWeight: '700',
+  },
+  subtleTitle: {
+    color: '#57534E',
+    fontSize: 15,
+    fontWeight: '800',
   },
   panelText: {
     marginTop: 8,

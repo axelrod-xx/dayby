@@ -42,7 +42,7 @@ Expo Go is fine for early UI checks, but dayby needs camera capture, native vide
 - Issue signed playback/download URLs.
 - Validate invite joins.
 - Decide daily winners.
-- Generate or queue generated Daily/Monthly MP4s when needed.
+- Generate or queue generated Daily/Weekly/Monthly MP4s when needed. Weekly is a quiet progress preview; Monthly remains the main memory.
 - Enforce retention jobs and notification windows later.
 
 ## Date and Time Rules

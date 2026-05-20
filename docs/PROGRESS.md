@@ -42,6 +42,7 @@ Phase 8: Preservation and archive foundation.
 - EAS build profiles added for iOS/Android development, preview, and production.
 - Local tracked-file secret scanner added.
 - Daily Reel and Monthly Memory export controls added with save/share hooks.
+- Quiet Weekly Memory route added as a secondary progress preview.
 - Supabase Edge Functions `r2-upload-url` and `r2-download-url` deployed with JWT verification enabled.
 - R2 Edge Function secrets set in Supabase.
 - Expo/EAS project created and linked: `@ryoaxelrod/dayby`.
@@ -69,6 +70,7 @@ Phase 8: Preservation and archive foundation.
 - `/daily/demo/2026-05-20` returns HTTP 200 and contains `Daily Reel`
 - `/vote/demo/2026-05-20` returns HTTP 200 and contains `Best 2 sec`
 - `/monthly/demo/2026/5` returns HTTP 200 and contains `moments`
+- `/weekly/demo/2026-05-18` returns HTTP 200 and contains `THIS WEEK`
 - `/archive` returns HTTP 200 and contains `Archive`
 - `/safety/report?groupId=demo` returns HTTP 200 and contains `Send report`
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
@@ -78,6 +80,7 @@ Phase 8: Preservation and archive foundation.
 - Supabase migrations present remotely: `record_group_activity_rpc`
 - Supabase migrations present remotely: `add_trim_metadata`
 - Supabase migrations present remotely: `group_lifecycle_rpc`
+- Supabase migrations present remotely: `add_weekly_generated_video_type`
 - Supabase Edge Functions are ACTIVE: `r2-upload-url`, `r2-download-url`.
 - Supabase secrets list contains R2 keys: account id, access key id, secret access key, bucket.
 - Unauthenticated Edge Function requests return `401`, confirming JWT protection.
@@ -102,6 +105,7 @@ Phase 8: Preservation and archive foundation.
 - Check Android development build result and install the APK when complete.
 - Add export/save/share for Daily Reel and Monthly Memory.
 - Add actual server-generated Daily/Monthly MP4 cache later.
+- Keep Weekly Memory visually secondary; Monthly remains the product promise.
 - Add automatic scheduled status transitions for Active / Quiet / Archived / Dormant.
 - Re-run `npm audit` and `npx expo install --check` when npm registry requests stop timing out.
 

@@ -12,7 +12,7 @@ The schema starts small but keeps the product constraints in the database.
 - `daily_posts`: asset posted to a group for a group-local date.
 - `votes`: one member vote per target date.
 - `daily_winners`: one kept moment per group per day.
-- `generated_videos`: Daily/Monthly generated MP4 cache.
+- `generated_videos`: Daily/Weekly/Monthly generated MP4 cache.
 - `group_activity_events`: post/view/download/vote/open events.
 - `reports`: safety and moderation reports.
 - `subscriptions`: later payment/subscription state.

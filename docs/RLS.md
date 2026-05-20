@@ -76,5 +76,5 @@
 - Create signed playback/download URL.
 - Join group invite safely.
 - Decide daily winner.
-- Generate Daily/Monthly video artifacts.
+- Generate Daily/Weekly/Monthly video artifacts.
 - Run retention and deletion scheduling.

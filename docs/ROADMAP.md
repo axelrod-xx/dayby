@@ -61,6 +61,7 @@
 
 ## Phase 7: Monthly Memory
 
+- Weekly preview as a quiet progress reward.
 - Fetch winners by month.
 - Monthly preview.
 - Date/time/name overlay.

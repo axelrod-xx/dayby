@@ -14,7 +14,8 @@ The app is not a video editor, not a public social feed, and not a music app. It
 4. Tomorrow: watch yesterday's group Daily Reel.
 5. Tomorrow: vote for the one moment worth keeping.
 6. Every day: one winner becomes the group's saved daily memory.
-7. Month end: daily winners become a roughly 1-minute Monthly Memory.
+7. During the week: a quiet Weekly Memory can be previewed, but it is not the main product promise.
+8. Month end: daily winners become a roughly 1-minute Monthly Memory.
 
 ## MVP Features
 
@@ -29,6 +30,7 @@ The app is not a video editor, not a public social feed, and not a music app. It
 - Daily Reel ordered by captured time.
 - One vote per member for the previous day.
 - Winner decision at the deadline, including tie handling.
+- Quiet Weekly Memory as a lightweight progress preview.
 - Monthly Memory from daily winners and metadata.
 - Save/share exports without in-app BGM.
 - Basic report, delete, and admin moderation paths.
@@ -51,6 +53,7 @@ The app is not a video editor, not a public social feed, and not a music app. It
 - English-first UI.
 - Memory-first, not editor-first.
 - Daily Reel emphasizes time and person: `18:42 · RYO`.
+- Weekly Memory is intentionally secondary: visible, useful, not pushed.
 - Monthly Memory emphasizes date, weekday, time, and group.
 - The main video body stays clean.
 - A modest final `made with dayby` end card is acceptable.
