@@ -27,6 +27,8 @@ Phase 1: Auth and Profile foundation.
 - Phase 4+ tables for assets, daily posts, votes, winners, generated videos, activity events, reports, and subscriptions.
 - Phase 5 Daily Reel fetch/display route.
 - Phase 6 Vote route and one-vote insert flow.
+- Phase 6 winner decision RPC with random tie handling.
+- Phase 7 Monthly Memory preview route.
 - External service inventory documented.
 
 ## Verified
@@ -43,8 +45,10 @@ Phase 1: Auth and Profile foundation.
 - `/post` returns HTTP 200 and contains `Post to groups`
 - `/daily/demo/2026-05-20` returns HTTP 200 and contains `Daily Reel`
 - `/vote/demo/2026-05-20` returns HTTP 200 and contains `Best 2 sec`
+- `/monthly/demo/2026/5` returns HTTP 200 and contains `moments`
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
+- Supabase migrations present remotely: `decide_daily_winner_rpc`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -53,7 +57,8 @@ Phase 1: Auth and Profile foundation.
 - Validate Apple and Google providers after account setup.
 - Add actual native 2-second trimming implementation.
 - Deploy R2 Edge Functions after secrets are configured.
-- Add winner decision RPC and Monthly Memory preview.
+- Add export/save/share for Daily Reel and Monthly Memory.
+- Add actual server-generated Daily/Monthly MP4 cache later.
 - Re-run `npm audit` and `npx expo install --check` when npm registry requests stop timing out.
 
 ## Blocked By External Setup

@@ -19,6 +19,9 @@ export default function GroupDetailScreen() {
   const [invites, setInvites] = useState<GroupInvite[]>([]);
   const [loading, setLoading] = useState(true);
   const [creatingInvite, setCreatingInvite] = useState(false);
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
 
   const load = async () => {
     if (!groupId) {
@@ -119,6 +122,23 @@ export default function GroupDetailScreen() {
           {group.member_limit} members on {group.plan}. Monthly highlight is{' '}
           {group.monthly_highlight_enabled ? 'on' : 'off'}.
         </Text>
+      </View>
+
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>Monthly Memory</Text>
+        <Text style={styles.panelText}>The kept moments from this month, in order.</Text>
+        <View style={styles.action}>
+          <Link
+            href={{
+              pathname: '/monthly/[groupId]/[year]/[month]',
+              params: { groupId: group.id, year: String(currentYear), month: String(currentMonth) },
+            }}
+            asChild>
+            <PrimaryButton onPress={() => undefined} variant="light">
+              Open this month
+            </PrimaryButton>
+          </Link>
+        </View>
       </View>
 
       <View style={styles.panel}>
