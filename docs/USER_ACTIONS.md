@@ -70,6 +70,9 @@ R2_SECRET_ACCESS_KEY=
 R2_BUCKET=dayby
 ```
 
+ローカルでこちらに設定作業を任せる場合は、Git管理外の `.supabase-secrets.local` を作成して上記4つだけを入れる。
+このファイルは `.gitignore` 済み。作成後に `Supabase secretsファイル作った` と伝える。
+
 ## Expo / EAS
 
 1. Expo account を用意する

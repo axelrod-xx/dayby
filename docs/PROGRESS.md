@@ -42,6 +42,7 @@ Phase 8: Preservation and archive foundation.
 - EAS build profiles added for iOS/Android development, preview, and production.
 - Local tracked-file secret scanner added.
 - Daily Reel and Monthly Memory export controls added with save/share hooks.
+- Supabase Edge Functions `r2-upload-url` and `r2-download-url` deployed with JWT verification enabled.
 - External service inventory documented.
 
 ## Verified
@@ -72,6 +73,7 @@ Phase 8: Preservation and archive foundation.
 - Supabase migrations present remotely: `record_group_activity_rpc`
 - Supabase migrations present remotely: `add_trim_metadata`
 - Supabase migrations present remotely: `group_lifecycle_rpc`
+- Supabase Edge Functions are ACTIVE: `r2-upload-url`, `r2-download-url`.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -82,7 +84,7 @@ Phase 8: Preservation and archive foundation.
 - Add actual native 2-second trimming implementation.
 - Choose and wire native video processing library inside Expo Dev Client.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
-- Deploy R2 Edge Functions after secrets are configured.
+- Add R2 secrets to Supabase Edge Functions, then run signed URL smoke test.
 - Add export/save/share for Daily Reel and Monthly Memory.
 - Add actual server-generated Daily/Monthly MP4 cache later.
 - Add automatic scheduled status transitions for Active / Quiet / Archived / Dormant.
@@ -93,7 +95,7 @@ Phase 8: Preservation and archive foundation.
 - Supabase publishable key added to local `.env.local`; do not commit this file.
 - Apple Sign in with Apple configuration.
 - Google OAuth configuration.
-- R2 server-side access key for signed upload/download endpoint.
+- R2 server-side access key created; Supabase Edge Function secrets still need to be set.
 - iOS and Android development builds for native camera verification.
 
 ## Tool Limits Observed
