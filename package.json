@@ -7,6 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "dev:clear": "expo start --clear",
+    "check:secrets": "node scripts/check-secrets.js",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

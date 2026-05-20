@@ -22,6 +22,7 @@ npm run start
 npm run android
 npm run ios
 npm run web
+npm run dev:clear
 ```
 
 ## Environment
@@ -40,11 +41,19 @@ Use Expo Development Builds for dayby's real app testing.
 
 Expo Go can check basic UI, but video trimming and native modules may require a development build. Rebuild the dev client after adding native modules.
 
+```bash
+npx eas build --profile development --platform ios
+npx eas build --profile development --platform android
+```
+
+Use the `preview` profile for internal distribution and `production` for store-ready builds.
+
 ## Verification
 
 Before marking a phase done:
 
 - Run TypeScript checks.
+- Run tracked-file secret checks with `npm run check:secrets`.
 - Run lint if configured.
 - Start the app.
 - Verify the relevant flow on both iOS and Android when native behavior is involved.

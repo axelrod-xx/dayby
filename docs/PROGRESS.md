@@ -39,11 +39,14 @@ Phase 8: Preservation and archive foundation.
 - Phase 3 Trim screen now requires processing before choosing groups.
 - Phase 4 Post screen carries trim metadata into `video_assets`.
 - Phase 8 lifecycle RPC for Active / Quiet / Archived / Memory Active / Dormant transitions.
+- EAS build profiles added for iOS/Android development, preview, and production.
+- Local tracked-file secret scanner added.
 - External service inventory documented.
 
 ## Verified
 
 - `npm run typecheck`
+- `npm run check:secrets`
 - `npm audit --audit-level=moderate`
 - Expo Web starts on `http://localhost:8081`
 - `/` returns HTTP 200 and contains `dayby`
