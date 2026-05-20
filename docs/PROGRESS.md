@@ -83,8 +83,11 @@ Phase 8: Preservation and archive foundation.
 - Unauthenticated Edge Function requests return `401`, confirming JWT protection.
 - EAS project info resolves for `@ryoaxelrod/dayby`.
 - Android development build finished before native trim dependency: `7039ab95-79ab-4015-a8ff-9537900314c2`.
-- Android development build with native trim dependency is in progress: `491f6ff5-6f40-4a5d-bef9-330da0d9d560`.
+- Android development build with native trim dependency finished: `491f6ff5-6f40-4a5d-bef9-330da0d9d560`.
+- Removed old account-scope EAS env vars from abandoned apps.
 - Native trim service typechecks with `react-native-video-trim` dynamic import.
+- Android development APK ready: `https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk`
+- EAS account-scope env list is empty for preview and production; dayby project-scope env remains.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -92,8 +95,7 @@ Phase 8: Preservation and archive foundation.
 
 - Validate Apple and Google providers after account setup.
 - Use dev email sign-in while Apple/Google provider setup is pending.
-- Run a fresh Android development build after native video trim dependency commit.
-- Verify native 2-second trim on Android development build.
+- Install Android development APK and verify native 2-second trim on device.
 - Verify native 2-second trim on iOS development build after Apple signing is ready.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Run signed URL smoke test after Auth rate limit clears or after Apple/Google/dev session is available.

@@ -77,13 +77,30 @@ R2 secrets は Supabase Edge Functions に設定済み。
 
 Expo account は確認済み。
 EAS project `@ryoaxelrod/dayby` は作成・リンク済み。
-Android development build は開始済み。
+Android development build は完了済み。
 
 次に必要:
 
-1. Android build が完了したら実機にAPKをインストールする
+1. Android実機にAPKをインストールする
 2. iOS development build のために Apple Developer Account / signing を準備する
 3. ネイティブカメラ、Appleログイン、Googleログイン、動画トリミングは実機または dev build で確認する
+
+Android APK:
+
+```text
+https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk
+```
+
+Androidで最初に確認する流れ:
+
+1. APKをインストール
+2. daybyを開く
+3. 開発ログインで入る
+4. Profileを作る
+5. Groupを作る
+6. Cameraで10秒以内を撮る
+7. Trimで`Process 2 sec`を押す
+8. `2-second file ready` と出るか確認
 
 ## GitHub
 
