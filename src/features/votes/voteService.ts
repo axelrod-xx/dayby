@@ -1,5 +1,7 @@
 import { requireSupabase } from '@/src/lib/supabase';
 
+import { recordGroupActivity } from '../groups/groupService';
+
 export async function getMyVote(groupId: string, targetDate: string): Promise<string | null> {
   const client = requireSupabase();
   const {
@@ -49,4 +51,6 @@ export async function voteForPost(input: {
   if (error) {
     throw error;
   }
+
+  await recordGroupActivity(input.groupId, 'vote');
 }

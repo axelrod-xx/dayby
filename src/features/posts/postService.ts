@@ -2,6 +2,7 @@ import { requestSignedVideoUpload, uploadVideoToSignedUrl } from '@/src/features
 import { env } from '@/src/lib/env';
 import { requireSupabase } from '@/src/lib/supabase';
 
+import { recordGroupActivity } from '../groups/groupService';
 import type { GroupWithMembership } from '../groups/types';
 
 export type PostableGroup = GroupWithMembership & {
@@ -147,17 +148,7 @@ export async function createDailyPosts(input: CreatePostsInput) {
     throw postsError;
   }
 
-  const { error: activityError } = await client.from('group_activity_events').insert(
-    input.groupIds.map((groupId) => ({
-      group_id: groupId,
-      user_id: user.id,
-      event_type: 'post',
-    })),
-  );
-
-  if (activityError) {
-    throw activityError;
-  }
+  await Promise.all(input.groupIds.map((groupId) => recordGroupActivity(groupId, 'post')));
 
   return asset.id as string;
 }

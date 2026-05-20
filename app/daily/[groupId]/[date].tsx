@@ -4,6 +4,7 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 're
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
+import { recordGroupActivity } from '@/src/features/groups/groupService';
 import { listDailyMoments, type DailyMoment } from '@/src/features/reels/reelService';
 
 function MomentCard({ moment, index }: { moment: DailyMoment; index: number }) {
@@ -47,6 +48,7 @@ export default function DailyReelScreen() {
       .then(setMoments)
       .catch((error) => Alert.alert('Could not load daily reel', error.message))
       .finally(() => setLoading(false));
+    recordGroupActivity(groupId, 'view').catch(() => undefined);
   }, [date, groupId]);
 
   return (

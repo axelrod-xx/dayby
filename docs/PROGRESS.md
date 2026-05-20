@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 1: Auth and Profile foundation.
+Phase 8: Preservation and archive foundation.
 
 ## Completed
 
@@ -31,6 +31,9 @@ Phase 1: Auth and Profile foundation.
 - Phase 6 Vote route and one-vote insert flow.
 - Phase 6 winner decision RPC with random tie handling.
 - Phase 7 Monthly Memory preview route.
+- Phase 8 group activity RPC for post/view/download/vote/open/archive_restore.
+- Phase 8 Archive route for quiet and archived groups.
+- Group list now separates active groups from quiet/archive candidates.
 - External service inventory documented.
 
 ## Verified
@@ -49,9 +52,11 @@ Phase 1: Auth and Profile foundation.
 - `/daily/demo/2026-05-20` returns HTTP 200 and contains `Daily Reel`
 - `/vote/demo/2026-05-20` returns HTTP 200 and contains `Best 2 sec`
 - `/monthly/demo/2026/5` returns HTTP 200 and contains `moments`
+- `/archive` returns HTTP 200 and contains `Archive`
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
 - Supabase migrations present remotely: `decide_daily_winner_rpc`
+- Supabase migrations present remotely: `record_group_activity_rpc`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -64,6 +69,7 @@ Phase 1: Auth and Profile foundation.
 - Deploy R2 Edge Functions after secrets are configured.
 - Add export/save/share for Daily Reel and Monthly Memory.
 - Add actual server-generated Daily/Monthly MP4 cache later.
+- Add automatic scheduled status transitions for Active / Quiet / Archived / Dormant.
 - Re-run `npm audit` and `npx expo install --check` when npm registry requests stop timing out.
 
 ## Blocked By External Setup
@@ -72,7 +78,6 @@ Phase 1: Auth and Profile foundation.
 - Apple Sign in with Apple configuration.
 - Google OAuth configuration.
 - R2 server-side access key for signed upload/download endpoint.
-- GitHub remote repository creation.
 - iOS and Android development builds for native camera verification.
 
 ## Tool Limits Observed

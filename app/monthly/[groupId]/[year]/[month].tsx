@@ -7,6 +7,7 @@ import {
   listMonthlyMoments,
   type MonthlyMoment,
 } from '@/src/features/monthly/monthlyService';
+import { recordGroupActivity } from '@/src/features/groups/groupService';
 
 const monthName = (year: number, month: number) =>
   new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
@@ -28,6 +29,7 @@ export default function MonthlyMemoryScreen() {
       .then(setMoments)
       .catch((error) => Alert.alert('Could not load monthly memory', error.message))
       .finally(() => setLoading(false));
+    recordGroupActivity(params.groupId, 'view').catch(() => undefined);
   }, [month, params.groupId, year]);
 
   return (

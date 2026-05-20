@@ -2,6 +2,8 @@ import { requireSupabase } from '@/src/lib/supabase';
 
 import type { Group, GroupInvite, GroupMember, GroupMemberProfile, GroupWithMembership } from './types';
 
+export type GroupActivityEventType = 'post' | 'view' | 'download' | 'vote' | 'open' | 'archive_restore';
+
 type CreateGroupInput = {
   name: string;
   timezone: string;
@@ -89,6 +91,45 @@ export async function listMyGroups(): Promise<GroupWithMembership[]> {
 export async function getGroup(groupId: string): Promise<GroupWithMembership | null> {
   const groups = await listMyGroups();
   return groups.find((group) => group.id === groupId) ?? null;
+}
+
+export async function recordGroupActivity(groupId: string, eventType: GroupActivityEventType) {
+  const client = requireSupabase();
+  const { error } = await client.rpc('record_group_activity', {
+    target_event_type: eventType,
+    target_group_id: groupId,
+  });
+
+  if (error) {
+    throw error;
+  }
+}
+
+export function getGroupActivityLabel(group: Pick<Group, 'last_posted_at' | 'last_viewed_at' | 'last_downloaded_at'>) {
+  const dates = [group.last_posted_at, group.last_viewed_at, group.last_downloaded_at]
+    .filter((value): value is string => Boolean(value))
+    .map((value) => new Date(value));
+
+  if (dates.length === 0) {
+    return 'No activity yet';
+  }
+
+  const latest = new Date(Math.max(...dates.map((date) => date.getTime())));
+  const days = Math.floor((Date.now() - latest.getTime()) / 86_400_000);
+
+  if (days <= 0) {
+    return 'Active today';
+  }
+
+  if (days === 1) {
+    return 'Active yesterday';
+  }
+
+  return `Active ${days} days ago`;
+}
+
+export function isArchiveCandidate(group: GroupWithMembership) {
+  return ['quiet', 'archived', 'memory_active', 'dormant', 'delete_scheduled'].includes(group.status);
 }
 
 export async function createGroup(input: CreateGroupInput): Promise<string> {

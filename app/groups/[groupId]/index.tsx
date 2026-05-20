@@ -8,6 +8,7 @@ import {
   getGroup,
   listGroupInvites,
   listGroupMembers,
+  recordGroupActivity,
 } from '@/src/features/groups/groupService';
 import type { GroupInvite, GroupMemberProfile, GroupWithMembership } from '@/src/features/groups/types';
 import { previousDateString } from '@/src/features/reels/reelService';
@@ -47,6 +48,8 @@ export default function GroupDetailScreen() {
     load()
       .catch((error) => Alert.alert('Could not load group', error.message))
       .finally(() => setLoading(false));
+
+    recordGroupActivity(groupId, 'open').catch(() => undefined);
   }, [groupId]);
 
   const addInvite = async () => {

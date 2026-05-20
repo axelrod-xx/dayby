@@ -4,7 +4,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
-import { listMyGroups } from '@/src/features/groups/groupService';
+import { getGroupActivityLabel, isArchiveCandidate, listMyGroups } from '@/src/features/groups/groupService';
 import type { GroupWithMembership } from '@/src/features/groups/types';
 
 export default function GroupsScreen() {
@@ -12,6 +12,8 @@ export default function GroupsScreen() {
   const [groups, setGroups] = useState<GroupWithMembership[]>([]);
   const [loading, setLoading] = useState(false);
   const canCreateGroup = status === 'signed-in' && isProfileComplete;
+  const activeGroups = groups.filter((group) => !isArchiveCandidate(group));
+  const archivedGroups = groups.filter(isArchiveCandidate);
 
   useFocusEffect(
     useCallback(() => {
@@ -66,7 +68,7 @@ export default function GroupsScreen() {
         <ActivityIndicator color="#171615" />
       ) : groups.length > 0 ? (
         <View style={styles.list}>
-          {groups.map((group) => (
+          {activeGroups.map((group) => (
             <Link
               key={group.id}
               href={{ pathname: '/groups/[groupId]', params: { groupId: group.id } } as unknown as Href}
@@ -75,13 +77,23 @@ export default function GroupsScreen() {
                 <View>
                   <Text style={styles.groupName}>{group.name}</Text>
                   <Text style={styles.groupMeta}>
-                    {group.member_role} · {group.timezone}
+                    {group.member_role} · {group.timezone} · {getGroupActivityLabel(group)}
                   </Text>
                 </View>
                 <Text style={styles.chevron}>›</Text>
               </Pressable>
             </Link>
           ))}
+          {archivedGroups.length > 0 ? (
+            <Link href={'/archive' as Href} asChild>
+              <Pressable style={({ pressed }) => [styles.archiveLink, pressed && styles.pressed]}>
+                <Text style={styles.archiveText}>
+                  {archivedGroups.length} quiet group{archivedGroups.length > 1 ? 's' : ''}
+                </Text>
+                <Text style={styles.chevron}>›</Text>
+              </Pressable>
+            </Link>
+          ) : null}
         </View>
       ) : (
         <View style={styles.empty}>
@@ -148,6 +160,20 @@ const styles = StyleSheet.create({
   chevron: {
     color: '#A49B91',
     fontSize: 28,
+  },
+  archiveLink: {
+    minHeight: 58,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E1DA',
+    paddingHorizontal: 4,
+  },
+  archiveText: {
+    color: '#78716C',
+    fontSize: 14,
+    fontWeight: '800',
   },
   empty: {
     borderTopWidth: 1,
