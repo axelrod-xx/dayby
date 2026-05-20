@@ -61,6 +61,9 @@ export async function listMyGroups(): Promise<GroupWithMembership[]> {
         last_posted_at,
         last_viewed_at,
         last_downloaded_at,
+        lifecycle_checked_at,
+        delete_scheduled_at,
+        delete_after,
         created_at,
         updated_at
       )

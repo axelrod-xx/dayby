@@ -11,6 +11,9 @@ export type Group = {
   last_posted_at: string | null;
   last_viewed_at: string | null;
   last_downloaded_at: string | null;
+  lifecycle_checked_at: string | null;
+  delete_scheduled_at: string | null;
+  delete_after: string | null;
   created_at: string;
   updated_at: string;
 };

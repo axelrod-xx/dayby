@@ -68,6 +68,9 @@ export default function ArchiveScreen() {
                     <Text style={styles.groupMeta}>
                       {group.status.replace('_', ' ')} · {getGroupActivityLabel(group)}
                     </Text>
+                    {group.delete_after ? (
+                      <Text style={styles.deleteHint}>Download before {new Date(group.delete_after).toLocaleDateString()}</Text>
+                    ) : null}
                   </View>
                   <Text style={styles.chevron}>›</Text>
                 </Pressable>
@@ -134,6 +137,12 @@ const styles = StyleSheet.create({
     color: '#78716C',
     fontSize: 13,
     textTransform: 'capitalize',
+  },
+  deleteHint: {
+    marginTop: 6,
+    color: '#9A3412',
+    fontSize: 12,
+    fontWeight: '700',
   },
   chevron: {
     color: '#A49B91',

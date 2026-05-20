@@ -38,6 +38,7 @@ Phase 8: Preservation and archive foundation.
 - Phase 3/4 trim metadata contract: selected start, 2-second duration, native-trim flag, and upload guard.
 - Phase 3 Trim screen now requires processing before choosing groups.
 - Phase 4 Post screen carries trim metadata into `video_assets`.
+- Phase 8 lifecycle RPC for Active / Quiet / Archived / Memory Active / Dormant transitions.
 - External service inventory documented.
 
 ## Verified
@@ -65,6 +66,7 @@ Phase 8: Preservation and archive foundation.
 - Supabase migrations present remotely: `decide_daily_winner_rpc`
 - Supabase migrations present remotely: `record_group_activity_rpc`
 - Supabase migrations present remotely: `add_trim_metadata`
+- Supabase migrations present remotely: `group_lifecycle_rpc`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
