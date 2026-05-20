@@ -75,8 +75,14 @@ R2 secrets は Supabase Edge Functions に設定済み。
 
 ## Expo / EAS
 
-1. Expo account を用意する
-2. EAS development build を iOS / Android 両方で作成する
+Expo account は確認済み。
+EAS project `@ryoaxelrod/dayby` は作成・リンク済み。
+Android development build は開始済み。
+
+次に必要:
+
+1. Android build が完了したら実機にAPKをインストールする
+2. iOS development build のために Apple Developer Account / signing を準備する
 3. ネイティブカメラ、Appleログイン、Googleログイン、動画トリミングは実機または dev build で確認する
 
 ## GitHub

@@ -44,6 +44,9 @@ Phase 8: Preservation and archive foundation.
 - Daily Reel and Monthly Memory export controls added with save/share hooks.
 - Supabase Edge Functions `r2-upload-url` and `r2-download-url` deployed with JWT verification enabled.
 - R2 Edge Function secrets set in Supabase.
+- Expo/EAS project created and linked: `@ryoaxelrod/dayby`.
+- EAS public env vars configured for development, preview, and production.
+- Android development build started on EAS.
 - External service inventory documented.
 
 ## Verified
@@ -77,6 +80,8 @@ Phase 8: Preservation and archive foundation.
 - Supabase Edge Functions are ACTIVE: `r2-upload-url`, `r2-download-url`.
 - Supabase secrets list contains R2 keys: account id, access key id, secret access key, bucket.
 - Unauthenticated Edge Function requests return `401`, confirming JWT protection.
+- EAS project info resolves for `@ryoaxelrod/dayby`.
+- Android development build is in progress: `7039ab95-79ab-4015-a8ff-9537900314c2`.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -88,6 +93,7 @@ Phase 8: Preservation and archive foundation.
 - Choose and wire native video processing library inside Expo Dev Client.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Run signed URL smoke test after Auth rate limit clears or after Apple/Google/dev session is available.
+- Check Android development build result and install the APK when complete.
 - Add export/save/share for Daily Reel and Monthly Memory.
 - Add actual server-generated Daily/Monthly MP4 cache later.
 - Add automatic scheduled status transitions for Active / Quiet / Archived / Dormant.
@@ -100,6 +106,7 @@ Phase 8: Preservation and archive foundation.
 - Google OAuth configuration.
 - R2 server-side access key created and registered in Supabase Edge Function secrets. Rotate before production.
 - iOS and Android development builds for native camera verification.
+- iOS development build still needs Apple Developer credentials/signing.
 
 ## Tool Limits Observed
 
