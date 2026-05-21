@@ -11,7 +11,7 @@ export default function SignInScreen() {
     useAuth();
   const [loadingProvider, setLoadingProvider] = useState<'apple' | 'google' | 'dev' | null>(null);
   const [showDevForm, setShowDevForm] = useState(false);
-  const [email, setEmail] = useState('dev@dayby.local');
+  const [email, setEmail] = useState('dev@dayby.app');
   const [password, setPassword] = useState('dayby-dev-password');
 
   const run = async (provider: 'apple' | 'google') => {
@@ -85,7 +85,7 @@ export default function SignInScreen() {
                   autoCapitalize="none"
                   inputMode="email"
                   onChangeText={setEmail}
-                  placeholder="dev@dayby.local"
+                  placeholder="dev@dayby.app"
                   placeholderTextColor="#A49B91"
                   style={styles.input}
                   value={email}
@@ -105,6 +105,7 @@ export default function SignInScreen() {
                   variant="light">
                   Continue for testing
                 </PrimaryButton>
+                <Text style={styles.devHint}>Test account: dev@dayby.app</Text>
               </View>
             ) : null}
           </View>
@@ -190,5 +191,10 @@ const styles = StyleSheet.create({
     color: '#171615',
     fontSize: 16,
     backgroundColor: '#FFFEFB',
+  },
+  devHint: {
+    color: '#78716C',
+    fontSize: 12,
+    textAlign: 'center',
   },
 });

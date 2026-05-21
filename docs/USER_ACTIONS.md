@@ -38,6 +38,15 @@ https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a887a540-2a82-4ddf-8e
 - `2-second file ready` と表示される
 - アプリがクラッシュしない
 
+開発ログイン:
+
+```text
+Email: dev@dayby.app
+Password: dayby-dev-password
+```
+
+もしインストール済みのビルドで `dev@dayby.local` が初期表示されている場合は、手で `dev@dayby.app` に変更してください。
+
 ### Android実機確認
 
 Android端末が手元に戻ったら、development APKをインストールして確認してください。

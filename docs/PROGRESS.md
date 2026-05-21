@@ -54,6 +54,7 @@ Phase 8: Preservation and archive foundation.
 - First youth-facing UI polish pass added for Home and Group Detail.
 - R2 upload path now fails visibly when enabled instead of falling back to local-dev keys.
 - Post creation now records local processed MP4 size and blocks oversized MVP uploads before R2.
+- Confirmed development test account: `dev@dayby.app`.
 
 ## Verified
 
@@ -80,6 +81,7 @@ Phase 8: Preservation and archive foundation.
 - Home web UI shows the revised `Shoot 10 sec. / Keep 2 sec.` hero and `Memory rhythm` section.
 - Home and `/groups/demo` web checks completed with no browser console errors.
 - Upload path typechecks with local file-size inspection and visible R2 failure behavior.
+- `dev@dayby.app` signs in successfully through Supabase Auth with a confirmed email.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
