@@ -88,9 +88,15 @@ Phase 8: Preservation and archive foundation.
 - Android development build finished before native trim dependency: `7039ab95-79ab-4015-a8ff-9537900314c2`.
 - Android development build with native trim dependency finished: `491f6ff5-6f40-4a5d-bef9-330da0d9d560`.
 - Removed old account-scope EAS env vars from abandoned apps.
+- iOS device development build attempted; blocked by missing internal distribution credentials.
+- iOS encryption declaration and EAS app version source configured.
+- iOS simulator development build profile added for credential-light build checks.
+- iOS simulator development build finished: `1f6ab1b8-5bee-4333-825b-484a68f3f5b5`.
 - Native trim service typechecks with `react-native-video-trim` dynamic import.
 - Android development APK ready: `https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk`
 - EAS account-scope env list is empty for preview and production; dayby project-scope env remains.
+- iOS device build needs interactive Apple credential setup before it can be queued.
+- iOS simulator archive ready: `https://expo.dev/artifacts/eas/4T1yyw62ztqbZJ8t8PzEzK.tar.gz`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -117,6 +123,7 @@ Phase 8: Preservation and archive foundation.
 - R2 server-side access key created and registered in Supabase Edge Function secrets. Rotate before production.
 - iOS and Android development builds for native camera verification.
 - iOS development build still needs Apple Developer credentials/signing.
+- iOS simulator build can be used for app compilation checks, but camera verification still needs a real device.
 
 ## Tool Limits Observed
 

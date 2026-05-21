@@ -85,6 +85,19 @@ Android development build は完了済み。
 2. iOS development build のために Apple Developer Account / signing を準備する
 3. ネイティブカメラ、Appleログイン、Googleログイン、動画トリミングは実機または dev build で確認する
 
+iOS実機buildで必要:
+
+1. `npx eas-cli build --profile development --platform ios` を対話モードで実行する
+2. Apple IDでログインする
+3. EASにiOS Distribution Certificate / Provisioning Profile作成を許可する
+4. 完了後、こちらで再度iOS build状態を確認する
+
+iOS simulator build は完了済み。これはコンパイル確認用で、実機カメラ検証には使わない。
+
+```text
+https://expo.dev/artifacts/eas/4T1yyw62ztqbZJ8t8PzEzK.tar.gz
+```
+
 Android APK:
 
 ```text
