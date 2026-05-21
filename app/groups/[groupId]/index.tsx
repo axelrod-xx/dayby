@@ -90,23 +90,29 @@ export default function GroupDetailScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
+        <Text style={styles.kicker}>Group</Text>
         <Text style={styles.title}>{group.name}</Text>
-        <Text style={styles.copy}>{group.timezone}</Text>
+        <Text style={styles.copy}>
+          {group.timezone} · {members.length}/{group.member_limit} friends
+        </Text>
       </View>
 
-      <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Today</Text>
-        <Text style={styles.panelText}>Capture flow comes next: shoot 10 sec, keep 2 sec.</Text>
+      <View style={styles.todayPanel}>
+        <Text style={styles.kicker}>Today</Text>
+        <Text style={styles.todayTitle}>Keep one tiny piece of the day.</Text>
+        <Text style={styles.panelText}>Shoot up to 10 seconds. Only the 2 seconds you choose will be uploaded.</Text>
         <View style={styles.action}>
           <Link href={'/camera' as Href} asChild>
-            <PrimaryButton onPress={() => undefined}>Capture today</PrimaryButton>
+            <PrimaryButton onPress={() => undefined} variant="accent">
+              Capture today
+            </PrimaryButton>
           </Link>
         </View>
       </View>
 
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Yesterday</Text>
-        <Text style={styles.panelText}>Watch the daily reel, then choose the 2 seconds worth keeping.</Text>
+        <Text style={styles.panelText}>Watch by time, then choose the 2 seconds worth keeping.</Text>
         <View style={styles.action}>
           <Link
             href={{
@@ -124,8 +130,8 @@ export default function GroupDetailScreen() {
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Settings</Text>
         <Text style={styles.panelText}>
-          {group.member_limit} members on {group.plan}. Monthly highlight is{' '}
-          {group.monthly_highlight_enabled ? 'on' : 'off'}.
+          {group.plan} plan · monthly highlight {group.monthly_highlight_enabled ? 'on' : 'off'} · downloads{' '}
+          {group.download_enabled ? 'on' : 'off'}
         </Text>
       </View>
 
@@ -227,7 +233,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 40,
     paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFDF8',
+  },
+  kicker: {
+    marginBottom: 9,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
     color: '#171615',
@@ -244,6 +257,19 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#E5E1DA',
     paddingTop: 18,
+  },
+  todayPanel: {
+    borderWidth: 1,
+    borderColor: '#E4DED5',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#FFFFFF',
+  },
+  todayTitle: {
+    color: '#141312',
+    fontSize: 24,
+    fontWeight: '800',
+    lineHeight: 30,
   },
   subtlePanel: {
     borderTopWidth: 1,

@@ -5,7 +5,7 @@ type PrimaryButtonProps = PropsWithChildren<{
   onPress: () => void;
   disabled?: boolean;
   loading?: boolean;
-  variant?: 'dark' | 'light';
+  variant?: 'dark' | 'light' | 'accent';
 }>;
 
 export function PrimaryButton({
@@ -16,6 +16,7 @@ export function PrimaryButton({
   variant = 'dark',
 }: PrimaryButtonProps) {
   const isLight = variant === 'light';
+  const isAccent = variant === 'accent';
 
   return (
     <Pressable
@@ -24,7 +25,7 @@ export function PrimaryButton({
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        isLight ? styles.light : styles.dark,
+        isLight ? styles.light : isAccent ? styles.accent : styles.dark,
         (disabled || loading) && styles.disabled,
         pressed && styles.pressed,
       ]}>
@@ -47,6 +48,9 @@ const styles = StyleSheet.create({
   },
   dark: {
     backgroundColor: '#171615',
+  },
+  accent: {
+    backgroundColor: '#E65A3C',
   },
   light: {
     borderWidth: 1,

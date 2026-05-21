@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 const items = [
-  { label: 'Capture', value: '10 sec' },
-  { label: 'Keep', value: '2 sec' },
-  { label: 'Month', value: '1 min' },
+  { accent: '#E65A3C', label: 'Capture', value: '10 sec' },
+  { accent: '#2F6F68', label: 'Keep', value: '2 sec' },
+  { accent: '#2E5AAC', label: 'Month', value: '1 min' },
 ];
 
 export function TodayOverview() {
@@ -11,6 +11,7 @@ export function TodayOverview() {
     <View style={styles.container}>
       {items.map((item) => (
         <View key={item.label} style={styles.item}>
+          <View style={[styles.accent, { backgroundColor: item.accent }]} />
           <Text style={styles.value}>{item.value}</Text>
           <Text style={styles.label}>{item.label}</Text>
         </View>
@@ -27,14 +28,20 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#E5E1DA',
+    borderColor: '#E4DED5',
     borderRadius: 8,
-    padding: 14,
-    backgroundColor: '#FBFAF7',
+    padding: 13,
+    backgroundColor: '#FFFFFF',
+  },
+  accent: {
+    width: 22,
+    height: 3,
+    borderRadius: 2,
+    marginBottom: 12,
   },
   value: {
-    color: '#171615',
-    fontSize: 20,
+    color: '#141312',
+    fontSize: 19,
     fontWeight: '700',
   },
   label: {

@@ -1,102 +1,36 @@
 # User Actions / あなたにお願いしたい作業
 
-このファイルは、アカウント所有者権限や秘密情報が必要な作業だけをまとめます。
-こちらで実装を進められるものは進め、止まるものだけここに残します。
+このファイルは、アカウント所有者権限や実機が必要な作業だけをまとめます。
+こちらで進められる実装は止めず、外部サービスや端末操作が必要なものだけここに残します。
 
-## Supabase
+## 今すぐ必要
 
-現在のプロジェクト:
+### iOS Development Build
 
-- Project: `dayby`
-- URL: `https://doupguwwpshyjdhsfgtr.supabase.co`
-- Local env: `.env.local` に publishable key 設定済み
+現在、iOS実機用のEAS development buildを対話モードで進行中です。
 
-お願いしたいこと:
+進め方:
 
-1. Supabase Auth の Apple provider を有効化する
-2. Supabase Auth の Google provider を有効化する
-3. service role key はアプリコード、GitHub、`EXPO_PUBLIC_` には絶対に入れない
+1. Apple Developer Program License Agreementが出た場合は同意する
+2. Distribution Certificateは新規作成済みで問題なし
+3. Ad Hoc build対象端末で手元のiPhoneを選択する
+4. EAS buildがキューに入ったら、build URLまたはエラー全文を共有する
 
-Apple provider の入力方針:
-
-- `Client IDs`: `app.dayby.mobile`
-- `Secret Key (for OAuth)`: ネイティブiOSログインだけなら空でよい
-- `Allow users without an email`: OFF
-
-Google provider の入力方針:
-
-- `Client IDs`: Google Cloud で作成した OAuth Client ID を入れる
-- 例: `xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com`
-- `app.dayby.mobile` は Client ID ではないので入れない
-- `Client Secret`: ネイティブ iOS/Android クライアントだけなら空でよい
-- `Skip nonce checks`: iOS Google ネイティブログインで必要なら ON
-- `Allow users without an email`: OFF
-
-## Apple
-
-1. Apple Developer Account を用意する
-2. Bundle ID `app.dayby.mobile` を作成する
-3. Sign in with Apple を有効化する
-4. TestFlight / App Store Connect の準備を進める
-
-## Google
-
-1. Google Cloud project を用意する
-2. OAuth consent screen を設定する
-3. iOS 用 OAuth Client ID を作成する
-   - Bundle ID: `app.dayby.mobile`
-4. Android 用 OAuth Client ID は development build の SHA-1 が確定してから追加する
-5. 作成した Client ID を Supabase Auth Google provider に入れる
-
-## Cloudflare R2
-
-現在の bucket:
-
-- Bucket: `dayby`
-- 推奨: private bucket + signed URL
-
-お願いしたいこと:
-
-1. R2 の server-side access key を作成する
-2. 下記を Supabase Edge Function の secrets に設定する
-3. アプリ側 `.env.local` や GitHub には入れない
-
-必要な server-side secrets:
+ビルドコマンド:
 
 ```bash
-R2_ACCOUNT_ID=
-R2_ACCESS_KEY_ID=
-R2_SECRET_ACCESS_KEY=
-R2_BUCKET=dayby
+npx eas-cli build --profile development --platform ios
 ```
 
-R2 secrets は Supabase Edge Functions に設定済み。
-スクリーンショットに表示された開発用キーを使ったため、本番前に必ずローテーションする。
+補足:
 
-## Expo / EAS
+- 以前のNee用証明書を再利用しなくても問題ありません。
+- daybyは新規Bundle ID `app.dayby.mobile` のまま進めます。
+- 古いNee関連のEAS/Apple資格情報は、daybyの実機確認後に整理でOKです。
 
-Expo account は確認済み。
-EAS project `@ryoaxelrod/dayby` は作成・リンク済み。
-Android development build は完了済み。
+### Android実機確認
 
-次に必要:
-
-1. Android実機にAPKをインストールする
-2. iOS development build のために Apple Developer Account / signing を準備する
-3. ネイティブカメラ、Appleログイン、Googleログイン、動画トリミングは実機または dev build で確認する
-
-iOS実機buildで必要:
-
-1. `npx eas-cli build --profile development --platform ios` を対話モードで実行する
-2. Apple IDでログインする
-3. EASにiOS Distribution Certificate / Provisioning Profile作成を許可する
-4. 完了後、こちらで再度iOS build状態を確認する
-
-iOS simulator build は完了済み。これはコンパイル確認用で、実機カメラ検証には使わない。
-
-```text
-https://expo.dev/artifacts/eas/4T1yyw62ztqbZJ8t8PzEzK.tar.gz
-```
+Android端末が手元に戻ったら、development APKをインストールして確認してください。
 
 Android APK:
 
@@ -104,7 +38,7 @@ Android APK:
 https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk
 ```
 
-Androidで最初に確認する流れ:
+最初に確認する流れ:
 
 1. APKをインストール
 2. daybyを開く
@@ -112,27 +46,77 @@ Androidで最初に確認する流れ:
 4. Profileを作る
 5. Groupを作る
 6. Cameraで10秒以内を撮る
-7. Trimで`Process 2 sec`を押す
-8. `2-second file ready` と出るか確認
+7. Trimで `Process 2 sec` を押す
+8. `2-second file ready` が出るか確認
 
-## GitHub
+## 後で必要
 
-Repository:
+### Supabase Auth
 
-- `axelrod-xx/dayby`
+ログイン面は後回しにしています。リリース前に必須です。
 
-こちらで push 前に必ず確認すること:
+Apple provider:
 
-- `.env.local` を stage しない
-- service role key / R2 secret / Apple secret / Google secret を commit しない
-- `git status --short --ignored` で ignore 状態を確認する
+- `Client IDs`: `app.dayby.mobile`
+- `Secret Key (for OAuth)`: Web OAuthを使う場合のみJWT形式のclient secretが必要
+- Native iOSログイン中心なら、初期検証では空のまま進められる可能性があります
+- `Allow users without an email`: OFF
 
-## 開発中の一時対応
+Google provider:
 
-Apple / Google 設定が完了するまで、ローカルだけで使える開発用メールログインを有効化しています。
+- Google CloudでiOS / Android向けOAuth Client IDを作る
+- Supabase AuthのGoogle providerへ正しいClient IDを入れる
+- `app.dayby.mobile` はGoogle Client IDではないので入れない
+- `Allow users without an email`: OFF
+- iOSネイティブログインでnonce問題が出た場合のみ `Skip nonce checks` を検討
+
+### R2 Key Rotation
+
+開発用のR2キーは一度画面共有に表示されているため、本番前に必ずローテーションしてください。
+
+方針:
+
+- R2 bucketはprivateのまま
+- アプリにR2秘密鍵は入れない
+- Supabase Edge Function secretsにだけ設定する
+- 本番前に古いR2 tokenを削除する
+
+### R2 Upload有効化
+
+実機でネイティブ2秒トリムが確認できるまで、R2アップロードは無効のままです。
+
+有効化条件:
+
+1. iOSまたはAndroidのdevelopment buildで2秒MP4生成を確認
+2. 投稿画面で10秒元動画がアップロードされないことを確認
+3. `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` をEAS envに設定
+4. signed URLでR2へPUTできることを確認
+
+### Apple / Google Production Login
+
+開発ログインは `.env.local` / EAS development / preview だけで使います。
+productionでは必ず無効化します。
 
 ```bash
-EXPO_PUBLIC_ENABLE_DEV_AUTH=true
+EXPO_PUBLIC_ENABLE_DEV_AUTH=false
 ```
 
-この値は `.env.local` のみで使い、本番や GitHub には入れません。
+## 完了済み
+
+- Supabase project `dayby` 作成済み
+- Cloudflare R2 bucket `dayby` 作成済み
+- R2 server-side secretsをSupabase Edge Functionsへ登録済み
+- GitHub repository `axelrod-xx/dayby` 作成済み
+- Expo/EAS project `@ryoaxelrod/dayby` 作成済み
+- Android development build作成済み
+- iOS simulator build作成済み
+- iOS Bundle ID `app.dayby.mobile` 登録済み
+
+## 絶対にGitHubへ上げないもの
+
+- `.env.local`
+- Supabase service role key
+- R2 access key / secret access key
+- Apple secret key
+- Google client secret
+- EAS credential raw files

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, type Href } from 'expo-router';
 
 import { TodayOverview } from '@/src/features/home/TodayOverview';
@@ -8,12 +8,20 @@ import { useAuth } from '@/src/features/auth/AuthProvider';
 export default function TabOneScreen() {
   const { isProfileComplete, isSupabaseConfigured, profile, signOut, status } = useAuth();
   const isSignedIn = status === 'signed-in';
+  const todayLabel = new Intl.DateTimeFormat('en', {
+    day: '2-digit',
+    month: 'short',
+    weekday: 'short',
+  }).format(new Date());
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.wordmark}>dayby</Text>
-        <Text style={styles.copy}>Shoot 10 sec. Keep 2 sec.</Text>
+        <View style={styles.topline}>
+          <Text style={styles.wordmark}>dayby</Text>
+          <Text style={styles.date}>{todayLabel}</Text>
+        </View>
+        <Text style={styles.hero}>Shoot 10 sec.{'\n'}Keep 2 sec.</Text>
         <Text style={styles.copy}>Your month becomes 1 minute.</Text>
       </View>
 
@@ -28,7 +36,8 @@ export default function TabOneScreen() {
         </View>
       ) : null}
 
-      <View style={styles.panel}>
+      <View style={styles.focusPanel}>
+        <Text style={styles.kicker}>Today</Text>
         <Text style={styles.panelTitle}>
           {isSignedIn ? `Hi${profile?.display_name ? `, ${profile.display_name}` : ''}` : 'Start'}
         </Text>
@@ -47,7 +56,9 @@ export default function TabOneScreen() {
           ) : (
             <View style={styles.signedInActions}>
               <Link href={'/camera' as Href} asChild>
-                <PrimaryButton onPress={() => undefined}>Capture today</PrimaryButton>
+                <PrimaryButton onPress={() => undefined} variant="accent">
+                  Capture today
+                </PrimaryButton>
               </Link>
               <PrimaryButton onPress={() => void signOut()} variant="light">
                 Log out
@@ -58,12 +69,12 @@ export default function TabOneScreen() {
       </View>
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Next up</Text>
+        <Text style={styles.panelTitle}>Memory rhythm</Text>
         <Text style={styles.panelText}>
-          Apple and Google login, profile setup, then group creation.
+          Tonight is for posting. Tomorrow is for voting. The month stays the main memory.
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -89,25 +100,50 @@ function getNextAction(status: string, isProfileComplete: boolean) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     gap: 22,
     paddingHorizontal: 22,
+    paddingBottom: 40,
     paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFDF8',
   },
   header: {
-    gap: 8,
+    gap: 10,
+  },
+  topline: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   wordmark: {
     color: '#171615',
-    fontSize: 42,
+    fontSize: 28,
     fontWeight: '700',
     letterSpacing: 0,
   },
+  date: {
+    color: '#7A736B',
+    fontSize: 13,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+  },
+  hero: {
+    color: '#141312',
+    fontSize: 44,
+    fontWeight: '800',
+    lineHeight: 48,
+    letterSpacing: 0,
+  },
   copy: {
-    color: '#57534E',
+    color: '#57514B',
     fontSize: 18,
     lineHeight: 25,
+  },
+  focusPanel: {
+    borderWidth: 1,
+    borderColor: '#E4DED5',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#FFFFFF',
   },
   panel: {
     borderTopWidth: 1,
@@ -130,6 +166,13 @@ const styles = StyleSheet.create({
     color: '#171615',
     fontSize: 18,
     fontWeight: '700',
+  },
+  kicker: {
+    marginBottom: 10,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   panelText: {
     marginTop: 8,

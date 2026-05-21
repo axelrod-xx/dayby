@@ -50,6 +50,8 @@ Phase 8: Preservation and archive foundation.
 - Android development build started on EAS.
 - `react-native-video-trim` added for native 2-second trim/compress in development builds.
 - External service inventory documented.
+- User action checklist restored in readable Japanese.
+- First youth-facing UI polish pass added for Home and Group Detail.
 
 ## Verified
 
@@ -73,6 +75,8 @@ Phase 8: Preservation and archive foundation.
 - `/weekly/demo/2026-05-18` returns HTTP 200 and contains `THIS WEEK`
 - `/archive` returns HTTP 200 and contains `Archive`
 - `/safety/report?groupId=demo` returns HTTP 200 and contains `Send report`
+- Home web UI shows the revised `Shoot 10 sec. / Keep 2 sec.` hero and `Memory rhythm` section.
+- Home and `/groups/demo` web checks completed with no browser console errors.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
@@ -97,6 +101,7 @@ Phase 8: Preservation and archive foundation.
 - EAS account-scope env list is empty for preview and production; dayby project-scope env remains.
 - iOS device build needs interactive Apple credential setup before it can be queued.
 - iOS simulator archive ready: `https://expo.dev/artifacts/eas/4T1yyw62ztqbZJ8t8PzEzK.tar.gz`
+- iOS device development build is now progressing through interactive Apple credential/device setup.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
