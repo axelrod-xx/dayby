@@ -1,4 +1,8 @@
-import { requestSignedVideoUpload, uploadVideoToSignedUrl } from '@/src/features/video/uploadService';
+import {
+  getLocalVideoFileSize,
+  requestSignedVideoUpload,
+  uploadVideoToSignedUrl,
+} from '@/src/features/video/uploadService';
 import { env } from '@/src/lib/env';
 import { requireSupabase } from '@/src/lib/supabase';
 
@@ -83,24 +87,16 @@ async function createUploadKey(input: {
     throw new Error('R2 uploads are disabled until native 2-second trimming is enabled.');
   }
 
-  try {
-    const signed = await requestSignedVideoUpload({
-      contentType: 'video/mp4',
-      sizeBytes: input.sizeBytes,
-    });
-    await uploadVideoToSignedUrl({
-      uploadUrl: signed.uploadUrl,
-      uri: input.uri,
-      contentType: 'video/mp4',
-    });
-    return signed.key;
-  } catch (error) {
-    if (!__DEV__) {
-      throw error;
-    }
-
-    return `local-dev/${uuid()}.mp4`;
-  }
+  const signed = await requestSignedVideoUpload({
+    contentType: 'video/mp4',
+    sizeBytes: input.sizeBytes,
+  });
+  await uploadVideoToSignedUrl({
+    uploadUrl: signed.uploadUrl,
+    uri: input.uri,
+    contentType: 'video/mp4',
+  });
+  return signed.key;
 }
 
 export async function createDailyPosts(input: CreatePostsInput) {
@@ -122,9 +118,15 @@ export async function createDailyPosts(input: CreatePostsInput) {
     trimDurationMs: input.trimDurationMs,
   });
 
+  const sizeBytes = input.sizeBytes ?? (await getLocalVideoFileSize(input.uri));
+
+  if (sizeBytes && sizeBytes > 3_000_000) {
+    throw new Error('This 2-second video is too large. Try recording again with less motion or better lighting.');
+  }
+
   const r2Key = await createUploadKey({
     uri: input.uri,
-    sizeBytes: input.sizeBytes,
+    sizeBytes,
   });
 
   const { data: asset, error: assetError } = await client
@@ -135,7 +137,7 @@ export async function createDailyPosts(input: CreatePostsInput) {
       duration_ms: 2000,
       has_audio: input.hasAudio,
       captured_at: input.capturedAt,
-      size_bytes: input.sizeBytes ?? null,
+      size_bytes: sizeBytes ?? null,
       trim_start_ms: input.trimStartMs,
       trim_duration_ms: input.trimDurationMs,
       is_native_trimmed: input.isNativeTrimmed,

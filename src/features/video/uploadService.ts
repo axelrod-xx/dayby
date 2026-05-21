@@ -1,5 +1,6 @@
 import { env } from '@/src/lib/env';
 import { requireSupabase } from '@/src/lib/supabase';
+import * as FileSystem from 'expo-file-system/legacy';
 
 type SignedUploadResponse = {
   key: string;
@@ -40,6 +41,16 @@ export async function requestSignedVideoUpload(input: {
   return (await response.json()) as SignedUploadResponse;
 }
 
+export async function getLocalVideoFileSize(uri: string): Promise<number | undefined> {
+  const info = await FileSystem.getInfoAsync(uri);
+
+  if (!info.exists) {
+    throw new Error('Processed video file was not found on this device.');
+  }
+
+  return typeof info.size === 'number' ? info.size : undefined;
+}
+
 export async function uploadVideoToSignedUrl(input: {
   uploadUrl: string;
   uri: string;
@@ -56,6 +67,6 @@ export async function uploadVideoToSignedUrl(input: {
   });
 
   if (!response.ok) {
-    throw new Error('Video upload failed.');
+    throw new Error(`Video upload failed with status ${response.status}.`);
   }
 }
