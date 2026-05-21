@@ -72,8 +72,9 @@ Development builds:
 
 - Android with native trim: `https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk`
 - iOS simulator archive: `https://expo.dev/artifacts/eas/4T1yyw62ztqbZJ8t8PzEzK.tar.gz`
+- iOS real-device development build: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a887a540-2a82-4ddf-8e66-985eb11ce719`
 
-The iOS real-device development build is being set up interactively because Apple credentials require account-owner actions.
+The iOS real-device development build finished with an Ad Hoc profile for the registered iPhone.
 
 ## GitHub
 

@@ -5,28 +5,38 @@
 
 ## 今すぐ必要
 
-### iOS Development Build
+### iOS実機確認
 
-現在、iOS実機用のEAS development buildを対話モードで進行中です。
+iOS development buildは完了しています。手元のiPhoneでインストールして確認してください。
 
-進め方:
+Install URL:
 
-1. Apple Developer Program License Agreementが出た場合は同意する
-2. Distribution Certificateは新規作成済みで問題なし
-3. Ad Hoc build対象端末で手元のiPhoneを選択する
-4. EAS buildがキューに入ったら、build URLまたはエラー全文を共有する
-
-ビルドコマンド:
-
-```bash
-npx eas-cli build --profile development --platform ios
+```text
+https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a887a540-2a82-4ddf-8e66-985eb11ce719
 ```
 
-補足:
+確認する流れ:
 
-- 以前のNee用証明書を再利用しなくても問題ありません。
-- daybyは新規Bundle ID `app.dayby.mobile` のまま進めます。
-- 古いNee関連のEAS/Apple資格情報は、daybyの実機確認後に整理でOKです。
+1. iPhoneで上記URLを開く、またはQRコードを読む
+2. daybyをインストールする
+3. daybyを開く
+4. 開発ログインで入る
+5. Profileを作る
+6. Groupを作る
+7. Cameraで10秒以内を撮る
+8. Trimで `Process 2 sec` を押す
+9. `2-second file ready` が出るか確認
+10. Post to groupsまで進めるか確認
+
+確認してほしいポイント:
+
+- カメラ権限が正しく出る
+- マイク権限が正しく出る
+- 10秒以内で録画が止まる
+- Trim画面で動画プレビューが動く
+- 2秒トリム処理が成功する
+- `2-second file ready` と表示される
+- アプリがクラッシュしない
 
 ### Android実機確認
 
@@ -38,16 +48,7 @@ Android APK:
 https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk
 ```
 
-最初に確認する流れ:
-
-1. APKをインストール
-2. daybyを開く
-3. 開発ログインで入る
-4. Profileを作る
-5. Groupを作る
-6. Cameraで10秒以内を撮る
-7. Trimで `Process 2 sec` を押す
-8. `2-second file ready` が出るか確認
+確認する流れはiOSと同じです。
 
 ## 後で必要
 
@@ -111,6 +112,7 @@ EXPO_PUBLIC_ENABLE_DEV_AUTH=false
 - Android development build作成済み
 - iOS simulator build作成済み
 - iOS Bundle ID `app.dayby.mobile` 登録済み
+- iOS development build作成済み
 
 ## 絶対にGitHubへ上げないもの
 

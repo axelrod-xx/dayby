@@ -102,6 +102,8 @@ Phase 8: Preservation and archive foundation.
 - iOS device build needs interactive Apple credential setup before it can be queued.
 - iOS simulator archive ready: `https://expo.dev/artifacts/eas/4T1yyw62ztqbZJ8t8PzEzK.tar.gz`
 - iOS device development build is now progressing through interactive Apple credential/device setup.
+- iOS device development build finished: `a887a540-2a82-4ddf-8e66-985eb11ce719`.
+- iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a887a540-2a82-4ddf-8e66-985eb11ce719`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -110,7 +112,7 @@ Phase 8: Preservation and archive foundation.
 - Validate Apple and Google providers after account setup.
 - Use dev email sign-in while Apple/Google provider setup is pending.
 - Install Android development APK and verify native 2-second trim on device.
-- Verify native 2-second trim on iOS development build after Apple signing is ready.
+- Install iOS development build and verify native 2-second trim on device.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Run signed URL smoke test after Auth rate limit clears or after Apple/Google/dev session is available.
 - Check Android development build result and install the APK when complete.
@@ -127,7 +129,7 @@ Phase 8: Preservation and archive foundation.
 - Google OAuth configuration.
 - R2 server-side access key created and registered in Supabase Edge Function secrets. Rotate before production.
 - iOS and Android development builds for native camera verification.
-- iOS development build still needs Apple Developer credentials/signing.
+- iOS development build is ready; real-device camera/trim verification is still pending.
 - iOS simulator build can be used for app compilation checks, but camera verification still needs a real device.
 
 ## Tool Limits Observed
