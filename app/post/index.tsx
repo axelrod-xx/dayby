@@ -30,6 +30,25 @@ export default function PostToGroupsScreen() {
   }, []);
 
   const availableGroups = useMemo(() => groups.filter((group) => !group.posted_today), [groups]);
+  const postButtonLabel = useMemo(() => {
+    if (posting) {
+      return 'Posting';
+    }
+
+    if (selectedIds.size > 0) {
+      return `Post to ${selectedIds.size}`;
+    }
+
+    if (groups.length === 0) {
+      return 'Create a group first';
+    }
+
+    if (availableGroups.length === 0) {
+      return 'Already posted today';
+    }
+
+    return 'Select a group';
+  }, [availableGroups.length, groups.length, posting, selectedIds.size]);
 
   const toggle = (group: PostableGroup) => {
     if (group.posted_today) {
@@ -74,76 +93,90 @@ export default function PostToGroupsScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View>
-        <Text style={styles.title}>Post to groups</Text>
-        <Text style={styles.copy}>One 2-second video can go to multiple groups. The file stays single.</Text>
-      </View>
-
-      <View style={styles.soundPill}>
-        <Text style={styles.soundText}>
-          {muted === '1' ? 'Muted export' : 'Original sound'} · {Number(trimStartMs ?? 0) / 1000}s start
-        </Text>
-      </View>
-
-      {isNativeTrimmed !== '1' ? (
-        <View style={styles.notice}>
-          <Text style={styles.noticeTitle}>Dev preview</Text>
-          <Text style={styles.noticeCopy}>Native 2-second export is not enabled yet, so real uploads stay blocked.</Text>
+    <View style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View>
+          <Text style={styles.title}>Post to groups</Text>
+          <Text style={styles.copy}>One 2-second video can go to multiple groups. The file stays single.</Text>
         </View>
-      ) : null}
 
-      {loading ? (
-        <ActivityIndicator color="#171615" />
-      ) : groups.length === 0 ? (
-        <View style={styles.empty}>
-          <Text style={styles.emptyTitle}>No groups yet</Text>
-          <Text style={styles.emptyCopy}>Create or join a group before posting today's moment.</Text>
+        <View style={styles.soundPill}>
+          <Text style={styles.soundText}>
+            {muted === '1' ? 'Muted export' : 'Original sound'} · {Number(trimStartMs ?? 0) / 1000}s start
+          </Text>
         </View>
-      ) : (
-        <View style={styles.list}>
-          {groups.map((group) => {
-            const selected = selectedIds.has(group.id);
-            return (
-              <Pressable
-                key={group.id}
-                onPress={() => toggle(group)}
-                style={({ pressed }) => [
-                  styles.groupCard,
-                  selected && styles.groupCardSelected,
-                  group.posted_today && styles.groupCardDisabled,
-                  pressed && !group.posted_today && styles.pressed,
-                ]}>
-                <View style={styles.groupHeader}>
-                  <Text style={styles.groupName}>{group.name}</Text>
-                  <View style={[styles.check, selected && styles.checkSelected]}>
-                    <Text style={[styles.checkText, selected && styles.checkTextSelected]}>{selected ? '✓' : ''}</Text>
+
+        {isNativeTrimmed !== '1' ? (
+          <View style={styles.notice}>
+            <Text style={styles.noticeTitle}>Dev preview</Text>
+            <Text style={styles.noticeCopy}>Native 2-second export is not enabled yet, so real uploads stay blocked.</Text>
+          </View>
+        ) : null}
+
+        {loading ? (
+          <ActivityIndicator color="#171615" />
+        ) : groups.length === 0 ? (
+          <View style={styles.empty}>
+            <Text style={styles.emptyTitle}>No groups yet</Text>
+            <Text style={styles.emptyCopy}>Create or join a group before posting today's moment.</Text>
+            <View style={styles.emptyAction}>
+              <PrimaryButton onPress={() => router.push('/groups/create' as Href)} variant="light">
+                Create group
+              </PrimaryButton>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.list}>
+            {groups.map((group) => {
+              const selected = selectedIds.has(group.id);
+              return (
+                <Pressable
+                  key={group.id}
+                  onPress={() => toggle(group)}
+                  style={({ pressed }) => [
+                    styles.groupCard,
+                    selected && styles.groupCardSelected,
+                    group.posted_today && styles.groupCardDisabled,
+                    pressed && !group.posted_today && styles.pressed,
+                  ]}>
+                  <View style={styles.groupHeader}>
+                    <Text style={styles.groupName}>{group.name}</Text>
+                    <View style={[styles.check, selected && styles.checkSelected]}>
+                      <Text style={[styles.checkText, selected && styles.checkTextSelected]}>{selected ? '✓' : ''}</Text>
+                    </View>
                   </View>
-                </View>
-                <Text style={styles.groupMeta}>
-                  {group.posted_today ? 'Already posted today' : `${group.member_role} · ready for today`}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-      )}
+                  <Text style={styles.groupMeta}>
+                    {group.posted_today ? 'Already posted today' : `${group.member_role} · ready for today`}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
+      </ScrollView>
 
-      <PrimaryButton
-        disabled={selectedIds.size === 0 || availableGroups.length === 0 || !uri}
-        loading={posting}
-        onPress={() => void post()}>
-        Post {selectedIds.size > 0 ? `to ${selectedIds.size}` : ''}
-      </PrimaryButton>
-    </ScrollView>
+      <View style={styles.footer}>
+        <PrimaryButton
+          disabled={selectedIds.size === 0 || availableGroups.length === 0 || !uri}
+          loading={posting}
+          onPress={() => void post()}
+          variant={selectedIds.size > 0 ? 'accent' : 'dark'}>
+          {postButtonLabel}
+        </PrimaryButton>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: '#FFFEFB',
+  },
   container: {
     gap: 22,
     paddingHorizontal: 22,
-    paddingBottom: 42,
+    paddingBottom: 120,
     paddingTop: 84,
     backgroundColor: '#FFFEFB',
   },
@@ -264,5 +297,20 @@ const styles = StyleSheet.create({
     color: '#68625D',
     fontSize: 15,
     lineHeight: 22,
+  },
+  emptyAction: {
+    marginTop: 16,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E1DA',
+    paddingHorizontal: 22,
+    paddingBottom: 28,
+    paddingTop: 14,
+    backgroundColor: '#FFFEFB',
   },
 });

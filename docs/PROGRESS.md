@@ -55,6 +55,7 @@ Phase 8: Preservation and archive foundation.
 - R2 upload path now fails visibly when enabled instead of falling back to local-dev keys.
 - Post creation now records local processed MP4 size and blocks oversized MVP uploads before R2.
 - Confirmed development test account: `dev@dayby.app`.
+- iOS device feedback addressed: 10-second recording passed; Trim now uses a draggable 2-second window; Post now has a fixed bottom action bar.
 
 ## Verified
 
@@ -82,6 +83,8 @@ Phase 8: Preservation and archive foundation.
 - Home and `/groups/demo` web checks completed with no browser console errors.
 - Upload path typechecks with local file-size inspection and visible R2 failure behavior.
 - `dev@dayby.app` signs in successfully through Supabase Auth with a confirmed email.
+- `/trim?uri=&muted=0` web check shows draggable-window helper copy and `Choose groups`.
+- `/post?uri=local-dev/test.mp4&muted=0&trimStartMs=1200&trimDurationMs=2000&isNativeTrimmed=0` web check shows fixed post action and create-group fallback.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`

@@ -1,17 +1,23 @@
 import { type Href, useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Alert, PanResponder, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { trimToTwoSeconds, type TwoSecondTrimResult } from '@/src/features/video/videoProcessingService';
 
-const startOptions = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000];
+const maxStartMs = 8000;
+const selectedDurationMs = 2000;
+const timelineMarks = [0, 2000, 4000, 6000, 8000, 10000];
+
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+const formatSeconds = (valueMs: number) => `${(valueMs / 1000).toFixed(1)}s`;
 
 export default function TrimScreen() {
   const { uri, muted } = useLocalSearchParams<{ uri?: string; muted?: string }>();
   const router = useRouter();
   const [selectedStartMs, setSelectedStartMs] = useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [trimResult, setTrimResult] = useState<TwoSecondTrimResult | null>(null);
   const player = useVideoPlayer(uri ?? '', (instance) => {
@@ -21,9 +27,28 @@ export default function TrimScreen() {
   });
 
   const selectStart = (startMs: number) => {
-    setSelectedStartMs(startMs);
+    setSelectedStartMs(clamp(Math.round(startMs / 100) * 100, 0, maxStartMs));
     setTrimResult(null);
   };
+
+  const selectStartFromX = (x: number) => {
+    if (!trackWidth) {
+      return;
+    }
+
+    selectStart((clamp(x, 0, trackWidth) / trackWidth) * maxStartMs);
+  };
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: (event) => selectStartFromX(event.nativeEvent.locationX),
+        onPanResponderMove: (event) => selectStartFromX(event.nativeEvent.locationX),
+      }),
+    [trackWidth],
+  );
 
   const processClip = async () => {
     if (!uri) {
@@ -66,7 +91,7 @@ export default function TrimScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View>
         <Text style={styles.title}>Keep 2 sec</Text>
         <Text style={styles.copy}>Pick the two seconds worth keeping. The 10-second take stays on this device.</Text>
@@ -77,22 +102,34 @@ export default function TrimScreen() {
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Selected</Text>
         <Text style={styles.panelText}>
-          {(selectedStartMs / 1000).toFixed(1)}s - {((selectedStartMs + 2000) / 1000).toFixed(1)}s ·{' '}
+          {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)} ·{' '}
           {muted === '1' ? 'Muted' : 'Original sound'}
         </Text>
-        <View style={styles.timeline}>
-          {startOptions.map((startMs) => {
-            const selected = startMs === selectedStartMs;
-            return (
-              <Pressable
-                key={startMs}
-                onPress={() => selectStart(startMs)}
-                style={({ pressed }) => [styles.tick, selected && styles.tickSelected, pressed && styles.pressed]}>
-                <Text style={[styles.tickText, selected && styles.tickTextSelected]}>{startMs / 1000}s</Text>
-              </Pressable>
-            );
-          })}
+        <View
+          onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}
+          style={styles.timeline}
+          {...panResponder.panHandlers}>
+          <View style={styles.track} />
+          <View
+            style={[
+              styles.window,
+              {
+                left: `${(selectedStartMs / 10000) * 100}%`,
+                width: `${(selectedDurationMs / 10000) * 100}%`,
+              },
+            ]}
+          />
+          <View style={[styles.handle, { left: `${(selectedStartMs / 10000) * 100}%` }]} />
+          <View style={[styles.handle, { left: `${((selectedStartMs + selectedDurationMs) / 10000) * 100}%` }]} />
         </View>
+        <View style={styles.markRow}>
+          {timelineMarks.map((mark) => (
+            <Pressable key={mark} onPress={() => selectStart(Math.min(mark, maxStartMs))} hitSlop={8}>
+              <Text style={styles.markText}>{mark / 1000}s</Text>
+            </Pressable>
+          ))}
+        </View>
+        <Text style={styles.helperText}>Drag the highlighted 2-second window. End time stays fixed at start + 2 sec.</Text>
         <Text style={styles.statusText}>
           {trimResult?.isNativeTrimmed
             ? '2-second file ready'
@@ -108,15 +145,15 @@ export default function TrimScreen() {
       <PrimaryButton disabled={!uri || !trimResult} onPress={continueToPost}>
         Choose groups
       </PrimaryButton>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     gap: 18,
     paddingHorizontal: 22,
+    paddingBottom: 36,
     paddingTop: 84,
     backgroundColor: '#FFFEFB',
   },
@@ -155,35 +192,46 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   timeline: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
+    height: 44,
+    justifyContent: 'center',
     marginTop: 16,
   },
-  tick: {
-    minWidth: 48,
-    minHeight: 38,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#D8D2C8',
-    borderRadius: 8,
-    backgroundColor: '#FBFAF7',
+  track: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#D8D2C8',
   },
-  tickSelected: {
-    borderColor: '#171615',
+  window: {
+    position: 'absolute',
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#E65A3C',
+  },
+  handle: {
+    position: 'absolute',
+    width: 22,
+    height: 34,
+    marginLeft: -11,
+    borderWidth: 3,
+    borderColor: '#FFFEFB',
+    borderRadius: 11,
     backgroundColor: '#171615',
   },
-  tickText: {
-    color: '#68625D',
-    fontSize: 13,
+  markRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 6,
+  },
+  markText: {
+    color: '#78716C',
+    fontSize: 12,
     fontWeight: '800',
   },
-  tickTextSelected: {
-    color: '#FFFEFB',
-  },
-  pressed: {
-    opacity: 0.75,
+  helperText: {
+    marginTop: 10,
+    color: '#78716C',
+    fontSize: 13,
+    lineHeight: 19,
   },
   statusText: {
     marginTop: 14,
