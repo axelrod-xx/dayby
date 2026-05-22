@@ -56,6 +56,7 @@ Phase 8: Preservation and archive foundation.
 - Post creation now records local processed MP4 size and blocks oversized MVP uploads before R2.
 - Confirmed development test account: `dev@dayby.app`.
 - iOS device feedback addressed: 10-second recording passed; Trim now uses a draggable 2-second window; Post now has a fixed bottom action bar.
+- Follow-up iOS development build started for Trim/Post fixes: `61f537fb-efa0-4ef9-89ab-ec30ff598613`.
 
 ## Verified
 
@@ -121,6 +122,7 @@ Phase 8: Preservation and archive foundation.
 - Use dev email sign-in while Apple/Google provider setup is pending.
 - Install Android development APK and verify native 2-second trim on device.
 - Install iOS development build and verify native 2-second trim on device.
+- Install the follow-up iOS build after it finishes and re-test Trim drag selection plus the fixed Post action bar.
 - After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
 - Run signed URL smoke test after Auth rate limit clears or after Apple/Google/dev session is available.
 - Check Android development build result and install the APK when complete.
