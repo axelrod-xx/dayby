@@ -58,6 +58,7 @@ Phase 8: Preservation and archive foundation.
 - iOS device feedback addressed: 10-second recording passed; Trim now uses a draggable 2-second window; Post now has a fixed bottom action bar.
 - Follow-up iOS development build started for Trim/Post fixes: `61f537fb-efa0-4ef9-89ab-ec30ff598613`.
 - Follow-up iOS development build finished: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/61f537fb-efa0-4ef9-89ab-ec30ff598613`.
+- Main copy shifted away from the 10-second rule toward `Two seconds a day. One minute a month.`
 
 ## Verified
 
@@ -81,7 +82,7 @@ Phase 8: Preservation and archive foundation.
 - `/weekly/demo/2026-05-18` returns HTTP 200 and contains `THIS WEEK`
 - `/archive` returns HTTP 200 and contains `Archive`
 - `/safety/report?groupId=demo` returns HTTP 200 and contains `Send report`
-- Home web UI shows the revised `Shoot 10 sec. / Keep 2 sec.` hero and `Memory rhythm` section.
+- Home web UI shows the `Two seconds a day. / One minute a month.` hero and `Memory rhythm` section.
 - Home and `/groups/demo` web checks completed with no browser console errors.
 - Upload path typechecks with local file-size inspection and visible R2 failure behavior.
 - `dev@dayby.app` signs in successfully through Supabase Auth with a confirmed email.

@@ -56,7 +56,7 @@ export default function CameraScreen() {
     return (
       <View style={styles.permission}>
         <Text style={styles.title}>Camera</Text>
-        <Text style={styles.copy}>Shoot up to 10 seconds. Only the final 2 seconds you choose will be uploaded.</Text>
+        <Text style={styles.copy}>Record a short take. You will keep just 2 seconds next.</Text>
         <PrimaryButton onPress={() => void requestPermissions()}>Allow camera</PrimaryButton>
         <Pressable onPress={() => setMuted((current) => !current)}>
           <Text style={styles.muteText}>{muted ? 'Muted recording selected' : 'Record with sound'}</Text>
@@ -70,8 +70,8 @@ export default function CameraScreen() {
       <CameraView ref={cameraRef} mode="video" mute={muted} style={styles.camera} videoQuality="720p" />
       <View style={styles.overlay}>
         <View>
-          <Text style={styles.captureTitle}>10 sec</Text>
-          <Text style={styles.captureCopy}>Keep only 2 sec next.</Text>
+          <Text style={styles.captureTitle}>{isRecording ? 'Recording' : 'Today'}</Text>
+          <Text style={styles.captureCopy}>Up to 10 sec. Keep 2 sec next.</Text>
         </View>
         <Pressable onPress={() => setMuted((current) => !current)} style={styles.muteButton}>
           <Text style={styles.muteButtonText}>{muted ? 'Muted' : 'Sound'}</Text>

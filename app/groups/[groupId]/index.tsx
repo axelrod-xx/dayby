@@ -99,8 +99,8 @@ export default function GroupDetailScreen() {
 
       <View style={styles.todayPanel}>
         <Text style={styles.kicker}>Today</Text>
-        <Text style={styles.todayTitle}>Keep one tiny piece of the day.</Text>
-        <Text style={styles.panelText}>Shoot up to 10 seconds. Only the 2 seconds you choose will be uploaded.</Text>
+        <Text style={styles.todayTitle}>Keep today's 2 seconds.</Text>
+        <Text style={styles.panelText}>A tiny moment from today, saved with the people who were there.</Text>
         <View style={styles.action}>
           <Link href={'/camera' as Href} asChild>
             <PrimaryButton onPress={() => undefined} variant="accent">

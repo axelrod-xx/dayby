@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 const items = [
-  { accent: '#E65A3C', label: 'Capture', value: '10 sec' },
-  { accent: '#2F6F68', label: 'Keep', value: '2 sec' },
+  { accent: '#E65A3C', label: 'Today', value: '2 sec' },
+  { accent: '#2F6F68', label: 'Together', value: 'Group' },
   { accent: '#2E5AAC', label: 'Month', value: '1 min' },
 ];
 

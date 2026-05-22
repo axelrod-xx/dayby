@@ -21,8 +21,8 @@ export default function TabOneScreen() {
           <Text style={styles.wordmark}>dayby</Text>
           <Text style={styles.date}>{todayLabel}</Text>
         </View>
-        <Text style={styles.hero}>Shoot 10 sec.{'\n'}Keep 2 sec.</Text>
-        <Text style={styles.copy}>Your month becomes 1 minute.</Text>
+        <Text style={styles.hero}>Two seconds a day.{'\n'}One minute a month.</Text>
+        <Text style={styles.copy}>A quiet memory, made by your group.</Text>
       </View>
 
       <TodayOverview />
@@ -95,7 +95,7 @@ function getNextAction(status: string, isProfileComplete: boolean) {
     return 'Set your display name before creating your first group.';
   }
 
-  return 'Create your first group, then capture the first 10 seconds worth remembering.';
+  return "Create your first group, then keep today's moment.";
 }
 
 const styles = StyleSheet.create({

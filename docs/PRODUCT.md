@@ -4,6 +4,8 @@
 
 dayby turns a friend group's daily 2-second moments into a monthly memory.
 
+Primary copy direction: `Two seconds a day. One minute a month.`
+
 The app is not a video editor, not a public social feed, and not a music app. It helps a private group keep the moments that mattered, then leaves music and final posting context to Instagram, TikTok, Reels, Stories, LINE, or the user's camera roll.
 
 ## Core Loop
@@ -52,6 +54,8 @@ The app is not a video editor, not a public social feed, and not a music app. It
 - Quiet, modern, simple.
 - English-first UI.
 - Memory-first, not editor-first.
+- The public-facing promise emphasizes daily 2-second memories becoming a 1-minute month.
+- The 10-second capture limit is a camera-time instruction, not the headline.
 - Daily Reel emphasizes time and person: `18:42 · RYO`.
 - Weekly Memory is intentionally secondary: visible, useful, not pushed.
 - Monthly Memory emphasizes date, weekday, time, and group.

@@ -46,8 +46,8 @@ export default function SignInScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.wordmark}>dayby</Text>
-        <Text style={styles.copy}>Shoot 10 sec. Keep 2 sec.</Text>
-        <Text style={styles.subcopy}>Your group keeps the month together.</Text>
+        <Text style={styles.copy}>Two seconds a day. One minute a month.</Text>
+        <Text style={styles.subcopy}>Your group keeps the days that mattered.</Text>
       </View>
 
       {!isSupabaseConfigured ? (
