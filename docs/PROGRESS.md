@@ -57,6 +57,7 @@ Phase 8: Preservation and archive foundation.
 - Confirmed development test account: `dev@dayby.app`.
 - iOS device feedback addressed: 10-second recording passed; Trim now uses a draggable 2-second window; Post now has a fixed bottom action bar.
 - Follow-up iOS development build started for Trim/Post fixes: `61f537fb-efa0-4ef9-89ab-ec30ff598613`.
+- Follow-up iOS development build finished: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/61f537fb-efa0-4ef9-89ab-ec30ff598613`.
 
 ## Verified
 
