@@ -1,5 +1,5 @@
 import { type Href, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, PanResponder, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
@@ -12,6 +12,7 @@ const timelineMarks = [0, 2000, 4000, 6000, 8000, 10000];
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 const formatSeconds = (valueMs: number) => `${(valueMs / 1000).toFixed(1)}s`;
+const normalizeStartMs = (startMs: number) => clamp(Math.round(startMs / 100) * 100, 0, maxStartMs);
 
 export default function TrimScreen() {
   const { uri, muted } = useLocalSearchParams<{ uri?: string; muted?: string }>();
@@ -20,6 +21,7 @@ export default function TrimScreen() {
   const [trackWidth, setTrackWidth] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [trimResult, setTrimResult] = useState<TwoSecondTrimResult | null>(null);
+  const dragStartMsRef = useRef(0);
   const player = useVideoPlayer(uri ?? '', (instance) => {
     instance.loop = false;
     instance.muted = muted === '1';
@@ -30,25 +32,36 @@ export default function TrimScreen() {
   const selectedEndSeconds = (selectedStartMs + selectedDurationMs) / 1000;
 
   const selectStart = (startMs: number) => {
-    setSelectedStartMs(clamp(Math.round(startMs / 100) * 100, 0, maxStartMs));
+    setSelectedStartMs(normalizeStartMs(startMs));
     setTrimResult(null);
   };
 
-  const selectStartFromX = (x: number) => {
+  const startFromTrackX = (x: number) => {
     if (!trackWidth) {
-      return;
+      return 0;
     }
 
-    selectStart((clamp(x, 0, trackWidth) / trackWidth) * maxStartMs);
+    const pointerMs = (clamp(x, 0, trackWidth) / trackWidth) * 10000;
+    return normalizeStartMs(pointerMs - selectedDurationMs / 2);
   };
 
   const panResponder = useMemo(
     () =>
       PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
         onStartShouldSetPanResponder: () => true,
-        onPanResponderGrant: (event) => selectStartFromX(event.nativeEvent.locationX),
-        onPanResponderMove: (event) => selectStartFromX(event.nativeEvent.locationX),
+        onMoveShouldSetPanResponder: (_, gesture) => Math.abs(gesture.dx) > 3 && Math.abs(gesture.dx) > Math.abs(gesture.dy),
+        onPanResponderGrant: (event) => {
+          const nextStartMs = startFromTrackX(event.nativeEvent.locationX);
+          dragStartMsRef.current = nextStartMs;
+          selectStart(nextStartMs);
+        },
+        onPanResponderMove: (_, gesture) => {
+          if (!trackWidth) {
+            return;
+          }
+
+          selectStart(dragStartMsRef.current + (gesture.dx / trackWidth) * 10000);
+        },
       }),
     [trackWidth],
   );

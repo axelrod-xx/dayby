@@ -88,6 +88,7 @@ Phase 8: Preservation and archive foundation.
 - `dev@dayby.app` signs in successfully through Supabase Auth with a confirmed email.
 - `/trim?uri=&muted=0` web check shows draggable-window helper copy and `Choose groups`.
 - `/trim?uri=&muted=0` web check shows the selected-2-second loop badge, updated helper copy, and `Use this 2 sec`.
+- Trim slider drag now uses gesture delta from the drag start, preventing the selected window from shaking while the handle re-renders.
 - `/post?uri=local-dev/test.mp4&muted=0&trimStartMs=1200&trimDurationMs=2000&isNativeTrimmed=0` web check shows fixed post action and create-group fallback.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
