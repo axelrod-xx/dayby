@@ -77,10 +77,10 @@ export default function GroupsScreen() {
                 <View>
                   <Text style={styles.groupName}>{group.name}</Text>
                   <Text style={styles.groupMeta}>
-                    {group.member_role} · {group.timezone} · {getGroupActivityLabel(group)}
+                    {group.member_role} / {group.timezone} / {getGroupActivityLabel(group)}
                   </Text>
                 </View>
-                <Text style={styles.chevron}>›</Text>
+                <Text style={styles.chevron}>&gt;</Text>
               </Pressable>
             </Link>
           ))}
@@ -90,7 +90,7 @@ export default function GroupsScreen() {
                 <Text style={styles.archiveText}>
                   {archivedGroups.length} quiet group{archivedGroups.length > 1 ? 's' : ''}
                 </Text>
-                <Text style={styles.chevron}>›</Text>
+                <Text style={styles.chevron}>&gt;</Text>
               </Pressable>
             </Link>
           ) : null}

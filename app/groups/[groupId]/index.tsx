@@ -10,13 +10,14 @@ import {
   listGroupMembers,
   recordGroupActivity,
 } from '@/src/features/groups/groupService';
-import type { GroupInvite, GroupMemberProfile, GroupWithMembership } from '@/src/features/groups/types';
+import type { GroupInvite, GroupMemberProfile } from '@/src/features/groups/types';
+import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 import { previousDateString } from '@/src/features/reels/reelService';
 import { currentWeekStartString } from '@/src/features/weekly/weeklyService';
 
 export default function GroupDetailScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
-  const [group, setGroup] = useState<GroupWithMembership | null>(null);
+  const [group, setGroup] = useState<PostableGroup | null>(null);
   const [members, setMembers] = useState<GroupMemberProfile[]>([]);
   const [invites, setInvites] = useState<GroupInvite[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +38,8 @@ export default function GroupDetailScreen() {
       listGroupInvites(groupId),
     ]);
 
-    setGroup(nextGroup);
+    const [postableGroup] = nextGroup ? await listPostableGroups([nextGroup]) : [];
+    setGroup(postableGroup ?? null);
     setMembers(nextMembers);
     setInvites(nextInvites);
   };
@@ -93,20 +95,37 @@ export default function GroupDetailScreen() {
         <Text style={styles.kicker}>Group</Text>
         <Text style={styles.title}>{group.name}</Text>
         <Text style={styles.copy}>
-          {group.timezone} · {members.length}/{group.member_limit} friends
+          {group.timezone} / {members.length}/{group.member_limit} friends
         </Text>
       </View>
 
       <View style={styles.todayPanel}>
         <Text style={styles.kicker}>Today</Text>
-        <Text style={styles.todayTitle}>Keep today's 2 seconds.</Text>
-        <Text style={styles.panelText}>A tiny moment from today, saved with the people who were there.</Text>
+        <Text style={styles.todayTitle}>{group.posted_today ? 'Posted today.' : "Keep today's 2 seconds."}</Text>
+        <Text style={styles.panelText}>
+          {group.posted_today
+            ? 'Your moment is already in this group. Come back tomorrow to vote.'
+            : 'A tiny moment from today, saved with the people who were there.'}
+        </Text>
         <View style={styles.action}>
-          <Link href={'/camera' as Href} asChild>
-            <PrimaryButton onPress={() => undefined} variant="accent">
-              Capture today
-            </PrimaryButton>
-          </Link>
+          {group.posted_today ? (
+            <Link
+              href={{
+                pathname: '/daily/[groupId]/[date]',
+                params: { groupId: group.id, date: previousDateString() },
+              }}
+              asChild>
+              <PrimaryButton onPress={() => undefined} variant="light">
+                Open yesterday
+              </PrimaryButton>
+            </Link>
+          ) : (
+            <Link href={'/camera' as Href} asChild>
+              <PrimaryButton onPress={() => undefined} variant="accent">
+                Capture today
+              </PrimaryButton>
+            </Link>
+          )}
         </View>
       </View>
 
@@ -130,7 +149,7 @@ export default function GroupDetailScreen() {
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Settings</Text>
         <Text style={styles.panelText}>
-          {group.plan} plan · monthly highlight {group.monthly_highlight_enabled ? 'on' : 'off'} · downloads{' '}
+          {group.plan} plan / monthly highlight {group.monthly_highlight_enabled ? 'on' : 'off'} / downloads{' '}
           {group.download_enabled ? 'on' : 'off'}
         </Text>
       </View>

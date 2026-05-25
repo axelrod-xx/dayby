@@ -1,18 +1,42 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Link, type Href } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Link, type Href, useFocusEffect } from 'expo-router';
 
 import { TodayOverview } from '@/src/features/home/TodayOverview';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
+import { listMyGroups } from '@/src/features/groups/groupService';
+import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 
 export default function TabOneScreen() {
   const { isProfileComplete, isSupabaseConfigured, profile, signOut, status } = useAuth();
+  const [groups, setGroups] = useState<PostableGroup[]>([]);
+  const [loadingGroups, setLoadingGroups] = useState(false);
   const isSignedIn = status === 'signed-in';
+  const canLoadGroups = isSignedIn && isProfileComplete;
+  const availableGroups = groups.filter((group) => !group.posted_today);
+  const postedGroups = groups.filter((group) => group.posted_today);
   const todayLabel = new Intl.DateTimeFormat('en', {
     day: '2-digit',
     month: 'short',
     weekday: 'short',
   }).format(new Date());
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!canLoadGroups) {
+        setGroups([]);
+        return;
+      }
+
+      setLoadingGroups(true);
+      listMyGroups()
+        .then(listPostableGroups)
+        .then(setGroups)
+        .catch(() => setGroups([]))
+        .finally(() => setLoadingGroups(false));
+    }, [canLoadGroups]),
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -41,7 +65,15 @@ export default function TabOneScreen() {
         <Text style={styles.panelTitle}>
           {isSignedIn ? `Hi${profile?.display_name ? `, ${profile.display_name}` : ''}` : 'Start'}
         </Text>
-        <Text style={styles.panelText}>{getNextAction(status, isProfileComplete)}</Text>
+        <Text style={styles.panelText}>
+          {getNextAction({
+            availableCount: availableGroups.length,
+            groupCount: groups.length,
+            isProfileComplete,
+            postedCount: postedGroups.length,
+            status,
+          })}
+        </Text>
         <View style={styles.actionRow}>
           {!isSignedIn ? (
             <Link href="/(auth)/sign-in" asChild>
@@ -53,11 +85,39 @@ export default function TabOneScreen() {
             <Link href="/profile-setup" asChild>
               <PrimaryButton onPress={() => undefined}>Set profile</PrimaryButton>
             </Link>
-          ) : (
+          ) : loadingGroups ? (
+            <ActivityIndicator color="#171615" />
+          ) : groups.length === 0 ? (
+            <View style={styles.signedInActions}>
+              <Link href="/groups/create" asChild>
+                <PrimaryButton onPress={() => undefined} variant="accent">
+                  Create group
+                </PrimaryButton>
+              </Link>
+              <Link href="/groups/join" asChild>
+                <PrimaryButton onPress={() => undefined} variant="light">
+                  Enter code
+                </PrimaryButton>
+              </Link>
+            </View>
+          ) : availableGroups.length > 0 ? (
             <View style={styles.signedInActions}>
               <Link href={'/camera' as Href} asChild>
                 <PrimaryButton onPress={() => undefined} variant="accent">
                   Capture today
+                </PrimaryButton>
+              </Link>
+              <Link href={'/(tabs)/groups' as Href} asChild>
+                <PrimaryButton onPress={() => undefined} variant="light">
+                  {availableGroups.length} group{availableGroups.length > 1 ? 's' : ''} open today
+                </PrimaryButton>
+              </Link>
+            </View>
+          ) : (
+            <View style={styles.signedInActions}>
+              <Link href={'/(tabs)/groups' as Href} asChild>
+                <PrimaryButton onPress={() => undefined} variant="accent">
+                  View groups
                 </PrimaryButton>
               </Link>
               <PrimaryButton onPress={() => void signOut()} variant="light">
@@ -78,7 +138,15 @@ export default function TabOneScreen() {
   );
 }
 
-function getNextAction(status: string, isProfileComplete: boolean) {
+function getNextAction(input: {
+  availableCount: number;
+  groupCount: number;
+  isProfileComplete: boolean;
+  postedCount: number;
+  status: string;
+}) {
+  const { availableCount, groupCount, isProfileComplete, postedCount, status } = input;
+
   if (status === 'missing-config') {
     return 'Create Supabase, add environment values, then sign in with Apple or Google.';
   }
@@ -95,7 +163,15 @@ function getNextAction(status: string, isProfileComplete: boolean) {
     return 'Set your display name before creating your first group.';
   }
 
-  return "Create your first group, then keep today's moment.";
+  if (groupCount === 0) {
+    return 'Create or join a group before keeping your first moment.';
+  }
+
+  if (availableCount > 0) {
+    return `${availableCount} group${availableCount > 1 ? 's' : ''} can still receive today's 2 seconds.`;
+  }
+
+  return `You're done for today. ${postedCount} group${postedCount > 1 ? 's' : ''} kept your moment.`;
 }
 
 const styles = StyleSheet.create({

@@ -93,6 +93,10 @@ Phase 8: Preservation and archive foundation.
 - Post now routes to a success screen after upload, with `View group` for single-group posts and `View groups` / `Back home` for multi-group posts.
 - Camera, Trim, and Post now include clear back, close, or retake controls for the capture flow.
 - Added `docs/I18N.md` to track the English-first UI and planned Japanese/Korean localization path.
+- Home now changes its primary action for no groups, open groups, and all-posted states.
+- Group Detail now shows `Posted today` instead of another capture CTA when the user already posted to that group.
+- Vote completion now offers `Back to group` and `Back home`.
+- Remaining mojibake markers were removed from Groups, Group Detail, and Vote.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`

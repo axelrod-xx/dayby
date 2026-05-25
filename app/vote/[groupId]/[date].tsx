@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Link, type Href, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -73,9 +73,7 @@ export default function VoteScreen() {
                   <Text style={styles.time}>{moment.time_label}</Text>
                   <Text style={styles.name}>{moment.display_name}</Text>
                 </View>
-                <View style={[styles.radio, selected && styles.radioSelected]}>
-                  <Text style={styles.radioText}>{selected ? '✓' : ''}</Text>
-                </View>
+                <View style={[styles.radio, selected && styles.radioSelected]}>{selected ? <View style={styles.radioDot} /> : null}</View>
               </Pressable>
             );
           })}
@@ -86,6 +84,18 @@ export default function VoteScreen() {
         <View style={styles.locked}>
           <Text style={styles.lockedTitle}>Vote saved</Text>
           <Text style={styles.lockedCopy}>Results unlock after the deadline.</Text>
+          <View style={styles.lockedActions}>
+            <Link href={{ pathname: '/groups/[groupId]', params: { groupId } } as unknown as Href} asChild>
+              <PrimaryButton onPress={() => undefined} variant="light">
+                Back to group
+              </PrimaryButton>
+            </Link>
+            <Link href={'/(tabs)' as Href} asChild>
+              <PrimaryButton onPress={() => undefined} variant="light">
+                Back home
+              </PrimaryButton>
+            </Link>
+          </View>
         </View>
       ) : (
         <PrimaryButton disabled={!selectedPostId || moments.length === 0} loading={saving} onPress={() => void save()}>
@@ -164,10 +174,11 @@ const styles = StyleSheet.create({
     borderColor: '#171615',
     backgroundColor: '#171615',
   },
-  radioText: {
-    color: '#FFFEFB',
-    fontSize: 16,
-    fontWeight: '900',
+  radioDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#FFFEFB',
   },
   locked: {
     borderTopWidth: 1,
@@ -183,5 +194,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     color: '#68625D',
     fontSize: 15,
+  },
+  lockedActions: {
+    gap: 10,
+    marginTop: 16,
   },
 });
