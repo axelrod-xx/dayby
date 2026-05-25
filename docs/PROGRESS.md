@@ -116,6 +116,8 @@ Phase 8: Preservation and archive foundation.
 - iOS device development build is now progressing through interactive Apple credential/device setup.
 - iOS device development build finished: `a887a540-2a82-4ddf-8e66-985eb11ce719`.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a887a540-2a82-4ddf-8e66-985eb11ce719`
+- iOS device development build with selected-trim loop preview finished: `9272464e-62f3-4add-9f57-46589f6186d8`.
+- iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/9272464e-62f3-4add-9f57-46589f6186d8`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
