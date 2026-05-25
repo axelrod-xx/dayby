@@ -1,5 +1,5 @@
 import { type Href, useLocalSearchParams, useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Alert, PanResponder, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
@@ -21,10 +21,13 @@ export default function TrimScreen() {
   const [processing, setProcessing] = useState(false);
   const [trimResult, setTrimResult] = useState<TwoSecondTrimResult | null>(null);
   const player = useVideoPlayer(uri ?? '', (instance) => {
-    instance.loop = true;
+    instance.loop = false;
     instance.muted = muted === '1';
+    instance.timeUpdateEventInterval = 0.05;
     void instance.play();
   });
+  const selectedStartSeconds = selectedStartMs / 1000;
+  const selectedEndSeconds = (selectedStartMs + selectedDurationMs) / 1000;
 
   const selectStart = (startMs: number) => {
     setSelectedStartMs(clamp(Math.round(startMs / 100) * 100, 0, maxStartMs));
@@ -49,6 +52,30 @@ export default function TrimScreen() {
       }),
     [trackWidth],
   );
+
+  useEffect(() => {
+    if (!uri) {
+      return;
+    }
+
+    player.currentTime = selectedStartSeconds;
+    player.play();
+  }, [player, selectedStartSeconds, uri]);
+
+  useEffect(() => {
+    if (!uri) {
+      return undefined;
+    }
+
+    const interval = setInterval(() => {
+      if (player.currentTime >= selectedEndSeconds - 0.04 || player.currentTime < selectedStartSeconds) {
+        player.currentTime = selectedStartSeconds;
+        player.play();
+      }
+    }, 80);
+
+    return () => clearInterval(interval);
+  }, [player, selectedEndSeconds, selectedStartSeconds, uri]);
 
   const processClip = async () => {
     if (!uri) {
@@ -97,12 +124,23 @@ export default function TrimScreen() {
         <Text style={styles.copy}>Pick the two seconds worth keeping. The 10-second take stays on this device.</Text>
       </View>
 
-      {uri ? <VideoView player={player} style={styles.preview} /> : <View style={styles.preview} />}
+      <View style={styles.previewWrap}>
+        {uri ? (
+          <VideoView contentFit="cover" nativeControls={false} player={player} style={styles.preview} />
+        ) : (
+          <View style={styles.preview} />
+        )}
+        <View style={styles.previewBadge}>
+          <Text style={styles.previewBadgeText}>
+            Looping {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)}
+          </Text>
+        </View>
+      </View>
 
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Selected</Text>
         <Text style={styles.panelText}>
-          {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)} ·{' '}
+          {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)} /{' '}
           {muted === '1' ? 'Muted' : 'Original sound'}
         </Text>
         <View
@@ -129,7 +167,7 @@ export default function TrimScreen() {
             </Pressable>
           ))}
         </View>
-        <Text style={styles.helperText}>Drag the highlighted 2-second window. End time stays fixed at start + 2 sec.</Text>
+        <Text style={styles.helperText}>Drag the highlighted window. The preview loops only this 2-second part.</Text>
         <Text style={styles.statusText}>
           {trimResult?.isNativeTrimmed
             ? '2-second file ready'
@@ -140,7 +178,7 @@ export default function TrimScreen() {
       </View>
 
       <PrimaryButton disabled={!uri} loading={processing} onPress={() => void processClip()} variant="light">
-        Process 2 sec
+        Use this 2 sec
       </PrimaryButton>
       <PrimaryButton disabled={!uri || !trimResult} onPress={continueToPost}>
         Choose groups
@@ -168,12 +206,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 23,
   },
-  preview: {
+  previewWrap: {
     width: '100%',
     aspectRatio: 9 / 16,
     maxHeight: 390,
     borderRadius: 8,
+    overflow: 'hidden',
     backgroundColor: '#171615',
+  },
+  preview: {
+    flex: 1,
+    backgroundColor: '#171615',
+  },
+  previewBadge: {
+    position: 'absolute',
+    left: 12,
+    bottom: 12,
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    backgroundColor: 'rgba(20, 19, 18, 0.74)',
+  },
+  previewBadgeText: {
+    color: '#FFFEFB',
+    fontSize: 12,
+    fontWeight: '800',
   },
   panel: {
     borderTopWidth: 1,

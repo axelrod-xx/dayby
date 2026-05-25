@@ -74,7 +74,7 @@ Phase 8: Preservation and archive foundation.
 - `/groups/join` returns HTTP 200 and contains `Invite code`
 - `/camera` returns HTTP 200 and contains `Camera`
 - `/post` returns HTTP 200 and contains `Post to groups`
-- `/trim?uri=&muted=0` returns HTTP 200 and contains `Process 2 sec`
+- `/trim?uri=&muted=0` returns HTTP 200 and contains `Use this 2 sec`
 - `/post?uri=local-dev/test.mp4&muted=0&trimStartMs=0&trimDurationMs=2000&isNativeTrimmed=0` returns HTTP 200 and shows dev upload guard copy
 - `/daily/demo/2026-05-20` returns HTTP 200 and contains `Daily Reel`
 - `/vote/demo/2026-05-20` returns HTTP 200 and contains `Best 2 sec`
@@ -87,6 +87,7 @@ Phase 8: Preservation and archive foundation.
 - Upload path typechecks with local file-size inspection and visible R2 failure behavior.
 - `dev@dayby.app` signs in successfully through Supabase Auth with a confirmed email.
 - `/trim?uri=&muted=0` web check shows draggable-window helper copy and `Choose groups`.
+- `/trim?uri=&muted=0` web check shows the selected-2-second loop badge, updated helper copy, and `Use this 2 sec`.
 - `/post?uri=local-dev/test.mp4&muted=0&trimStartMs=1200&trimDurationMs=2000&isNativeTrimmed=0` web check shows fixed post action and create-group fallback.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
