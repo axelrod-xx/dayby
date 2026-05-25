@@ -1,6 +1,6 @@
 import { Link, type Href, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import {
@@ -72,6 +72,18 @@ export default function GroupDetailScreen() {
     }
   };
 
+  const shareInvite = async () => {
+    const invite = invites[0];
+    if (!invite || !group) {
+      Alert.alert('Create a code first', 'Make an invite code before sharing this group.');
+      return;
+    }
+
+    await Share.share({
+      message: `Join ${group.name} on dayby. Invite code: ${invite.code}`,
+    });
+  };
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -88,6 +100,8 @@ export default function GroupDetailScreen() {
       </ScrollView>
     );
   }
+
+  const canManageInvites = group.member_role === 'owner' || group.member_role === 'admin';
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -129,6 +143,24 @@ export default function GroupDetailScreen() {
         </View>
       </View>
 
+      {members.length <= 1 && canManageInvites ? (
+        <View style={styles.inviteNudge}>
+          <Text style={styles.inviteNudgeTitle}>Bring your people in.</Text>
+          <Text style={styles.panelText}>dayby starts to feel right when a few friends keep the same month together.</Text>
+          <View style={styles.action}>
+            {invites[0] ? (
+              <PrimaryButton onPress={() => void shareInvite()} variant="accent">
+                Share invite code
+              </PrimaryButton>
+            ) : (
+              <PrimaryButton loading={creatingInvite} onPress={() => void addInvite()} variant="accent">
+                Create invite code
+              </PrimaryButton>
+            )}
+          </View>
+        </View>
+      ) : null}
+
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Yesterday</Text>
         <Text style={styles.panelText}>Watch by time, then choose the 2 seconds worth keeping.</Text>
@@ -141,28 +173,6 @@ export default function GroupDetailScreen() {
             asChild>
             <PrimaryButton onPress={() => undefined} variant="light">
               Open Daily Reel
-            </PrimaryButton>
-          </Link>
-        </View>
-      </View>
-
-      <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Settings</Text>
-        <Text style={styles.panelText}>
-          {group.plan} plan / monthly highlight {group.monthly_highlight_enabled ? 'on' : 'off'} / downloads{' '}
-          {group.download_enabled ? 'on' : 'off'}
-        </Text>
-      </View>
-
-      <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Safety</Text>
-        <Text style={styles.panelText}>Report a moment or group issue without calling anyone out.</Text>
-        <View style={styles.action}>
-          <Link
-            href={{ pathname: '/safety/report', params: { groupId: group.id } } as unknown as Href}
-            asChild>
-            <PrimaryButton onPress={() => undefined} variant="light">
-              Report something
             </PrimaryButton>
           </Link>
         </View>
@@ -216,7 +226,7 @@ export default function GroupDetailScreen() {
         </View>
       </View>
 
-      {group.member_role === 'owner' || group.member_role === 'admin' ? (
+      {canManageInvites ? (
         <View style={styles.panel}>
           <Text style={styles.panelTitle}>Invite</Text>
           <Text style={styles.panelText}>Share a code with friends. Links can come later.</Text>
@@ -231,11 +241,38 @@ export default function GroupDetailScreen() {
           ) : null}
           <View style={styles.action}>
             <PrimaryButton loading={creatingInvite} onPress={() => void addInvite()} variant="light">
-              Create invite code
+              New invite code
             </PrimaryButton>
+            {invites[0] ? (
+              <PrimaryButton onPress={() => void shareInvite()} variant="light">
+                Share latest code
+              </PrimaryButton>
+            ) : null}
           </View>
         </View>
       ) : null}
+
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>Settings</Text>
+        <Text style={styles.panelText}>
+          {group.plan} plan / monthly highlight {group.monthly_highlight_enabled ? 'on' : 'off'} / downloads{' '}
+          {group.download_enabled ? 'on' : 'off'}
+        </Text>
+      </View>
+
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>Safety</Text>
+        <Text style={styles.panelText}>Report a moment or group issue without calling anyone out.</Text>
+        <View style={styles.action}>
+          <Link
+            href={{ pathname: '/safety/report', params: { groupId: group.id } } as unknown as Href}
+            asChild>
+            <PrimaryButton onPress={() => undefined} variant="light">
+              Report something
+            </PrimaryButton>
+          </Link>
+        </View>
+      </View>
     </ScrollView>
   );
 }
@@ -283,6 +320,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 18,
     backgroundColor: '#FFFFFF',
+  },
+  inviteNudge: {
+    borderWidth: 1,
+    borderColor: '#171615',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#F5F1EA',
+  },
+  inviteNudgeTitle: {
+    color: '#171615',
+    fontSize: 22,
+    fontWeight: '900',
+    lineHeight: 28,
   },
   todayTitle: {
     color: '#141312',
@@ -349,6 +399,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   action: {
+    gap: 10,
     marginTop: 14,
   },
 });

@@ -97,6 +97,8 @@ Phase 8: Preservation and archive foundation.
 - Group Detail now shows `Posted today` instead of another capture CTA when the user already posted to that group.
 - Vote completion now offers `Back to group` and `Back home`.
 - Remaining mojibake markers were removed from Groups, Group Detail, and Vote.
+- Daily Reel now presents one active moment at a time with auto-advance, previous/next controls, a timeline, and Group/Home return paths.
+- Group Detail now nudges one-person groups to invite friends and can share the latest invite code through the native share sheet.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`
