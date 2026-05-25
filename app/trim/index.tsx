@@ -133,6 +133,11 @@ export default function TrimScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
+        <View style={styles.topBar}>
+          <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
+            <Text style={styles.backText}>Retake</Text>
+          </Pressable>
+        </View>
         <Text style={styles.title}>Keep 2 sec</Text>
         <Text style={styles.copy}>Pick the two seconds worth keeping. The 10-second take stays on this device.</Text>
       </View>
@@ -218,6 +223,18 @@ const styles = StyleSheet.create({
     color: '#68625D',
     fontSize: 16,
     lineHeight: 23,
+  },
+  topBar: {
+    marginBottom: 10,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    paddingVertical: 6,
+  },
+  backText: {
+    color: '#57534E',
+    fontSize: 15,
+    fontWeight: '800',
   },
   previewWrap: {
     width: '100%',

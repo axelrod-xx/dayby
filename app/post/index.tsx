@@ -84,7 +84,15 @@ export default function PostToGroupsScreen() {
         isNativeTrimmed: isNativeTrimmed === '1',
         processedAt: processedAt || null,
       });
-      router.replace('/(tabs)/groups' as Href);
+      const selectedGroups = groups.filter((group) => selectedIds.has(group.id));
+      router.replace({
+        pathname: '/post/success',
+        params: {
+          count: String(selectedGroups.length),
+          groupId: selectedGroups.length === 1 ? selectedGroups[0].id : '',
+          groupName: selectedGroups.length === 1 ? selectedGroups[0].name : '',
+        },
+      } as unknown as Href);
     } catch (error) {
       Alert.alert('Post failed', error instanceof Error ? error.message : 'Please try again.');
     } finally {
@@ -95,6 +103,12 @@ export default function PostToGroupsScreen() {
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.topBar}>
+          <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
+            <Text style={styles.backText}>Back</Text>
+          </Pressable>
+        </View>
+
         <View>
           <Text style={styles.title}>Post to groups</Text>
           <Text style={styles.copy}>One 2-second video can go to multiple groups. The file stays single.</Text>
@@ -179,6 +193,18 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
     paddingTop: 84,
     backgroundColor: '#FFFEFB',
+  },
+  topBar: {
+    marginBottom: -8,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    paddingVertical: 6,
+  },
+  backText: {
+    color: '#57534E',
+    fontSize: 15,
+    fontWeight: '800',
   },
   title: {
     color: '#171615',

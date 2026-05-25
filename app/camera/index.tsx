@@ -55,6 +55,9 @@ export default function CameraScreen() {
   if (!hasCamera || !hasMicrophone) {
     return (
       <View style={styles.permission}>
+        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.permissionBack}>
+          <Text style={styles.backText}>Back</Text>
+        </Pressable>
         <Text style={styles.title}>Camera</Text>
         <Text style={styles.copy}>Record a short take. You will keep just 2 seconds next.</Text>
         <PrimaryButton onPress={() => void requestPermissions()}>Allow camera</PrimaryButton>
@@ -69,6 +72,9 @@ export default function CameraScreen() {
     <View style={styles.container}>
       <CameraView ref={cameraRef} mode="video" mute={muted} style={styles.camera} videoQuality="720p" />
       <View style={styles.overlay}>
+        <Pressable disabled={isRecording} onPress={() => router.back()} hitSlop={12} style={styles.closeButton}>
+          <Text style={[styles.closeText, isRecording && styles.closeTextDisabled]}>Close</Text>
+        </Pressable>
         <View>
           <Text style={styles.captureTitle}>{isRecording ? 'Recording' : 'Today'}</Text>
           <Text style={styles.captureCopy}>Up to 10 sec. Keep 2 sec next.</Text>
@@ -109,6 +115,17 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
   },
+  permissionBack: {
+    position: 'absolute',
+    left: 22,
+    top: 70,
+    paddingVertical: 6,
+  },
+  backText: {
+    color: '#57534E',
+    fontSize: 15,
+    fontWeight: '800',
+  },
   container: {
     flex: 1,
     backgroundColor: '#0E0D0C',
@@ -124,6 +141,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  closeButton: {
+    position: 'absolute',
+    left: 0,
+    top: -42,
+    paddingVertical: 6,
+  },
+  closeText: {
+    color: '#FFFEFB',
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  closeTextDisabled: {
+    opacity: 0.36,
   },
   captureTitle: {
     color: '#FFFEFB',
