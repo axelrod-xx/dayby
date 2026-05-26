@@ -40,10 +40,10 @@ export function PrimaryButton({
 
 const buttonStyles = StyleSheet.create({
   button: {
-    minHeight: 54,
+    minHeight: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 14,
+    borderRadius: 18,
     paddingHorizontal: 20,
   },
   dark: {

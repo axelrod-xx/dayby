@@ -138,12 +138,12 @@ export default function TabOneScreen() {
             <View style={styles.signedInActions}>
               <Link href="/groups/create" asChild>
                 <PrimaryButton onPress={() => undefined} variant="accent">
-                  Create group
+                  Start a group
                 </PrimaryButton>
               </Link>
               <Link href="/groups/join" asChild>
                 <PrimaryButton onPress={() => undefined} variant="light">
-                  Enter code
+                  Join friends
                 </PrimaryButton>
               </Link>
             </View>
@@ -151,7 +151,7 @@ export default function TabOneScreen() {
             <View style={styles.signedInActions}>
               <Link href={'/camera' as Href} asChild>
                 <PrimaryButton onPress={() => undefined} variant="accent">
-                  Capture today
+                  Keep today
                 </PrimaryButton>
               </Link>
               <Link href={'/(tabs)/groups' as Href} asChild>
@@ -164,7 +164,7 @@ export default function TabOneScreen() {
             <View style={styles.signedInActions}>
               <Link href={'/(tabs)/groups' as Href} asChild>
                 <PrimaryButton onPress={() => undefined} variant="accent">
-                  View groups
+                  Open groups
                 </PrimaryButton>
               </Link>
             </View>
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 20,
     paddingHorizontal: 22,
-    paddingBottom: 40,
+    paddingBottom: 116,
     paddingTop: 84,
     backgroundColor: '#F7FBFF',
   },

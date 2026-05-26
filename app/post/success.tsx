@@ -52,19 +52,19 @@ export default function PostSuccessScreen() {
         {hasSingleGroup ? (
           <Link href={{ pathname: '/groups/[groupId]', params: { groupId } } as unknown as Href} asChild>
             <PrimaryButton onPress={() => undefined} variant="accent">
-              View group
+            Open group
             </PrimaryButton>
           </Link>
         ) : (
           <Link href={'/(tabs)/groups' as Href} asChild>
             <PrimaryButton onPress={() => undefined} variant="accent">
-              View groups
+            Open groups
             </PrimaryButton>
           </Link>
         )}
         <Link href={'/(tabs)' as Href} asChild>
           <PrimaryButton onPress={() => undefined} variant="light">
-            Back home
+            Home
           </PrimaryButton>
         </Link>
       </View>

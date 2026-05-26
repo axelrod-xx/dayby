@@ -77,7 +77,7 @@ export default function CreateGroupScreen() {
       </View>
 
       <PrimaryButton disabled={!name.trim()} loading={saving} onPress={() => void save()}>
-        Create group
+        Start group
       </PrimaryButton>
     </ScrollView>
   );

@@ -44,7 +44,7 @@ export default function JoinGroupScreen() {
       </View>
 
       <PrimaryButton disabled={code.trim().length < 4} loading={joining} onPress={() => void join()}>
-        Join group
+        Join friends
       </PrimaryButton>
     </View>
   );

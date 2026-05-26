@@ -148,7 +148,7 @@ export default function GroupDetailScreen() {
           ) : (
             <Link href={'/camera' as Href} asChild>
               <PrimaryButton onPress={() => undefined} variant="accent">
-                Capture today
+                Keep today
               </PrimaryButton>
             </Link>
           )}

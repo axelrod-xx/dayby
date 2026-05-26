@@ -55,12 +55,12 @@ export default function GroupsScreen() {
           <View style={styles.actionGrid}>
             <Link href="/groups/create" asChild>
               <PrimaryButton onPress={() => undefined} variant="accent">
-                Create group
+                Start a group
               </PrimaryButton>
             </Link>
             <Link href="/groups/join" asChild>
               <PrimaryButton onPress={() => undefined} variant="light">
-                Enter code
+                Join friends
               </PrimaryButton>
             </Link>
           </View>
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 20,
     paddingHorizontal: 22,
+    paddingBottom: 116,
     paddingTop: 78,
     backgroundColor: '#F7FBFF',
   },
