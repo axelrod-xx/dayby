@@ -1,5 +1,5 @@
 import { Link, type Href, useLocalSearchParams } from 'expo-router';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 
@@ -11,6 +11,15 @@ export default function PostSuccessScreen() {
   }>();
   const postedCount = Math.max(Number(count ?? 0), 1);
   const hasSingleGroup = Boolean(groupId);
+  const shareText = hasSingleGroup
+    ? `I kept today's 2 seconds in ${groupName || 'our group'} on dayby.`
+    : `I kept today's 2 seconds in ${postedCount} groups on dayby.`;
+
+  const shareMoment = async () => {
+    await Share.share({
+      message: `${shareText}\nTwo seconds a day. One minute a month.`,
+    });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -25,8 +34,18 @@ export default function PostSuccessScreen() {
       </View>
 
       <View style={styles.panel}>
+        <Text style={styles.panelTitle}>Tell the group</Text>
+        <Text style={styles.panelText}>The habit spreads best when one friend makes the first move.</Text>
+        <View style={styles.panelAction}>
+          <PrimaryButton onPress={() => void shareMoment()} variant="light">
+            Share this
+          </PrimaryButton>
+        </View>
+      </View>
+
+      <View style={styles.panelSoft}>
         <Text style={styles.panelTitle}>Tomorrow</Text>
-        <Text style={styles.panelText}>Come back to watch yesterday's reel and vote for the moment worth keeping.</Text>
+        <Text style={styles.panelText}>Watch yesterday's reel, then vote for the moment worth keeping.</Text>
       </View>
 
       <View style={styles.actions}>
@@ -95,6 +114,11 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: 'rgba(255,254,251,0.08)',
   },
+  panelSoft: {
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,254,251,0.16)',
+    paddingTop: 18,
+  },
   panelTitle: {
     color: '#FFFEFB',
     fontSize: 18,
@@ -105,6 +129,9 @@ const styles = StyleSheet.create({
     color: '#D8D2C8',
     fontSize: 15,
     lineHeight: 22,
+  },
+  panelAction: {
+    marginTop: 14,
   },
   actions: {
     gap: 10,

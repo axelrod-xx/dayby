@@ -51,6 +51,7 @@ export function ExportActions({ groupId, videoUri }: ExportActionsProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.kicker}>Export</Text>
+      <Text style={styles.copy}>Save the clean memory, then choose the sound in the app where you post it.</Text>
       <View style={styles.actions}>
         <PrimaryButton onPress={() => void save()} variant="light">
           Save Video
@@ -80,6 +81,11 @@ const styles = StyleSheet.create({
     color: '#171615',
     fontSize: 18,
     fontWeight: '800',
+  },
+  copy: {
+    color: '#68625D',
+    fontSize: 14,
+    lineHeight: 20,
   },
   actions: {
     gap: 10,

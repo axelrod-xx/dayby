@@ -80,7 +80,7 @@ export default function GroupDetailScreen() {
     }
 
     await Share.share({
-      message: `Join ${group.name} on dayby. Invite code: ${invite.code}`,
+      message: `Join ${group.name} on dayby.\nInvite code: ${invite.code}\nTwo seconds a day. One minute a month.`,
     });
   };
 
@@ -111,6 +111,18 @@ export default function GroupDetailScreen() {
         <Text style={styles.copy}>
           {members.length}/{group.member_limit} friends / {group.timezone}
         </Text>
+        <View style={styles.friendStrip}>
+          {members.slice(0, 5).map((member) => (
+            <View key={member.id} style={styles.friendBubble}>
+              <Text style={styles.friendInitial}>{member.display_name.slice(0, 1).toUpperCase()}</Text>
+            </View>
+          ))}
+          {members.length > 5 ? (
+            <View style={styles.friendBubble}>
+              <Text style={styles.friendInitial}>+{members.length - 5}</Text>
+            </View>
+          ) : null}
+        </View>
       </View>
 
       <View style={styles.todayPanel}>
@@ -145,12 +157,12 @@ export default function GroupDetailScreen() {
 
       {members.length <= 1 && canManageInvites ? (
         <View style={styles.inviteNudge}>
-          <Text style={styles.inviteNudgeTitle}>Bring your people in.</Text>
-          <Text style={styles.panelText}>dayby starts to feel right when a few friends keep the same month together.</Text>
+          <Text style={styles.inviteNudgeTitle}>This gets better when your friends are in it.</Text>
+          <Text style={styles.panelText}>Send the code now, then let the month become something worth showing later.</Text>
           <View style={styles.action}>
             {invites[0] ? (
               <PrimaryButton onPress={() => void shareInvite()} variant="accent">
-                Share invite code
+                Send invite
               </PrimaryButton>
             ) : (
               <PrimaryButton loading={creatingInvite} onPress={() => void addInvite()} variant="accent">
@@ -227,8 +239,8 @@ export default function GroupDetailScreen() {
 
       {canManageInvites ? (
         <View style={styles.panel}>
-          <Text style={styles.panelTitle}>Invite</Text>
-          <Text style={styles.panelText}>Share a code with friends. Links can come later.</Text>
+          <Text style={styles.panelTitle}>Invite friends</Text>
+          <Text style={styles.panelText}>A simple code is easier to send in LINE, Instagram, or a group chat.</Text>
           {invites[0] ? (
             <View style={styles.codeBox}>
               <Text style={styles.code}>{invites[0].code}</Text>
@@ -244,7 +256,7 @@ export default function GroupDetailScreen() {
             </PrimaryButton>
             {invites[0] ? (
               <PrimaryButton onPress={() => void shareInvite()} variant="light">
-                Share latest code
+                Send latest code
               </PrimaryButton>
             ) : null}
           </View>
@@ -315,6 +327,26 @@ const styles = StyleSheet.create({
     color: '#BDB5AA',
     fontSize: 16,
     lineHeight: 23,
+  },
+  friendStrip: {
+    flexDirection: 'row',
+    marginTop: 16,
+  },
+  friendBubble: {
+    width: 34,
+    height: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,254,251,0.24)',
+    borderRadius: 17,
+    marginRight: -7,
+    backgroundColor: '#26322D',
+  },
+  friendInitial: {
+    color: '#FFFEFB',
+    fontSize: 12,
+    fontWeight: '900',
   },
   panel: {
     borderTopWidth: 1,

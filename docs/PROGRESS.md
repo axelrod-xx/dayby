@@ -178,6 +178,9 @@ Phase 8: Preservation and archive foundation.
 - Ran two review loops: typecheck, secret scan, mojibake scan, diff check, and representative web screenshots.
 - iOS device development build with the full-app UI pass finished: `20b8cd08-8854-46bb-a614-f195e6289a61`.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/20b8cd08-8854-46bb-a614-f195e6289a61`
+- Strengthened friend-facing growth moments: invite copy, post-success share sheet, member initials on group detail, monthly export cue, and cleaner export guidance.
+- iOS device development build with friend-facing UI updates finished: `31eba391-50e5-479f-a154-b59dd4c9f010`.
+- iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/31eba391-50e5-479f-a154-b59dd4c9f010`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 

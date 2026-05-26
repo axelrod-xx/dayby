@@ -11,7 +11,7 @@ import {
 } from '@/src/features/monthly/monthlyService';
 
 const monthName = (year: number, month: number) =>
-  new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
+  new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
 
 export default function MonthlyMemoryScreen() {
   const params = useLocalSearchParams<{ groupId: string; year: string; month: string }>();
@@ -74,6 +74,14 @@ export default function MonthlyMemoryScreen() {
           <Text style={styles.made}>made with dayby</Text>
         </View>
       ) : null}
+
+      <View style={styles.shareCue}>
+        <Text style={styles.shareKicker}>Made to leave the app</Text>
+        <Text style={styles.shareTitle}>Export clean. Add music later.</Text>
+        <Text style={styles.shareCopy}>
+          dayby keeps the memory quiet here, then your group can bring it to Reels, TikTok, Stories, or LINE.
+        </Text>
+      </View>
 
       {params.groupId ? <ExportActions groupId={params.groupId} videoUri={null} /> : null}
     </ScrollView>
@@ -194,5 +202,30 @@ const styles = StyleSheet.create({
     marginTop: 22,
     color: '#A49B91',
     fontSize: 12,
+  },
+  shareCue: {
+    borderWidth: 1,
+    borderColor: 'rgba(255,254,251,0.18)',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: 'rgba(255,254,251,0.07)',
+  },
+  shareKicker: {
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  shareTitle: {
+    marginTop: 8,
+    color: '#FFFEFB',
+    fontSize: 22,
+    fontWeight: '900',
+  },
+  shareCopy: {
+    marginTop: 8,
+    color: '#BDB5AA',
+    fontSize: 15,
+    lineHeight: 22,
   },
 });
