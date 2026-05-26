@@ -127,7 +127,7 @@ export default function PostToGroupsScreen() {
         ) : null}
 
         {loading ? (
-          <ActivityIndicator color="#171615" />
+          <ActivityIndicator color="#102033" />
         ) : groups.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyTitle}>No groups yet</Text>
@@ -189,14 +189,14 @@ export default function PostToGroupsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   container: {
     gap: 22,
     paddingHorizontal: 22,
     paddingBottom: 120,
     paddingTop: 74,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   backButton: {
     alignSelf: 'flex-start',
@@ -209,20 +209,20 @@ const styles = StyleSheet.create({
   },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 40,
     fontWeight: '900',
     lineHeight: 44,
   },
   copy: {
     marginTop: 10,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -231,17 +231,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   momentKicker: {
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   momentTitle: {
     marginTop: 8,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 25,
     fontWeight: '900',
   },
@@ -259,13 +259,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FBFAF7',
   },
   noticeTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 15,
     fontWeight: '800',
   },
   noticeCopy: {
     marginTop: 6,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -277,10 +277,10 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 14,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   groupCardSelected: {
-    borderColor: '#171615',
+    borderColor: '#102033',
     backgroundColor: '#EFE7DD',
   },
   groupCardDisabled: {
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F1EA',
   },
   groupInitial: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 17,
     fontWeight: '900',
   },
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   groupName: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '900',
   },
@@ -327,19 +327,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#D8D2C8',
+    borderColor: '#B8C9DA',
     borderRadius: 15,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   checkSelected: {
-    borderColor: '#171615',
-    backgroundColor: '#171615',
+    borderColor: '#102033',
+    backgroundColor: '#102033',
   },
   checkDot: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   empty: {
     borderTopWidth: 1,
@@ -347,13 +347,13 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   },
   emptyTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '800',
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
     lineHeight: 22,
   },
@@ -370,6 +370,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 28,
     paddingTop: 14,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
 });

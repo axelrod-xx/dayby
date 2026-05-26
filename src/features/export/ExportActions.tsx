@@ -75,15 +75,15 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 16,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   kicker: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '800',
   },
   copy: {
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   pill: {
     borderWidth: 1,
-    borderColor: '#D8D2C8',
+    borderColor: '#B8C9DA',
     borderRadius: 999,
     paddingHorizontal: 12,
     paddingVertical: 7,

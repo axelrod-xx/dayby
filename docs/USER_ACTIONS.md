@@ -1,129 +1,80 @@
 # User Actions / あなたにお願いしたい作業
 
-このファイルは、アカウント所有者権限や実機が必要な作業だけをまとめます。
-こちらで進められる実装は止めず、外部サービスや端末操作が必要なものだけここに残します。
+このファイルは、アカウント所有者の操作や実機確認が必要なものだけをまとめます。
+コード側で進められる作業はCodex側で進めます。
 
-## 今すぐ必要
+## いま優先して確認したいこと
 
-### iOS実機確認
+### iOS実機テスト
 
-iOS development buildは完了しています。手元のiPhoneでインストールして確認してください。
+最新のiOS development buildをiPhoneに入れて確認してください。
+確認用URLは `docs/PROGRESS.md` の最新行を参照してください。
 
-Install URL:
+確認してほしい流れ:
 
-```text
-https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a887a540-2a82-4ddf-8e66-985eb11ce719
-```
+1. 起動
+2. Dev login または Apple / Google login
+3. Profile setup
+4. Group作成
+5. Invite作成と共有文面
+6. Cameraで10秒以内撮影
+7. Trimで2秒選択、選択部分がわかるか
+8. Post to Groups
+9. Post Successから共有
+10. Daily Reel / Vote / Monthly Memory
+11. Notification permissionとPreview reminder
 
-確認する流れ:
+重点チェック:
 
-1. iPhoneで上記URLを開く、またはQRコードを読む
-2. daybyをインストールする
-3. daybyを開く
-4. 開発ログインで入る
-5. Profileを作る
-6. Groupを作る
-7. Cameraで10秒以内を撮る
-8. Trimで `Process 2 sec` を押す
-9. `2-second file ready` が出るか確認
-10. Post to groupsまで進めるか確認
+- 画面が暗すぎないか
+- 友達に見せても恥ずかしくないか
+- Trimの操作が震えないか
+- 投稿後に迷わず戻れるか
+- 通知許可の出方が自然か
+- Share文面が自然か
 
-確認してほしいポイント:
+### Android実機テスト
 
-- カメラ権限が正しく出る
-- マイク権限が正しく出る
-- 10秒以内で録画が止まる
-- Trim画面で動画プレビューが動く
-- 2秒トリム処理が成功する
-- `2-second file ready` と表示される
-- アプリがクラッシュしない
+Android端末でも同じ流れを確認してください。
+Androidは特に以下を見てください。
 
-開発ログイン:
+- Camera権限
+- Microphone権限
+- Notification権限
+- 10秒撮影
+- Native trim
+- Share sheet
+- Android戻るボタン
+- 画面端の余白やボタン切れ
+
+## ログイン設定
+
+Apple / Googleログインは本番前に正式設定が必要です。
+開発中はDev loginを使えます。
 
 ```text
 Email: dev@dayby.app
 Password: dayby-dev-password
 ```
 
-もしインストール済みのビルドで `dev@dayby.local` が初期表示されている場合は、手で `dev@dayby.app` に変更してください。
+## R2 / Supabase
 
-### Android実機確認
+- R2 bucketはprivateのまま維持してください。
+- R2 secretやSupabase service role keyはGitHubに入れません。
+- 本番前に、画面共有で一度見えたR2 keyはローテーションしてください。
 
-Android端末が手元に戻ったら、development APKをインストールして確認してください。
+## 日本語・韓国語対応
 
-Android APK:
+UIが固まったら開始します。
+順番:
 
-```text
-https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk
-```
+1. 文字列をコードから辞書へ切り出す
+2. Englishを基準言語にする
+3. Japaneseを追加
+4. Koreanを追加
+5. 実機で長い文言の折り返し確認
 
-確認する流れはiOSと同じです。
-
-## 後で必要
-
-### Supabase Auth
-
-ログイン面は後回しにしています。リリース前に必須です。
-
-Apple provider:
-
-- `Client IDs`: `app.dayby.mobile`
-- `Secret Key (for OAuth)`: Web OAuthを使う場合のみJWT形式のclient secretが必要
-- Native iOSログイン中心なら、初期検証では空のまま進められる可能性があります
-- `Allow users without an email`: OFF
-
-Google provider:
-
-- Google CloudでiOS / Android向けOAuth Client IDを作る
-- Supabase AuthのGoogle providerへ正しいClient IDを入れる
-- `app.dayby.mobile` はGoogle Client IDではないので入れない
-- `Allow users without an email`: OFF
-- iOSネイティブログインでnonce問題が出た場合のみ `Skip nonce checks` を検討
-
-### R2 Key Rotation
-
-開発用のR2キーは一度画面共有に表示されているため、本番前に必ずローテーションしてください。
-
-方針:
-
-- R2 bucketはprivateのまま
-- アプリにR2秘密鍵は入れない
-- Supabase Edge Function secretsにだけ設定する
-- 本番前に古いR2 tokenを削除する
-
-### R2 Upload有効化
-
-実機でネイティブ2秒トリムが確認できるまで、R2アップロードは無効のままです。
-
-有効化条件:
-
-1. iOSまたはAndroidのdevelopment buildで2秒MP4生成を確認
-2. 投稿画面で10秒元動画がアップロードされないことを確認
-3. `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` をEAS envに設定
-4. signed URLでR2へPUTできることを確認
-
-### Apple / Google Production Login
-
-開発ログインは `.env.local` / EAS development / preview だけで使います。
-productionでは必ず無効化します。
-
-```bash
-EXPO_PUBLIC_ENABLE_DEV_AUTH=false
-```
-
-## 完了済み
-
-- Supabase project `dayby` 作成済み
-- Cloudflare R2 bucket `dayby` 作成済み
-- R2 server-side secretsをSupabase Edge Functionsへ登録済み
-- GitHub repository `axelrod-xx/dayby` 作成済み
-- Expo/EAS project `@ryoaxelrod/dayby` 作成済み
-- Android development build作成済み
-- iOS simulator build作成済み
-- iOS Bundle ID `app.dayby.mobile` 登録済み
-- iOS development build作成済み
-
-## 絶対にGitHubへ上げないもの
+## GitHubに絶対に上げないもの
 
 - `.env.local`
 - Supabase service role key

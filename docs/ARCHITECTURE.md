@@ -8,7 +8,7 @@
 - Storage: Cloudflare R2 private bucket.
 - Server-side operations: Supabase Edge Functions or Cloudflare Workers.
 - Payments later: RevenueCat.
-- Notifications later: Expo Notifications.
+- Notifications: Expo Notifications for quiet local reminders first. Remote push should be enabled only after Apple Push Notifications capability is configured.
 
 ## Recommended Runtime Choice
 
@@ -44,6 +44,7 @@ Expo Go is fine for early UI checks, but dayby needs camera capture, native vide
 - Decide daily winners.
 - Generate or queue generated Daily/Weekly/Monthly MP4s when needed. Weekly is a quiet progress preview; Monthly remains the main memory.
 - Enforce retention jobs and notification windows later.
+- Store push tokens server-side later; the app currently requests permission, configures Android channels, and can preview a local reminder without requiring the iOS push entitlement.
 
 ## Date and Time Rules
 

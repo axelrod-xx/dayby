@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 const items = [
-  { accent: '#E65A3C', label: 'Today', value: '2 sec' },
+  { accent: '#2F80ED', label: 'Today', value: '2 sec' },
   { accent: '#8DAA91', label: 'Together', value: 'Group' },
   { accent: '#D9B36D', label: 'Month', value: '1 min' },
 ];
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     borderColor: '#E4DED5',
     borderRadius: 8,
     padding: 13,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   accent: {
     width: 22,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   value: {
-    color: '#141312',
+    color: '#102033',
     fontSize: 19,
     fontWeight: '900',
   },

@@ -50,7 +50,7 @@ export default function ArchiveScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color="#171615" />
+        <ActivityIndicator color="#102033" />
       ) : groups.length === 0 ? (
         <View style={styles.emptyCard}>
           <Text style={styles.emptyTitle}>Nothing quiet yet</Text>
@@ -95,30 +95,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 42,
     paddingTop: 74,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   hero: {
-    minHeight: 176,
+    minHeight: 150,
     justifyContent: 'flex-end',
-    borderRadius: 8,
-    padding: 18,
-    backgroundColor: '#26322D',
   },
   kicker: {
     marginBottom: 10,
-    color: '#D8D2C8',
+    color: '#5D7488',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 40,
     fontWeight: '900',
   },
   copy: {
     marginTop: 12,
-    color: '#D8D2C8',
+    color: '#5D6974',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -131,7 +128,7 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 14,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   groupMain: {
     minHeight: 64,
@@ -147,7 +144,7 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
   groupName: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '900',
   },
@@ -174,16 +171,16 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   emptyTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 22,
     fontWeight: '900',
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
     lineHeight: 22,
   },

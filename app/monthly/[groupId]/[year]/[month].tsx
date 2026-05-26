@@ -42,7 +42,7 @@ export default function MonthlyMemoryScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color="#171615" />
+        <ActivityIndicator color="#102033" />
       ) : moments.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>No kept moments yet</Text>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 42,
     paddingTop: 68,
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   hero: {
     minHeight: 260,
@@ -104,20 +104,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#26322D',
   },
   kicker: {
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 13,
     fontWeight: '900',
   },
   title: {
     marginTop: 8,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 46,
     fontWeight: '900',
     letterSpacing: 0,
   },
   copy: {
     marginTop: 10,
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   date: {
     width: 64,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 20,
     fontWeight: '900',
   },
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   time: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '900',
   },
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   },
   emptyTitle: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '800',
   },
@@ -179,22 +179,22 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,254,251,0.18)',
     borderRadius: 8,
     padding: 22,
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   endKicker: {
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
   },
   endName: {
     marginTop: 10,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 30,
     fontWeight: '900',
   },
   endCopy: {
     marginTop: 8,
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 14,
     fontWeight: '800',
   },
@@ -211,14 +211,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,254,251,0.07)',
   },
   shareKicker: {
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   shareTitle: {
     marginTop: 8,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 22,
     fontWeight: '900',
   },

@@ -24,57 +24,60 @@ export function PrimaryButton({
       disabled={disabled || loading}
       onPress={onPress}
       style={({ pressed }) => [
-        styles.button,
-        isLight ? styles.light : isAccent ? styles.accent : styles.dark,
-        (disabled || loading) && styles.disabled,
-        pressed && styles.pressed,
+        buttonStyles.button,
+        isLight ? buttonStyles.light : isAccent ? buttonStyles.accent : buttonStyles.dark,
+        (disabled || loading) && (isLight ? buttonStyles.lightDisabled : buttonStyles.disabled),
+        pressed && buttonStyles.pressed,
       ]}>
       {loading ? (
-        <ActivityIndicator color={isLight ? '#171615' : '#FFFEFB'} />
+        <ActivityIndicator color={isLight ? '#102033' : '#FFFFFF'} />
       ) : (
-        <Text style={[styles.label, isLight ? styles.lightLabel : styles.darkLabel]}>{children}</Text>
+        <Text style={[textStyles.label, isLight ? textStyles.lightLabel : textStyles.darkLabel]}>{children}</Text>
       )}
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
+const buttonStyles = StyleSheet.create({
   button: {
-    minHeight: 52,
+    minHeight: 54,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
-    paddingHorizontal: 18,
-    shadowColor: '#171615',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
+    borderRadius: 14,
+    paddingHorizontal: 20,
   },
   dark: {
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   accent: {
-    backgroundColor: '#E65A3C',
+    backgroundColor: '#2F80ED',
   },
   light: {
     borderWidth: 1,
-    borderColor: '#D8D2C8',
-    backgroundColor: '#FFFDF8',
+    borderColor: '#D6E4F2',
+    backgroundColor: '#FFFFFF',
   },
   disabled: {
-    opacity: 0.5,
+    backgroundColor: '#C8D6E3',
+  },
+  lightDisabled: {
+    opacity: 0.62,
   },
   pressed: {
     opacity: 0.82,
+    transform: [{ scale: 0.99 }],
   },
+});
+
+const textStyles = StyleSheet.create({
   label: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '800',
   },
   darkLabel: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
   },
   lightLabel: {
-    color: '#171615',
+    color: '#102033',
   },
 });

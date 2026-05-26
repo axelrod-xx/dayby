@@ -111,7 +111,7 @@ export default function DailyReelScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color="#171615" />
+        <ActivityIndicator color="#102033" />
       ) : moments.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>No moments yet</Text>
@@ -175,17 +175,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 42,
     paddingTop: 72,
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   kicker: {
     marginBottom: 8,
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 40,
     fontWeight: '900',
     letterSpacing: 0,
@@ -214,10 +214,10 @@ const styles = StyleSheet.create({
     maxHeight: 430,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   fallbackIndex: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 42,
     fontWeight: '900',
   },
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: 12,
     paddingVertical: 7,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '800',
     backgroundColor: 'rgba(0,0,0,0.45)',
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: 10,
     paddingVertical: 7,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '800',
     backgroundColor: 'rgba(0,0,0,0.45)',
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,254,251,0.08)',
   },
   stepText: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '800',
   },
@@ -283,11 +283,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,254,251,0.06)',
   },
   timelineItemActive: {
-    borderColor: '#FFFEFB',
+    borderColor: '#FFFFFF',
     backgroundColor: 'rgba(255,254,251,0.14)',
   },
   timelineTime: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 17,
     fontWeight: '900',
   },
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   timelineTextActive: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
   },
   actions: {
     gap: 10,
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   },
   emptyTitle: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '800',
   },

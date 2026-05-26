@@ -68,7 +68,7 @@ export default function GroupsScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color="#171615" />
+        <ActivityIndicator color="#102033" />
       ) : groups.length > 0 ? (
         <View style={styles.list}>
           <View style={styles.monthPreview}>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     gap: 20,
     paddingHorizontal: 22,
     paddingTop: 78,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   hero: {
     minHeight: 146,
@@ -130,20 +130,20 @@ const styles = StyleSheet.create({
   },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 44,
     fontWeight: '900',
     letterSpacing: 0,
   },
   body: {
     marginTop: 10,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -161,23 +161,23 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#171615',
+    backgroundColor: '#EAF4FF',
   },
   previewKicker: {
-    color: '#D8D2C8',
+    color: '#5D7488',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   previewTitle: {
     marginTop: 8,
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 26,
     fontWeight: '900',
   },
   previewCopy: {
     marginTop: 8,
-    color: '#BDB5AA',
+    color: '#5D6974',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     gap: 14,
     paddingHorizontal: 14,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   pressed: {
     opacity: 0.75,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EFE7DD',
   },
   groupInitial: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '900',
   },
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   groupName: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '900',
   },
@@ -246,16 +246,16 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   emptyTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 22,
     fontWeight: '900',
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
     lineHeight: 22,
   },

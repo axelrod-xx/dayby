@@ -54,7 +54,7 @@ export default function VoteScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color="#171615" />
+        <ActivityIndicator color="#102033" />
       ) : (
         <View style={styles.list}>
           {moments.map((moment) => {
@@ -113,24 +113,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 42,
     paddingTop: 74,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 40,
     fontWeight: '900',
     lineHeight: 44,
   },
   copy: {
     marginTop: 10,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -146,10 +146,10 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   voteCardSelected: {
-    borderColor: '#171615',
+    borderColor: '#102033',
     backgroundColor: '#EFE7DD',
   },
   pressed: {
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     opacity: 0.42,
   },
   time: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 22,
     fontWeight: '900',
   },
@@ -176,18 +176,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#D8D2C8',
+    borderColor: '#B8C9DA',
     borderRadius: 16,
   },
   radioSelected: {
-    borderColor: '#171615',
-    backgroundColor: '#171615',
+    borderColor: '#102033',
+    backgroundColor: '#102033',
   },
   radioDot: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   locked: {
     borderTopWidth: 1,
@@ -195,13 +195,13 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   },
   lockedTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '800',
   },
   lockedCopy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
   },
   lockedActions: {

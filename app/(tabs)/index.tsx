@@ -8,6 +8,7 @@ import { TodayOverview } from '@/src/features/home/TodayOverview';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
 import { listMyGroups } from '@/src/features/groups/groupService';
+import { NotificationCard } from '@/src/features/notifications/NotificationCard';
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 
 const homeDemoVideoUri = process.env.EXPO_PUBLIC_HOME_DEMO_VIDEO_URL ?? '';
@@ -95,6 +96,8 @@ export default function TabOneScreen() {
 
       <TodayOverview />
 
+      {isSignedIn && isProfileComplete ? <NotificationCard /> : null}
+
       {!isSupabaseConfigured ? (
         <View style={styles.notice}>
           <Text style={styles.noticeTitle}>Setup needed</Text>
@@ -130,7 +133,7 @@ export default function TabOneScreen() {
               <PrimaryButton onPress={() => undefined}>Set profile</PrimaryButton>
             </Link>
           ) : loadingGroups ? (
-            <ActivityIndicator color="#171615" />
+            <ActivityIndicator color="#102033" />
           ) : groups.length === 0 ? (
             <View style={styles.signedInActions}>
               <Link href="/groups/create" asChild>
@@ -333,14 +336,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 40,
     paddingTop: 84,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   headerCard: {
     minHeight: 248,
     justifyContent: 'space-between',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#171615',
+    backgroundColor: '#EAF4FF',
   },
   topline: {
     flexDirection: 'row',
@@ -348,19 +351,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   wordmark: {
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 28,
     fontWeight: '900',
     letterSpacing: 0,
   },
   date: {
-    color: '#D8D2C8',
+    color: '#5D7488',
     fontSize: 13,
     fontWeight: '800',
     textTransform: 'uppercase',
   },
   hero: {
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 42,
     fontWeight: '800',
     lineHeight: 46,
@@ -368,20 +371,20 @@ const styles = StyleSheet.create({
   },
   copy: {
     marginTop: 12,
-    color: '#D8D2C8',
+    color: '#5D6974',
     fontSize: 17,
     lineHeight: 24,
   },
   signedOutScreen: {
     flex: 1,
     minHeight: '100%',
-    backgroundColor: '#141312',
+    backgroundColor: '#102033',
     overflow: 'hidden',
   },
   demoVideo: {
     ...StyleSheet.absoluteFillObject,
     overflow: 'hidden',
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   homeDemoVideo: {
     ...StyleSheet.absoluteFillObject,
@@ -418,19 +421,19 @@ const styles = StyleSheet.create({
     left: 22,
   },
   demoDate: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 19,
     fontWeight: '900',
   },
   demoTime: {
     marginTop: 6,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 34,
     fontWeight: '900',
   },
   demoName: {
     marginTop: 5,
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 13,
     fontWeight: '900',
   },
@@ -440,7 +443,7 @@ const styles = StyleSheet.create({
     right: 22,
   },
   signedOutWordmark: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 54,
     fontWeight: '800',
     letterSpacing: 0,
@@ -464,7 +467,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
-    backgroundColor: '#E65A3C',
+    backgroundColor: '#2F80ED',
   },
   signedOutCtaDisabled: {
     opacity: 0.5,
@@ -473,13 +476,13 @@ const styles = StyleSheet.create({
     opacity: 0.82,
   },
   signedOutCtaText: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '800',
   },
   focusPanel: {
     borderWidth: 1,
-    borderColor: '#171615',
+    borderColor: '#102033',
     borderRadius: 8,
     padding: 18,
     backgroundColor: '#FFFFFF',
@@ -488,10 +491,10 @@ const styles = StyleSheet.create({
     gap: 12,
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#26322D',
+    backgroundColor: '#EAF4FF',
   },
   rhythmKicker: {
-    color: '#D8D2C8',
+    color: '#5D7488',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
@@ -504,13 +507,13 @@ const styles = StyleSheet.create({
   },
   rhythmNumber: {
     width: 34,
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 15,
     fontWeight: '900',
   },
   rhythmText: {
     flex: 1,
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 16,
     fontWeight: '800',
   },
@@ -522,25 +525,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FBFAF7',
   },
   noticeTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 16,
     fontWeight: '700',
   },
   panelTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '700',
   },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   panelText: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
     lineHeight: 22,
   },

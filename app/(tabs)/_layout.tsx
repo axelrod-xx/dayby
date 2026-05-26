@@ -38,7 +38,7 @@ export default function TabLayout() {
               borderTopColor: '#E5E1DA',
               paddingBottom: 24,
               paddingTop: 8,
-              backgroundColor: '#FFFEFB',
+              backgroundColor: '#FFFFFF',
             }
           : { display: 'none' },
         // Disable the static render of the header on web

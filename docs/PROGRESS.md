@@ -181,6 +181,9 @@ Phase 8: Preservation and archive foundation.
 - Strengthened friend-facing growth moments: invite copy, post-success share sheet, member initials on group detail, monthly export cue, and cleaner export guidance.
 - iOS device development build with friend-facing UI updates finished: `31eba391-50e5-479f-a154-b59dd4c9f010`.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/31eba391-50e5-479f-a154-b59dd4c9f010`
+- Shifted the normal app UI away from dark cards toward a fresh, cool blue-first palette. Removed the strongest peach blocks from setup/safety/archive/post-success screens and modernized shared buttons.
+- Added Expo Notifications dependency and local reminder groundwork without enabling iOS remote push entitlements yet, to avoid unnecessary EAS build failures until Apple Push capability is configured.
+- Restored `docs/USER_ACTIONS.md` in readable Japanese with iOS/Android real-device test focus points.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 

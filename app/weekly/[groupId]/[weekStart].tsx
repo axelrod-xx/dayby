@@ -32,7 +32,7 @@ export default function WeeklyMemoryScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator color="#171615" />
+        <ActivityIndicator color="#102033" />
       ) : moments.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>Still taking shape</Text>
@@ -63,29 +63,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 42,
     paddingTop: 74,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   hero: {
     borderWidth: 1,
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   kicker: {
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
   },
   title: {
     marginTop: 8,
-    color: '#171615',
+    color: '#102033',
     fontSize: 32,
     fontWeight: '900',
   },
   copy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
   },
   timeline: {
@@ -99,21 +99,21 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   date: {
     width: 64,
-    color: '#171615',
+    color: '#102033',
     fontSize: 16,
     fontWeight: '900',
   },
   rowBody: {
     borderLeftWidth: 1,
-    borderLeftColor: '#D8D2C8',
+    borderLeftColor: '#B8C9DA',
     paddingLeft: 16,
   },
   time: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '900',
   },
@@ -129,13 +129,13 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   },
   emptyTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '800',
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
     lineHeight: 22,
   },

@@ -87,7 +87,7 @@ export default function GroupDetailScreen() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color="#171615" />
+        <ActivityIndicator color="#102033" />
       </View>
     );
   }
@@ -293,38 +293,38 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   container: {
     gap: 18,
     paddingHorizontal: 22,
     paddingBottom: 40,
     paddingTop: 72,
-    backgroundColor: '#FFFDF8',
+    backgroundColor: '#F7FBFF',
   },
   hero: {
     minHeight: 178,
     justifyContent: 'flex-end',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#171615',
+    backgroundColor: '#EAF4FF',
   },
   kicker: {
     marginBottom: 9,
-    color: '#D8D2C8',
+    color: '#5D7488',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 38,
     fontWeight: '900',
     letterSpacing: 0,
   },
   copy: {
     marginTop: 10,
-    color: '#BDB5AA',
+    color: '#5D6974',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -338,13 +338,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255,254,251,0.24)',
+    borderColor: '#D5E5F6',
     borderRadius: 17,
     marginRight: -7,
-    backgroundColor: '#26322D',
+    backgroundColor: '#F6FAFF',
   },
   friendInitial: {
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 12,
     fontWeight: '900',
   },
@@ -355,33 +355,33 @@ const styles = StyleSheet.create({
   },
   todayPanel: {
     borderWidth: 1,
-    borderColor: '#171615',
+    borderColor: '#102033',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   panelKicker: {
     marginBottom: 9,
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   inviteNudge: {
     borderWidth: 1,
-    borderColor: '#171615',
+    borderColor: '#D5E5F6',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#F5F1EA',
+    backgroundColor: '#F1F7FF',
   },
   inviteNudgeTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 22,
     fontWeight: '900',
     lineHeight: 28,
   },
   todayTitle: {
-    color: '#141312',
+    color: '#102033',
     fontSize: 28,
     fontWeight: '900',
     lineHeight: 33,
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   inlineAction: {
-    color: '#E65A3C',
+    color: '#2F80ED',
     fontSize: 15,
     fontWeight: '900',
   },
@@ -403,28 +403,28 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#26322D',
+    backgroundColor: '#EAF4FF',
   },
   memoryKicker: {
-    color: '#D8D2C8',
+    color: '#5D7488',
     fontSize: 12,
     fontWeight: '900',
   },
   memoryTitle: {
     marginTop: 8,
-    color: '#FFFEFB',
+    color: '#102033',
     fontSize: 28,
     fontWeight: '900',
   },
   memoryCopy: {
     marginTop: 8,
-    color: '#D8D2C8',
+    color: '#5D6974',
     fontSize: 14,
     lineHeight: 20,
   },
   memoryAction: {
     marginTop: 18,
-    color: '#FFFEFB',
+    color: '#2F80ED',
     fontSize: 15,
     fontWeight: '900',
   },
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   panelTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 18,
     fontWeight: '700',
   },
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
   },
   panelText: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#5D6974',
     fontSize: 15,
     lineHeight: 22,
   },
@@ -463,7 +463,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FBFAF7',
   },
   rowTitle: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 16,
     fontWeight: '700',
   },
@@ -475,13 +475,13 @@ const styles = StyleSheet.create({
   codeBox: {
     marginTop: 14,
     borderWidth: 1,
-    borderColor: '#D8D2C8',
+    borderColor: '#B8C9DA',
     borderRadius: 8,
     padding: 16,
     backgroundColor: '#FBFAF7',
   },
   code: {
-    color: '#171615',
+    color: '#102033',
     fontSize: 28,
     fontWeight: '800',
     letterSpacing: 0,

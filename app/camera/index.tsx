@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingHorizontal: 22,
     paddingBottom: 54,
-    backgroundColor: '#171615',
+    backgroundColor: '#102033',
   },
   permissionHero: {
     minHeight: 260,
@@ -130,21 +130,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#26322D',
   },
   permissionKicker: {
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
     marginTop: 10,
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 42,
     fontWeight: '900',
     letterSpacing: 0,
   },
   copy: {
     marginTop: 10,
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   muteText: {
-    color: '#D8D2C8',
+    color: '#B8C9DA',
     fontSize: 15,
     textAlign: 'center',
   },
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   backText: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '800',
   },
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.25)',
   },
   cancelText: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '800',
   },
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     top: 124,
   },
   captureTitle: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 34,
     fontWeight: '900',
   },
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.25)',
   },
   muteButtonText: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontWeight: '700',
   },
   controls: {
@@ -250,10 +250,10 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#E65A3C',
+    backgroundColor: '#2F80ED',
   },
   recordingText: {
-    color: '#FFFEFB',
+    color: '#FFFFFF',
     fontSize: 12,
     fontWeight: '900',
   },
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 4,
-    borderColor: '#FFFEFB',
+    borderColor: '#FFFFFF',
     borderRadius: 41,
   },
   recordDot: {
