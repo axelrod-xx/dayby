@@ -85,7 +85,7 @@ export default function CameraScreen() {
           <Text style={styles.captureCopy}>Hold upright. Keep 2 sec next.</Text>
         </View>
       </View>
-      <View pointerEvents="none" style={styles.formatGuide}>
+      <View style={styles.formatGuide}>
         <View style={styles.formatCornerTopLeft} />
         <View style={styles.formatCornerTopRight} />
         <View style={styles.formatCornerBottomLeft} />
@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
     top: 144,
     bottom: 148,
     borderRadius: 8,
+    pointerEvents: 'none',
   },
   formatCornerTopLeft: {
     position: 'absolute',

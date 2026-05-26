@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Link, type Href, useFocusEffect } from 'expo-router';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Link, type Href, useFocusEffect, useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 import { TodayOverview } from '@/src/features/home/TodayOverview';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
@@ -9,10 +10,38 @@ import { listMyGroups } from '@/src/features/groups/groupService';
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 
 const demoMoments = [
-  { date: '05.03 SAT', name: 'RYO', time: '18:42' },
-  { date: '05.11 SUN', name: 'MIKA', time: '21:08' },
-  { date: '05.20 WED', name: 'YUN', time: '07:31' },
-  { date: '05.28 THU', name: 'SORA', time: '22:14' },
+  {
+    accent: '#E65A3C',
+    date: '05.03 SAT',
+    name: 'RYO',
+    scene: '#2C332D',
+    shade: '#1D211E',
+    time: '18:42',
+  },
+  {
+    accent: '#D9B36D',
+    date: '05.11 SUN',
+    name: 'MIKA',
+    scene: '#35302A',
+    shade: '#221F1C',
+    time: '21:08',
+  },
+  {
+    accent: '#8DAA91',
+    date: '05.20 WED',
+    name: 'YUN',
+    scene: '#26343B',
+    shade: '#171F23',
+    time: '07:31',
+  },
+  {
+    accent: '#C96E56',
+    date: '05.28 THU',
+    name: 'SORA',
+    scene: '#40302E',
+    shade: '#241C1B',
+    time: '22:14',
+  },
 ];
 
 export default function TabOneScreen() {
@@ -164,6 +193,9 @@ function SignedOutHome({
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeMoment = demoMoments[activeIndex];
+  const { height, width } = useWindowDimensions();
+  const isCompact = height < 760;
+  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -175,28 +207,72 @@ function SignedOutHome({
 
   return (
     <View style={styles.signedOutScreen}>
-      <View style={styles.demoVideo}>
-        <View style={styles.demoWash} />
-        <View style={styles.demoBlockLarge} />
-        <View style={styles.demoBlockSmall} />
-        <View style={styles.demoBottomMeta}>
+      <StatusBar style="light" translucent backgroundColor="transparent" />
+      <View style={[styles.demoVideo, { backgroundColor: activeMoment.shade }]}>
+        <View style={[styles.demoWash, { backgroundColor: activeMoment.shade }]} />
+        <View
+          style={[
+            styles.demoFrame,
+            {
+              backgroundColor: activeMoment.scene,
+              height: Math.max(height * 0.82, 620),
+              left: 0,
+              right: Math.max(width * 0.12, 44),
+              top: isCompact ? 252 : 282,
+            },
+          ]}
+        />
+        <View
+          style={[
+            styles.demoSideFrame,
+            {
+              backgroundColor: activeMoment.accent,
+              top: isCompact ? 420 : 464,
+              transform: [{ translateX: Math.max(width * 0.18, 72) }],
+              width: Math.max(width * 0.38, 150),
+            },
+          ]}
+        />
+        <View style={styles.demoShadowBand} />
+        <View style={[styles.demoBottomMeta, { bottom: isCompact ? 194 : 214 }]}>
           <Text style={styles.demoDate}>{activeMoment.date}</Text>
           <Text style={styles.demoTime}>{activeMoment.time}</Text>
           <Text style={styles.demoName}>{activeMoment.name}</Text>
         </View>
       </View>
 
-      <View style={styles.signedOutBrand}>
+      <View style={[styles.signedOutBrand, { top: isCompact ? 104 : 126 }]}>
         <Text style={styles.signedOutWordmark}>dayby</Text>
         <Text style={styles.signedOutCopy}>Two seconds a day.{'\n'}One minute a month.</Text>
       </View>
 
-      <View style={styles.signedOutFooter}>
-        <Link href="/(auth)/sign-in" asChild>
-          <PrimaryButton disabled={!isSupabaseConfigured} onPress={() => undefined} variant="accent">
-            Start with friends
-          </PrimaryButton>
-        </Link>
+      <View style={styles.demoProgress}>
+        {demoMoments.map((moment, index) => (
+          <View
+            key={moment.date}
+            style={[styles.demoProgressDot, index === activeIndex && styles.demoProgressDotActive]}
+          />
+        ))}
+      </View>
+
+      <View
+        style={[
+          styles.signedOutFooter,
+          {
+            bottom: isCompact ? 86 : 106,
+          },
+        ]}>
+        <Pressable
+          accessibilityRole="button"
+          disabled={!isSupabaseConfigured}
+          onPress={() => router.push('/(auth)/sign-in')}
+          style={({ pressed }) => [
+            styles.signedOutCta,
+            !isSupabaseConfigured && styles.signedOutCtaDisabled,
+            pressed && styles.signedOutCtaPressed,
+          ]}>
+          <Text style={styles.signedOutCtaText}>Start with friends</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -282,6 +358,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: '100%',
     backgroundColor: '#141312',
+    overflow: 'hidden',
   },
   demoVideo: {
     ...StyleSheet.absoluteFillObject,
@@ -294,33 +371,32 @@ const styles = StyleSheet.create({
     right: -70,
     top: -40,
     bottom: -40,
-    backgroundColor: '#211F1D',
     transform: [{ rotate: '-7deg' }],
   },
-  demoBlockLarge: {
+  demoFrame: {
     position: 'absolute',
-    left: -28,
-    right: 44,
-    top: 238,
     bottom: 0,
     borderRadius: 8,
-    backgroundColor: '#2F3430',
-    opacity: 0.82,
+    opacity: 0.88,
   },
-  demoBlockSmall: {
+  demoSideFrame: {
     position: 'absolute',
-    right: -24,
-    top: 430,
-    width: 170,
-    height: 250,
+    right: 0,
+    height: 270,
     borderRadius: 8,
-    backgroundColor: '#5B3A2F',
-    opacity: 0.7,
+    opacity: 0.62,
+  },
+  demoShadowBand: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 250,
+    backgroundColor: 'rgba(12, 11, 10, 0.34)',
   },
   demoBottomMeta: {
     position: 'absolute',
     left: 22,
-    bottom: 150,
   },
   demoDate: {
     color: '#FFFEFB',
@@ -343,7 +419,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 22,
     right: 22,
-    top: 148,
   },
   signedOutWordmark: {
     color: '#FFFEFB',
@@ -358,11 +433,46 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: 28,
   },
-  signedOutFooter: {
+  demoProgress: {
     position: 'absolute',
     left: 22,
     right: 22,
-    bottom: 74,
+    bottom: 176,
+    flexDirection: 'row',
+    gap: 6,
+  },
+  demoProgressDot: {
+    flex: 1,
+    height: 2,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255, 254, 251, 0.24)',
+  },
+  demoProgressDotActive: {
+    backgroundColor: 'rgba(255, 254, 251, 0.92)',
+  },
+  signedOutFooter: {
+    position: 'absolute',
+    left: 22,
+    width: '88%',
+  },
+  signedOutCta: {
+    minHeight: 52,
+    width: '84%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: '#E65A3C',
+  },
+  signedOutCtaDisabled: {
+    opacity: 0.5,
+  },
+  signedOutCtaPressed: {
+    opacity: 0.82,
+  },
+  signedOutCtaText: {
+    color: '#FFFEFB',
+    fontSize: 16,
+    fontWeight: '800',
   },
   focusPanel: {
     borderWidth: 1,
