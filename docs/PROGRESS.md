@@ -165,6 +165,8 @@ Phase 8: Preservation and archive foundation.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/9d85306c-1680-492b-9231-6df1f573fd2c`
 - Started full-app UI pass: signed-out Home now expects a one-minute public 9:16 demo MP4 via `EXPO_PUBLIC_HOME_DEMO_VIDEO_URL`, rotates 31 days of overlay metadata, removes progress dots, and centers the Start CTA.
 - Sign-in, tabs, modal, not-found, shared buttons, and export controls now use the dayby visual system instead of Expo defaults.
+- iOS device development build with first full-app UI pass finished: `0453789d-fee5-40ca-9599-5a0f24cdbf1e`.
+- iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/0453789d-fee5-40ca-9599-5a0f24cdbf1e`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
