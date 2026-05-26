@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: -28,
     right: 44,
-    top: 134,
+    top: 238,
     height: 360,
     borderRadius: 8,
     backgroundColor: '#2F3430',
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   demoBlockSmall: {
     position: 'absolute',
     right: -24,
-    top: 366,
+    top: 430,
     width: 170,
     height: 250,
     borderRadius: 8,
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   demoBottomMeta: {
     position: 'absolute',
     left: 22,
-    bottom: 194,
+    bottom: 150,
   },
   demoDate: {
     color: '#FFFEFB',
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 22,
     right: 22,
-    bottom: 176,
+    top: 148,
   },
   signedOutWordmark: {
     color: '#FFFEFB',
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 22,
     right: 22,
-    bottom: 34,
+    bottom: 36,
     gap: 12,
   },
   signedOutHint: {

@@ -6,6 +6,7 @@ import { Pressable } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useAuth } from '@/src/features/auth/AuthProvider';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -18,14 +19,17 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const themeName = colorScheme === 'dark' ? 'dark' : 'light';
+  const { status } = useAuth();
+  const isSignedIn = status === 'signed-in';
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[themeName].tint,
+        tabBarStyle: isSignedIn ? undefined : { display: 'none' },
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        headerShown: useClientOnlyValue(false, false),
       }}>
       <Tabs.Screen
         name="index"
