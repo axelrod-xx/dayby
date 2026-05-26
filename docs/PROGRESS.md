@@ -102,6 +102,7 @@ Phase 8: Preservation and archive foundation.
 - Camera now shows a clear `Cancel` control before recording and on the permission screen, so users do not need to rely on swipe-back.
 - First UI polish pass started: signed-out Home now shows a vertical Monthly Memory demo instead of only explanatory copy.
 - Camera, Trim, and Daily Reel now reinforce dayby's 9:16 vertical memory format.
+- Home now exposes `Log out` from a consistent account section for every signed-in state.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`

@@ -126,9 +126,6 @@ export default function TabOneScreen() {
                   View groups
                 </PrimaryButton>
               </Link>
-              <PrimaryButton onPress={() => void signOut()} variant="light">
-                Log out
-              </PrimaryButton>
             </View>
           )}
         </View>
@@ -140,6 +137,17 @@ export default function TabOneScreen() {
           Tonight is for posting. Tomorrow is for voting. The month stays the main memory.
         </Text>
       </View>
+
+      {isSignedIn ? (
+        <View style={styles.accountPanel}>
+          <Text style={styles.accountText}>
+            Signed in{profile?.display_name ? ` as ${profile.display_name}` : ''}
+          </Text>
+          <PrimaryButton onPress={() => void signOut()} variant="light">
+            Log out
+          </PrimaryButton>
+        </View>
+      ) : null}
     </ScrollView>
   );
 }
@@ -373,5 +381,16 @@ const styles = StyleSheet.create({
   },
   signedInActions: {
     gap: 10,
+  },
+  accountPanel: {
+    borderTopWidth: 1,
+    borderTopColor: '#E5E1DA',
+    gap: 10,
+    paddingTop: 18,
+  },
+  accountText: {
+    color: '#78716C',
+    fontSize: 13,
+    fontWeight: '700',
   },
 });
