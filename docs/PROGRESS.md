@@ -106,6 +106,7 @@ Phase 8: Preservation and archive foundation.
 - Signed-out Home is now a full-screen brand-first pseudo video demo with rotating date/time/author metadata.
 - Added `docs/UI_DEMO_VIDEO.md` to capture how the current pseudo demo can later become a 9:16 silent MP4.
 - Fixed signed-out Home layout by hiding the tab header/tab bar before sign-in and separating brand, demo metadata, and CTA positions.
+- Removed the signed-out Home top date/copy metadata so the demo date/time/author only appears in one place.
 - Daily and Monthly routes include export controls; generated MP4 URI wiring is still pending.
 - Supabase migrations present remotely: `initial_phase_1`, `allow_group_owner_read`
 - Supabase migrations present remotely: `group_invite_join_rpc`, `memory_core_schema`

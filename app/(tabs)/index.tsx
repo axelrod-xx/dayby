@@ -46,7 +46,7 @@ export default function TabOneScreen() {
   );
 
   if (!isSignedIn) {
-    return <SignedOutHome isSupabaseConfigured={isSupabaseConfigured} todayLabel={todayLabel} />;
+  return <SignedOutHome isSupabaseConfigured={isSupabaseConfigured} />;
   }
 
   return (
@@ -159,10 +159,8 @@ export default function TabOneScreen() {
 
 function SignedOutHome({
   isSupabaseConfigured,
-  todayLabel,
 }: {
   isSupabaseConfigured: boolean;
-  todayLabel: string;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeMoment = demoMoments[activeIndex];
@@ -181,10 +179,6 @@ function SignedOutHome({
         <View style={styles.demoWash} />
         <View style={styles.demoBlockLarge} />
         <View style={styles.demoBlockSmall} />
-        <View style={styles.demoTopMeta}>
-          <Text style={styles.demoTopKicker}>{todayLabel.toUpperCase()}</Text>
-          <Text style={styles.demoTopSub}>A month, made by friends</Text>
-        </View>
         <View style={styles.demoBottomMeta}>
           <Text style={styles.demoDate}>{activeMoment.date}</Text>
           <Text style={styles.demoTime}>{activeMoment.time}</Text>
@@ -323,22 +317,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#5B3A2F',
     opacity: 0.7,
-  },
-  demoTopMeta: {
-    position: 'absolute',
-    left: 22,
-    top: 72,
-  },
-  demoTopKicker: {
-    color: '#FFFEFB',
-    fontSize: 13,
-    fontWeight: '900',
-  },
-  demoTopSub: {
-    marginTop: 5,
-    color: '#BEB6AC',
-    fontSize: 13,
-    fontWeight: '700',
   },
   demoBottomMeta: {
     position: 'absolute',
