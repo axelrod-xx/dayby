@@ -33,8 +33,9 @@ export default function CreateGroupScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <View>
+        <Text style={styles.kicker}>New circle</Text>
         <Text style={styles.title}>Create group</Text>
-        <Text style={styles.copy}>Small by default. Quiet by design.</Text>
+        <Text style={styles.copy}>Small by default. Built for friends, not followers.</Text>
       </View>
 
       <View style={styles.form}>
@@ -84,16 +85,24 @@ export default function CreateGroupScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 24,
-    paddingHorizontal: 22,
+    gap: 22,
+    paddingLeft: 22,
+    paddingRight: 44,
     paddingBottom: 40,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 74,
+    backgroundColor: '#FFFDF8',
+  },
+  kicker: {
+    marginBottom: 10,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
     color: '#171615',
-    fontSize: 34,
-    fontWeight: '700',
+    fontSize: 40,
+    fontWeight: '900',
   },
   copy: {
     marginTop: 10,
@@ -118,7 +127,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     color: '#171615',
     fontSize: 17,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
   readOnlyBox: {
     minHeight: 54,
@@ -138,9 +147,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 18,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
-    paddingTop: 18,
+    borderWidth: 1,
+    borderColor: '#E5E1DA',
+    borderRadius: 8,
+    padding: 16,
+    backgroundColor: '#FFFEFB',
   },
   toggleText: {
     flex: 1,

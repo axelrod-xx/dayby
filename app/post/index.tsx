@@ -110,8 +110,9 @@ export default function PostToGroupsScreen() {
         </View>
 
         <View>
-          <Text style={styles.title}>Post to groups</Text>
-          <Text style={styles.copy}>One 2-second video can go to multiple groups. The file stays single.</Text>
+          <Text style={styles.kicker}>Send moment</Text>
+          <Text style={styles.title}>Choose who keeps it.</Text>
+          <Text style={styles.copy}>One 2-second file, shared into the groups you pick.</Text>
         </View>
 
         <View style={styles.soundPill}>
@@ -191,8 +192,8 @@ const styles = StyleSheet.create({
     gap: 22,
     paddingHorizontal: 22,
     paddingBottom: 120,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 74,
+    backgroundColor: '#FFFDF8',
   },
   topBar: {
     marginBottom: -8,
@@ -206,10 +207,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '800',
   },
+  kicker: {
+    marginBottom: 10,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
   title: {
     color: '#171615',
-    fontSize: 34,
-    fontWeight: '800',
+    fontSize: 40,
+    fontWeight: '900',
+    lineHeight: 44,
   },
   copy: {
     marginTop: 10,
@@ -220,7 +229,7 @@ const styles = StyleSheet.create({
   soundPill: {
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor: '#D8D2C8',
+    borderColor: '#171615',
     borderRadius: 999,
     paddingHorizontal: 14,
     paddingVertical: 8,
@@ -256,12 +265,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E5E1DA',
     borderRadius: 8,
-    padding: 16,
-    backgroundColor: '#FBFAF7',
+    padding: 18,
+    backgroundColor: '#FFFEFB',
   },
   groupCardSelected: {
     borderColor: '#171615',
-    backgroundColor: '#F5F1EA',
+    backgroundColor: '#EFE7DD',
   },
   groupCardDisabled: {
     opacity: 0.42,

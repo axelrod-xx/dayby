@@ -32,10 +32,11 @@ export default function GroupsScreen() {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.hero}>
+        <Text style={styles.kicker}>Your circles</Text>
         <Text style={styles.title}>Groups</Text>
         <Text style={styles.body}>
-          Your friend groups live here. One group, one day, one kept moment.
+          Small rooms for the months you want to remember together.
         </Text>
       </View>
 
@@ -53,7 +54,9 @@ export default function GroupsScreen() {
         ) : (
           <View style={styles.actionGrid}>
             <Link href="/groups/create" asChild>
-              <PrimaryButton onPress={() => undefined}>Create group</PrimaryButton>
+              <PrimaryButton onPress={() => undefined} variant="accent">
+                Create group
+              </PrimaryButton>
             </Link>
             <Link href="/groups/join" asChild>
               <PrimaryButton onPress={() => undefined} variant="light">
@@ -68,16 +71,24 @@ export default function GroupsScreen() {
         <ActivityIndicator color="#171615" />
       ) : groups.length > 0 ? (
         <View style={styles.list}>
+          <View style={styles.monthPreview}>
+            <Text style={styles.previewKicker}>This month</Text>
+            <Text style={styles.previewTitle}>{activeGroups.length} active group{activeGroups.length === 1 ? '' : 's'}</Text>
+            <Text style={styles.previewCopy}>No feeds. Just the people and the days.</Text>
+          </View>
           {activeGroups.map((group) => (
             <Link
               key={group.id}
               href={{ pathname: '/groups/[groupId]', params: { groupId: group.id } } as unknown as Href}
               asChild>
               <Pressable style={({ pressed }) => [styles.groupRow, pressed && styles.pressed]}>
-                <View>
+                <View style={styles.groupMark}>
+                  <Text style={styles.groupInitial}>{group.name.slice(0, 1).toUpperCase()}</Text>
+                </View>
+                <View style={styles.groupText}>
                   <Text style={styles.groupName}>{group.name}</Text>
                   <Text style={styles.groupMeta}>
-                    {group.member_role} / {group.timezone} / {getGroupActivityLabel(group)}
+                    {getGroupActivityLabel(group)} / {group.member_role}
                   </Text>
                 </View>
                 <Text style={styles.chevron}>&gt;</Text>
@@ -108,18 +119,30 @@ export default function GroupsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 22,
+    gap: 20,
     paddingHorizontal: 22,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 78,
+    backgroundColor: '#FFFDF8',
+  },
+  hero: {
+    minHeight: 146,
+    justifyContent: 'flex-end',
+  },
+  kicker: {
+    marginBottom: 10,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
     color: '#171615',
-    fontSize: 34,
-    fontWeight: '700',
+    fontSize: 44,
+    fontWeight: '900',
+    letterSpacing: 0,
   },
   body: {
-    marginTop: 16,
+    marginTop: 10,
     color: '#68625D',
     fontSize: 16,
     lineHeight: 24,
@@ -131,26 +154,67 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   list: {
-    gap: 10,
+    gap: 12,
+  },
+  monthPreview: {
+    minHeight: 154,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
+  },
+  previewKicker: {
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  previewTitle: {
+    marginTop: 8,
+    color: '#FFFEFB',
+    fontSize: 26,
+    fontWeight: '900',
+  },
+  previewCopy: {
+    marginTop: 8,
+    color: '#BDB5AA',
+    fontSize: 14,
+    lineHeight: 20,
   },
   groupRow: {
-    minHeight: 72,
+    minHeight: 82,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     borderWidth: 1,
     borderColor: '#E5E1DA',
     borderRadius: 8,
-    paddingHorizontal: 16,
-    backgroundColor: '#FBFAF7',
+    gap: 14,
+    paddingHorizontal: 14,
+    backgroundColor: '#FFFEFB',
   },
   pressed: {
     opacity: 0.75,
   },
+  groupMark: {
+    width: 46,
+    height: 46,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 23,
+    backgroundColor: '#EFE7DD',
+  },
+  groupInitial: {
+    color: '#171615',
+    fontSize: 18,
+    fontWeight: '900',
+  },
+  groupText: {
+    flex: 1,
+  },
   groupName: {
     color: '#171615',
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: '900',
   },
   groupMeta: {
     marginTop: 6,

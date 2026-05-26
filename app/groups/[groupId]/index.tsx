@@ -105,16 +105,16 @@ export default function GroupDetailScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View>
-        <Text style={styles.kicker}>Group</Text>
+      <View style={styles.hero}>
+        <Text style={styles.kicker}>Group memory</Text>
         <Text style={styles.title}>{group.name}</Text>
         <Text style={styles.copy}>
-          {group.timezone} / {members.length}/{group.member_limit} friends
+          {members.length}/{group.member_limit} friends / {group.timezone}
         </Text>
       </View>
 
       <View style={styles.todayPanel}>
-        <Text style={styles.kicker}>Today</Text>
+        <Text style={styles.panelKicker}>Today</Text>
         <Text style={styles.todayTitle}>{group.posted_today ? 'Posted today.' : "Keep today's 2 seconds."}</Text>
         <Text style={styles.panelText}>
           {group.posted_today
@@ -162,35 +162,34 @@ export default function GroupDetailScreen() {
       ) : null}
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Yesterday</Text>
-        <Text style={styles.panelText}>Watch by time, then choose the 2 seconds worth keeping.</Text>
-        <View style={styles.action}>
+        <View style={styles.panelHeader}>
+          <View>
+            <Text style={styles.panelTitle}>Yesterday</Text>
+            <Text style={styles.panelText}>Watch by time, then choose what stays.</Text>
+          </View>
           <Link
             href={{
               pathname: '/daily/[groupId]/[date]',
               params: { groupId: group.id, date: previousDateString() },
             }}
             asChild>
-            <PrimaryButton onPress={() => undefined} variant="light">
-              Open Daily Reel
-            </PrimaryButton>
+            <Text style={styles.inlineAction}>Open</Text>
           </Link>
         </View>
       </View>
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Monthly Memory</Text>
-        <Text style={styles.panelText}>The kept moments from this month, in order.</Text>
-        <View style={styles.action}>
+        <View style={styles.memoryPreview}>
+          <Text style={styles.memoryKicker}>OUR MONTH</Text>
+          <Text style={styles.memoryTitle}>{group.name.toUpperCase()}</Text>
+          <Text style={styles.memoryCopy}>Daily winners become a one-minute memory.</Text>
           <Link
             href={{
               pathname: '/monthly/[groupId]/[year]/[month]',
               params: { groupId: group.id, year: String(currentYear), month: String(currentMonth) },
             }}
             asChild>
-            <PrimaryButton onPress={() => undefined} variant="light">
-              Open this month
-            </PrimaryButton>
+            <Text style={styles.memoryAction}>Open this month</Text>
           </Link>
         </View>
       </View>
@@ -285,27 +284,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFEFB',
   },
   container: {
-    gap: 24,
+    gap: 18,
     paddingHorizontal: 22,
     paddingBottom: 40,
-    paddingTop: 84,
+    paddingTop: 72,
     backgroundColor: '#FFFDF8',
+  },
+  hero: {
+    minHeight: 178,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
   },
   kicker: {
     marginBottom: 9,
-    color: '#E65A3C',
+    color: '#D8D2C8',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
-    fontSize: 34,
-    fontWeight: '700',
+    color: '#FFFEFB',
+    fontSize: 38,
+    fontWeight: '900',
+    letterSpacing: 0,
   },
   copy: {
     marginTop: 10,
-    color: '#68625D',
+    color: '#BDB5AA',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -316,10 +323,17 @@ const styles = StyleSheet.create({
   },
   todayPanel: {
     borderWidth: 1,
-    borderColor: '#E4DED5',
+    borderColor: '#171615',
     borderRadius: 8,
     padding: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFEFB',
+  },
+  panelKicker: {
+    marginBottom: 9,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   inviteNudge: {
     borderWidth: 1,
@@ -336,9 +350,51 @@ const styles = StyleSheet.create({
   },
   todayTitle: {
     color: '#141312',
-    fontSize: 24,
-    fontWeight: '800',
-    lineHeight: 30,
+    fontSize: 28,
+    fontWeight: '900',
+    lineHeight: 33,
+  },
+  panelHeader: {
+    minHeight: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  inlineAction: {
+    color: '#E65A3C',
+    fontSize: 15,
+    fontWeight: '900',
+  },
+  memoryPreview: {
+    minHeight: 174,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#26322D',
+  },
+  memoryKicker: {
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  memoryTitle: {
+    marginTop: 8,
+    color: '#FFFEFB',
+    fontSize: 28,
+    fontWeight: '900',
+  },
+  memoryCopy: {
+    marginTop: 8,
+    color: '#D8D2C8',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  memoryAction: {
+    marginTop: 18,
+    color: '#FFFEFB',
+    fontSize: 15,
+    fontWeight: '900',
   },
   subtlePanel: {
     borderTopWidth: 1,

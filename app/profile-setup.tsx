@@ -34,6 +34,7 @@ export default function ProfileSetupScreen() {
   return (
     <View style={styles.container}>
       <View>
+        <Text style={styles.kicker}>Profile</Text>
         <Text style={styles.title}>Set your name</Text>
         <Text style={styles.copy}>This is how friends will see your 2-second moments.</Text>
       </View>
@@ -62,14 +63,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 28,
-    paddingHorizontal: 22,
-    paddingTop: 92,
-    backgroundColor: '#FFFEFB',
+    paddingLeft: 22,
+    paddingRight: 44,
+    paddingTop: 82,
+    backgroundColor: '#FFFDF8',
+  },
+  kicker: {
+    marginBottom: 10,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
     color: '#171615',
-    fontSize: 34,
-    fontWeight: '700',
+    fontSize: 40,
+    fontWeight: '900',
   },
   copy: {
     marginTop: 12,
@@ -94,6 +103,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     color: '#171615',
     fontSize: 18,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFFFF',
   },
 });

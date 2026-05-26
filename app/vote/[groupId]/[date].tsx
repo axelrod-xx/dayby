@@ -48,7 +48,8 @@ export default function VoteScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
-        <Text style={styles.title}>Best 2 sec</Text>
+        <Text style={styles.kicker}>Vote</Text>
+        <Text style={styles.title}>Which one stays?</Text>
         <Text style={styles.copy}>Pick the one moment your group should keep from {date}.</Text>
       </View>
 
@@ -111,13 +112,21 @@ const styles = StyleSheet.create({
     gap: 22,
     paddingHorizontal: 22,
     paddingBottom: 42,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 74,
+    backgroundColor: '#FFFDF8',
+  },
+  kicker: {
+    marginBottom: 10,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
     color: '#171615',
-    fontSize: 34,
+    fontSize: 40,
     fontWeight: '900',
+    lineHeight: 44,
   },
   copy: {
     marginTop: 10,
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   voteCard: {
-    minHeight: 78,
+    minHeight: 88,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -137,11 +146,11 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#FFFEFB',
   },
   voteCardSelected: {
     borderColor: '#171615',
-    backgroundColor: '#F5F1EA',
+    backgroundColor: '#EFE7DD',
   },
   pressed: {
     opacity: 0.75,

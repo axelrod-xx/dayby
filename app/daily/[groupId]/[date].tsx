@@ -103,9 +103,10 @@ export default function DailyReelScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
+        <Text style={styles.kicker}>Yesterday</Text>
         <Text style={styles.title}>Daily Reel</Text>
         <Text style={styles.copy}>
-          {date} / vertical memory / {moments.length > 0 ? totalDurationLabel : 'yesterday'}
+          {date} / {moments.length > 0 ? totalDurationLabel : 'waiting for moments'}
         </Text>
       </View>
 
@@ -173,17 +174,25 @@ const styles = StyleSheet.create({
     gap: 22,
     paddingHorizontal: 22,
     paddingBottom: 42,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 72,
+    backgroundColor: '#171615',
+  },
+  kicker: {
+    marginBottom: 8,
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
-    fontSize: 34,
-    fontWeight: '800',
+    color: '#FFFEFB',
+    fontSize: 40,
+    fontWeight: '900',
+    letterSpacing: 0,
   },
   copy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#BDB5AA',
     fontSize: 16,
   },
   reel: {
@@ -192,7 +201,7 @@ const styles = StyleSheet.create({
   stage: {
     overflow: 'hidden',
     borderRadius: 8,
-    backgroundColor: '#171615',
+    backgroundColor: '#0E0D0C',
   },
   stageVideo: {
     width: '100%',
@@ -252,12 +261,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#D8D2C8',
+    borderColor: 'rgba(255,254,251,0.22)',
     borderRadius: 8,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: 'rgba(255,254,251,0.08)',
   },
   stepText: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 14,
     fontWeight: '800',
   },
@@ -268,23 +277,23 @@ const styles = StyleSheet.create({
     minHeight: 58,
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E5E1DA',
+    borderColor: 'rgba(255,254,251,0.14)',
     borderRadius: 8,
     paddingHorizontal: 14,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: 'rgba(255,254,251,0.06)',
   },
   timelineItemActive: {
-    borderColor: '#171615',
-    backgroundColor: '#F5F1EA',
+    borderColor: '#FFFEFB',
+    backgroundColor: 'rgba(255,254,251,0.14)',
   },
   timelineTime: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 17,
     fontWeight: '900',
   },
   timelineName: {
     marginTop: 4,
-    color: '#78716C',
+    color: '#BDB5AA',
     fontSize: 12,
     fontWeight: '800',
   },
@@ -296,17 +305,17 @@ const styles = StyleSheet.create({
   },
   empty: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: 'rgba(255,254,251,0.18)',
     paddingTop: 18,
   },
   emptyTitle: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 18,
     fontWeight: '800',
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#BDB5AA',
     fontSize: 15,
     lineHeight: 22,
   },

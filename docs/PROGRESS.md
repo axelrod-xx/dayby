@@ -167,6 +167,8 @@ Phase 8: Preservation and archive foundation.
 - Sign-in, tabs, modal, not-found, shared buttons, and export controls now use the dayby visual system instead of Expo defaults.
 - iOS device development build with first full-app UI pass finished: `0453789d-fee5-40ca-9599-5a0f24cdbf1e`.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/0453789d-fee5-40ca-9599-5a0f24cdbf1e`
+- Expanded the non-Home UI pass across Groups, Group Detail, Post to Groups, Daily Reel, Monthly Memory, Vote, Create/Join Group, Profile Setup, Archive, Safety, and Post Success.
+- Shifted memory playback screens darker and more cinematic, and kept input screens lighter with larger editorial headers and quieter cards.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 

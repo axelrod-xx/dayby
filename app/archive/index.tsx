@@ -44,6 +44,7 @@ export default function ArchiveScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
+        <Text style={styles.kicker}>Memory shelf</Text>
         <Text style={styles.title}>Archive</Text>
         <Text style={styles.copy}>Quiet groups stay here. Opening or posting keeps their memories alive.</Text>
       </View>
@@ -93,13 +94,20 @@ const styles = StyleSheet.create({
     gap: 22,
     paddingHorizontal: 22,
     paddingBottom: 42,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 74,
+    backgroundColor: '#FFFDF8',
+  },
+  kicker: {
+    marginBottom: 10,
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
     color: '#171615',
-    fontSize: 34,
-    fontWeight: '800',
+    fontSize: 40,
+    fontWeight: '900',
   },
   copy: {
     marginTop: 12,
@@ -116,7 +124,7 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 14,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#FFFEFB',
   },
   groupMain: {
     minHeight: 58,
