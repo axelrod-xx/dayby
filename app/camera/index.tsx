@@ -82,8 +82,14 @@ export default function CameraScreen() {
       <View style={styles.overlay}>
         <View>
           <Text style={styles.captureTitle}>{isRecording ? 'Recording' : 'Today'}</Text>
-          <Text style={styles.captureCopy}>Up to 10 sec. Keep 2 sec next.</Text>
+          <Text style={styles.captureCopy}>Hold upright. Keep 2 sec next.</Text>
         </View>
+      </View>
+      <View pointerEvents="none" style={styles.formatGuide}>
+        <View style={styles.formatCornerTopLeft} />
+        <View style={styles.formatCornerTopRight} />
+        <View style={styles.formatCornerBottomLeft} />
+        <View style={styles.formatCornerBottomRight} />
       </View>
       <View style={styles.controls}>
         <Pressable onPress={isRecording ? stop : () => void record()} style={styles.recordButton}>
@@ -194,6 +200,54 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
+  },
+  formatGuide: {
+    position: 'absolute',
+    left: 28,
+    right: 28,
+    top: 144,
+    bottom: 148,
+    borderRadius: 8,
+  },
+  formatCornerTopLeft: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: 28,
+    height: 28,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderColor: 'rgba(255,254,251,0.46)',
+  },
+  formatCornerTopRight: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: 28,
+    height: 28,
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    borderColor: 'rgba(255,254,251,0.46)',
+  },
+  formatCornerBottomLeft: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    width: 28,
+    height: 28,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: 'rgba(255,254,251,0.46)',
+  },
+  formatCornerBottomRight: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    width: 28,
+    height: 28,
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderColor: 'rgba(255,254,251,0.46)',
   },
   recordButton: {
     width: 82,

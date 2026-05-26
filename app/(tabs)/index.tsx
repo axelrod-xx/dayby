@@ -8,6 +8,12 @@ import { useAuth } from '@/src/features/auth/AuthProvider';
 import { listMyGroups } from '@/src/features/groups/groupService';
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 
+const demoMoments = [
+  { date: '05.03 SAT', name: 'RYO', time: '18:42' },
+  { date: '05.11 SUN', name: 'MIKA', time: '21:08' },
+  { date: '05.20 WED', name: 'YUN', time: '07:31' },
+];
+
 export default function TabOneScreen() {
   const { isProfileComplete, isSupabaseConfigured, profile, signOut, status } = useAuth();
   const [groups, setGroups] = useState<PostableGroup[]>([]);
@@ -49,7 +55,7 @@ export default function TabOneScreen() {
         <Text style={styles.copy}>A quiet memory, made by your group.</Text>
       </View>
 
-      <TodayOverview />
+      {!isSignedIn ? <MonthlyDemo /> : <TodayOverview />}
 
       {!isSupabaseConfigured ? (
         <View style={styles.notice}>
@@ -77,8 +83,8 @@ export default function TabOneScreen() {
         <View style={styles.actionRow}>
           {!isSignedIn ? (
             <Link href="/(auth)/sign-in" asChild>
-              <PrimaryButton disabled={!isSupabaseConfigured} onPress={() => undefined}>
-                Sign in
+              <PrimaryButton disabled={!isSupabaseConfigured} onPress={() => undefined} variant="accent">
+                Start with friends
               </PrimaryButton>
             </Link>
           ) : !isProfileComplete ? (
@@ -138,6 +144,31 @@ export default function TabOneScreen() {
   );
 }
 
+function MonthlyDemo() {
+  return (
+    <View style={styles.demoFrame}>
+      <View style={styles.demoHeader}>
+        <Text style={styles.demoKicker}>OUR MAY</Text>
+        <Text style={styles.demoGroup}>GARNET FRIENDS</Text>
+      </View>
+      <View style={styles.demoStack}>
+        {demoMoments.map((moment, index) => (
+          <View key={moment.date} style={[styles.demoMoment, index === 1 && styles.demoMomentActive]}>
+            <Text style={styles.demoDate}>{moment.date}</Text>
+            <Text style={styles.demoTime}>{moment.time}</Text>
+            <Text style={styles.demoName}>{moment.name}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.demoEnd}>
+        <Text style={styles.demoEndTitle}>31 DAYS</Text>
+        <Text style={styles.demoEndCopy}>31 MOMENTS</Text>
+        <Text style={styles.demoMade}>made with dayby</Text>
+      </View>
+    </View>
+  );
+}
+
 function getNextAction(input: {
   availableCount: number;
   groupCount: number;
@@ -176,14 +207,14 @@ function getNextAction(input: {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 22,
+    gap: 20,
     paddingHorizontal: 22,
     paddingBottom: 40,
     paddingTop: 84,
     backgroundColor: '#FFFDF8',
   },
   header: {
-    gap: 10,
+    gap: 9,
   },
   topline: {
     flexDirection: 'row',
@@ -204,15 +235,96 @@ const styles = StyleSheet.create({
   },
   hero: {
     color: '#141312',
-    fontSize: 44,
+    fontSize: 40,
     fontWeight: '800',
-    lineHeight: 48,
+    lineHeight: 44,
     letterSpacing: 0,
   },
   copy: {
     color: '#57514B',
+    fontSize: 17,
+    lineHeight: 24,
+  },
+  demoFrame: {
+    overflow: 'hidden',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#141312',
+  },
+  demoHeader: {
+    minHeight: 92,
+    justifyContent: 'flex-end',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,254,251,0.16)',
+    paddingBottom: 14,
+  },
+  demoKicker: {
+    color: '#FFFEFB',
+    fontSize: 31,
+    fontWeight: '900',
+    letterSpacing: 0,
+  },
+  demoGroup: {
+    marginTop: 4,
+    color: '#BEB6AC',
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  demoStack: {
+    gap: 8,
+    paddingVertical: 18,
+  },
+  demoMoment: {
+    minHeight: 66,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,254,251,0.12)',
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    backgroundColor: 'rgba(255,254,251,0.04)',
+  },
+  demoMomentActive: {
+    borderColor: 'rgba(255,254,251,0.44)',
+    backgroundColor: 'rgba(255,254,251,0.1)',
+  },
+  demoDate: {
+    color: '#FFFEFB',
+    fontSize: 17,
+    fontWeight: '900',
+  },
+  demoTime: {
+    marginTop: 4,
+    color: '#FFFEFB',
+    fontSize: 24,
+    fontWeight: '900',
+  },
+  demoName: {
+    marginTop: 4,
+    color: '#AFA79D',
+    fontSize: 12,
+    fontWeight: '900',
+  },
+  demoEnd: {
+    minHeight: 84,
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,254,251,0.16)',
+  },
+  demoEndTitle: {
+    color: '#FFFEFB',
     fontSize: 18,
-    lineHeight: 25,
+    fontWeight: '900',
+  },
+  demoEndCopy: {
+    marginTop: 3,
+    color: '#D8D2C8',
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  demoMade: {
+    marginTop: 12,
+    color: '#8F877E',
+    fontSize: 12,
   },
   focusPanel: {
     borderWidth: 1,

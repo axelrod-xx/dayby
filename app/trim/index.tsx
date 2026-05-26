@@ -139,7 +139,7 @@ export default function TrimScreen() {
           </Pressable>
         </View>
         <Text style={styles.title}>Keep 2 sec</Text>
-        <Text style={styles.copy}>Pick the two seconds worth keeping. The 10-second take stays on this device.</Text>
+        <Text style={styles.copy}>Pick the two seconds worth keeping. dayby memories stay vertical.</Text>
       </View>
 
       <View style={styles.previewWrap}>
@@ -150,7 +150,7 @@ export default function TrimScreen() {
         )}
         <View style={styles.previewBadge}>
           <Text style={styles.previewBadgeText}>
-            Looping {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)}
+            Previewing {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)}
           </Text>
         </View>
       </View>

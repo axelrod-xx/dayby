@@ -105,7 +105,7 @@ export default function DailyReelScreen() {
       <View>
         <Text style={styles.title}>Daily Reel</Text>
         <Text style={styles.copy}>
-          {date} / {moments.length > 0 ? totalDurationLabel : 'yesterday'}
+          {date} / vertical memory / {moments.length > 0 ? totalDurationLabel : 'yesterday'}
         </Text>
       </View>
 
