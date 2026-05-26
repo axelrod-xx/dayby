@@ -70,9 +70,11 @@ export function ExportActions({ groupId, videoUri }: ExportActionsProps) {
 const styles = StyleSheet.create({
   container: {
     gap: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
-    paddingTop: 18,
+    borderWidth: 1,
+    borderColor: '#E5E1DA',
+    borderRadius: 8,
+    padding: 16,
+    backgroundColor: '#FFFDF8',
   },
   kicker: {
     color: '#171615',

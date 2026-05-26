@@ -31,6 +31,8 @@ Copy `.env.example` to `.env.local` for local values.
 
 Only variables prefixed with `EXPO_PUBLIC_` are available to the app bundle. Do not put service-role secrets, R2 access keys, or private signing secrets in any `EXPO_PUBLIC_` value.
 
+`EXPO_PUBLIC_HOME_DEMO_VIDEO_URL` can point to a public, silent 9:16 MP4 used only for the signed-out home demo. It should be around one minute and contain no private user content.
+
 ## External Services
 
 Supabase and Cloudflare R2 are new-project dependencies. See `docs/USER_ACTIONS.md` for the setup tasks that require account access.

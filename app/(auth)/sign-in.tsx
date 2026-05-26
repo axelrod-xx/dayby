@@ -44,10 +44,11 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.backdrop} />
       <View style={styles.header}>
         <Text style={styles.wordmark}>dayby</Text>
-        <Text style={styles.copy}>Two seconds a day. One minute a month.</Text>
-        <Text style={styles.subcopy}>Your group keeps the days that mattered.</Text>
+        <Text style={styles.copy}>Two seconds a day.{'\n'}One minute a month.</Text>
+        <Text style={styles.subcopy}>Start with the people you actually want to remember this with.</Text>
       </View>
 
       {!isSupabaseConfigured ? (
@@ -63,7 +64,8 @@ export default function SignInScreen() {
         <PrimaryButton
           disabled={!isSupabaseConfigured}
           loading={loadingProvider === 'apple'}
-          onPress={() => void run('apple')}>
+          onPress={() => void run('apple')}
+          variant="light">
           Continue with Apple
         </PrimaryButton>
         <PrimaryButton
@@ -122,34 +124,45 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     paddingBottom: 42,
     paddingTop: 92,
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#171615',
+  },
+  backdrop: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 320,
+    backgroundColor: '#222B25',
   },
   header: {
     gap: 14,
+    width: '100%',
+    maxWidth: 340,
   },
   wordmark: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 48,
-    fontWeight: '700',
+    fontWeight: '900',
     letterSpacing: 0,
   },
   copy: {
-    color: '#57534E',
+    color: '#FFFEFB',
     fontSize: 24,
-    fontWeight: '800',
+    fontWeight: '900',
     lineHeight: 30,
   },
   subcopy: {
-    color: '#78716C',
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 23,
+    maxWidth: 320,
   },
   notice: {
     borderWidth: 1,
     borderColor: '#E5E1DA',
     borderRadius: 8,
     padding: 16,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: 'rgba(255,253,248,0.92)',
   },
   noticeTitle: {
     color: '#171615',
@@ -163,16 +176,19 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   actions: {
+    width: 300,
+    alignSelf: 'flex-start',
+    marginLeft: 23,
     gap: 12,
   },
   devPanel: {
     marginTop: 6,
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: 'rgba(255,254,251,0.2)',
     paddingTop: 16,
   },
   devToggle: {
-    color: '#78716C',
+    color: '#D8D2C8',
     fontSize: 13,
     fontWeight: '800',
     textAlign: 'center',
@@ -193,7 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFEFB',
   },
   devHint: {
-    color: '#78716C',
+    color: '#D8D2C8',
     fontSize: 12,
     textAlign: 'center',
   },

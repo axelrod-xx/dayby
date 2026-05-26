@@ -56,6 +56,7 @@ Mobile uploads are also guarded by:
 
 ```bash
 EXPO_PUBLIC_ENABLE_R2_UPLOADS=false
+EXPO_PUBLIC_HOME_DEMO_VIDEO_URL=
 ```
 
 Keep this `false` until native 2-second trimming outputs a real 2-second MP4. This prevents accidentally uploading the original 10-second capture.

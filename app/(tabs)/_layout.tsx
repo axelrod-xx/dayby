@@ -26,7 +26,21 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[themeName].tint,
-        tabBarStyle: isSignedIn ? undefined : { display: 'none' },
+        tabBarInactiveTintColor: '#8E877E',
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '800',
+        },
+        tabBarStyle: isSignedIn
+          ? {
+              height: 86,
+              borderTopWidth: 1,
+              borderTopColor: '#E5E1DA',
+              paddingBottom: 24,
+              paddingTop: 8,
+              backgroundColor: '#FFFEFB',
+            }
+          : { display: 'none' },
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, false),

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Link, type Href, useFocusEffect, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { TodayOverview } from '@/src/features/home/TodayOverview';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
@@ -9,39 +10,40 @@ import { useAuth } from '@/src/features/auth/AuthProvider';
 import { listMyGroups } from '@/src/features/groups/groupService';
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 
+const homeDemoVideoUri = process.env.EXPO_PUBLIC_HOME_DEMO_VIDEO_URL ?? '';
+
 const demoMoments = [
-  {
-    accent: '#E65A3C',
-    date: '05.03 SAT',
-    name: 'RYO',
-    scene: '#2C332D',
-    shade: '#1D211E',
-    time: '18:42',
-  },
-  {
-    accent: '#D9B36D',
-    date: '05.11 SUN',
-    name: 'MIKA',
-    scene: '#35302A',
-    shade: '#221F1C',
-    time: '21:08',
-  },
-  {
-    accent: '#8DAA91',
-    date: '05.20 WED',
-    name: 'YUN',
-    scene: '#26343B',
-    shade: '#171F23',
-    time: '07:31',
-  },
-  {
-    accent: '#C96E56',
-    date: '05.28 THU',
-    name: 'SORA',
-    scene: '#40302E',
-    shade: '#241C1B',
-    time: '22:14',
-  },
+  { date: '05.01 FRI', name: 'RYO', time: '18:42' },
+  { date: '05.02 SAT', name: 'MIKA', time: '21:08' },
+  { date: '05.03 SUN', name: 'YUN', time: '07:31' },
+  { date: '05.04 MON', name: 'SORA', time: '22:14' },
+  { date: '05.05 TUE', name: 'NANA', time: '17:56' },
+  { date: '05.06 WED', name: 'JIN', time: '20:11' },
+  { date: '05.07 THU', name: 'AOI', time: '16:33' },
+  { date: '05.08 FRI', name: 'REN', time: '23:02' },
+  { date: '05.09 SAT', name: 'MIO', time: '19:27' },
+  { date: '05.10 SUN', name: 'KAI', time: '12:44' },
+  { date: '05.11 MON', name: 'RYO', time: '21:15' },
+  { date: '05.12 TUE', name: 'MIKA', time: '18:03' },
+  { date: '05.13 WED', name: 'YUN', time: '07:54' },
+  { date: '05.14 THU', name: 'SORA', time: '22:30' },
+  { date: '05.15 FRI', name: 'NANA', time: '17:19' },
+  { date: '05.16 SAT', name: 'JIN', time: '20:48' },
+  { date: '05.17 SUN', name: 'AOI', time: '15:06' },
+  { date: '05.18 MON', name: 'REN', time: '23:11' },
+  { date: '05.19 TUE', name: 'MIO', time: '19:52' },
+  { date: '05.20 WED', name: 'KAI', time: '12:09' },
+  { date: '05.21 THU', name: 'RYO', time: '18:37' },
+  { date: '05.22 FRI', name: 'MIKA', time: '21:40' },
+  { date: '05.23 SAT', name: 'YUN', time: '08:20' },
+  { date: '05.24 SUN', name: 'SORA', time: '22:05' },
+  { date: '05.25 MON', name: 'NANA', time: '17:45' },
+  { date: '05.26 TUE', name: 'JIN', time: '20:14' },
+  { date: '05.27 WED', name: 'AOI', time: '16:58' },
+  { date: '05.28 THU', name: 'REN', time: '23:33' },
+  { date: '05.29 FRI', name: 'MIO', time: '19:01' },
+  { date: '05.30 SAT', name: 'KAI', time: '12:26' },
+  { date: '05.31 SUN', name: 'ALL', time: '21:59' },
 ];
 
 export default function TabOneScreen() {
@@ -75,7 +77,7 @@ export default function TabOneScreen() {
   );
 
   if (!isSignedIn) {
-  return <SignedOutHome isSupabaseConfigured={isSupabaseConfigured} />;
+    return <SignedOutHome isSupabaseConfigured={isSupabaseConfigured} />;
   }
 
   return (
@@ -196,43 +198,52 @@ function SignedOutHome({
   const { height, width } = useWindowDimensions();
   const isCompact = height < 760;
   const router = useRouter();
+  const demoPlayer = useVideoPlayer(homeDemoVideoUri, (instance) => {
+    instance.loop = true;
+    instance.muted = true;
+    if (homeDemoVideoUri) {
+      void instance.play();
+    }
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((current) => (current + 1) % demoMoments.length);
-    }, 1700);
+    }, 1900);
 
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (!homeDemoVideoUri) {
+      return;
+    }
+
+    demoPlayer.play();
+  }, [demoPlayer]);
+
   return (
     <View style={styles.signedOutScreen}>
       <StatusBar style="light" translucent backgroundColor="transparent" />
-      <View style={[styles.demoVideo, { backgroundColor: activeMoment.shade }]}>
-        <View style={[styles.demoWash, { backgroundColor: activeMoment.shade }]} />
-        <View
-          style={[
-            styles.demoFrame,
-            {
-              backgroundColor: activeMoment.scene,
-              height: Math.max(height * 0.82, 620),
-              left: 0,
-              right: Math.max(width * 0.12, 44),
-              top: isCompact ? 252 : 282,
-            },
-          ]}
-        />
-        <View
-          style={[
-            styles.demoSideFrame,
-            {
-              backgroundColor: activeMoment.accent,
-              top: isCompact ? 420 : 464,
-              transform: [{ translateX: Math.max(width * 0.18, 72) }],
-              width: Math.max(width * 0.38, 150),
-            },
-          ]}
-        />
+      <View style={styles.demoVideo}>
+        {homeDemoVideoUri ? (
+          <VideoView contentFit="cover" nativeControls={false} player={demoPlayer} style={styles.homeDemoVideo} />
+        ) : (
+          <View style={styles.homeDemoFallback}>
+            <View style={styles.demoWash} />
+            <View
+              style={[
+                styles.demoFrame,
+                {
+                  height: Math.max(height * 0.82, 620),
+                  left: 0,
+                  right: Math.max(width * 0.12, 44),
+                  top: isCompact ? 252 : 282,
+                },
+              ]}
+            />
+          </View>
+        )}
         <View style={styles.demoShadowBand} />
         <View style={[styles.demoBottomMeta, { bottom: isCompact ? 194 : 214 }]}>
           <Text style={styles.demoDate}>{activeMoment.date}</Text>
@@ -244,15 +255,6 @@ function SignedOutHome({
       <View style={[styles.signedOutBrand, { top: isCompact ? 104 : 126 }]}>
         <Text style={styles.signedOutWordmark}>dayby</Text>
         <Text style={styles.signedOutCopy}>Two seconds a day.{'\n'}One minute a month.</Text>
-      </View>
-
-      <View style={styles.demoProgress}>
-        {demoMoments.map((moment, index) => (
-          <View
-            key={moment.date}
-            style={[styles.demoProgressDot, index === activeIndex && styles.demoProgressDotActive]}
-          />
-        ))}
       </View>
 
       <View
@@ -365,26 +367,27 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#171615',
   },
+  homeDemoVideo: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  homeDemoFallback: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#1D211E',
+  },
   demoWash: {
     position: 'absolute',
-    left: -70,
-    right: -70,
-    top: -40,
-    bottom: -40,
-    transform: [{ rotate: '-7deg' }],
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: '#1D211E',
   },
   demoFrame: {
     position: 'absolute',
     bottom: 0,
     borderRadius: 8,
+    backgroundColor: '#2C332D',
     opacity: 0.88,
-  },
-  demoSideFrame: {
-    position: 'absolute',
-    right: 0,
-    height: 270,
-    borderRadius: 8,
-    opacity: 0.62,
   },
   demoShadowBand: {
     position: 'absolute',
@@ -433,31 +436,14 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     lineHeight: 28,
   },
-  demoProgress: {
-    position: 'absolute',
-    left: 22,
-    right: 22,
-    bottom: 176,
-    flexDirection: 'row',
-    gap: 6,
-  },
-  demoProgressDot: {
-    flex: 1,
-    height: 2,
-    borderRadius: 999,
-    backgroundColor: 'rgba(255, 254, 251, 0.24)',
-  },
-  demoProgressDotActive: {
-    backgroundColor: 'rgba(255, 254, 251, 0.92)',
-  },
   signedOutFooter: {
     position: 'absolute',
-    left: 22,
-    width: '88%',
+    left: 45,
+    width: 300,
   },
   signedOutCta: {
     minHeight: 52,
-    width: '84%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,

@@ -1,18 +1,23 @@
 import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { Text, View } from '@/components/Themed';
+import { PrimaryButton } from '@/src/components/PrimaryButton';
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: 'dayby' }} />
       <View style={styles.container}>
-        <Text style={styles.title}>This screen doesn't exist.</Text>
-
-        <Link href="/" style={styles.link}>
-          <Text style={styles.linkText}>Go to home screen!</Text>
-        </Link>
+        <Text style={styles.kicker}>Lost moment</Text>
+        <Text style={styles.title}>This page is not here.</Text>
+        <Text style={styles.copy}>The memory is probably somewhere else.</Text>
+        <View style={styles.action}>
+          <Link href="/" asChild>
+            <PrimaryButton onPress={() => undefined} variant="accent">
+              Back home
+            </PrimaryButton>
+          </Link>
+        </View>
       </View>
     </>
   );
@@ -21,20 +26,30 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    paddingHorizontal: 22,
+    backgroundColor: '#FFFEFB',
+  },
+  kicker: {
+    color: '#E65A3C',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    marginTop: 12,
+    color: '#171615',
+    fontSize: 40,
+    fontWeight: '900',
+    lineHeight: 44,
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  copy: {
+    marginTop: 10,
+    color: '#68625D',
+    fontSize: 16,
+    lineHeight: 24,
   },
-  linkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+  action: {
+    marginTop: 26,
   },
 });

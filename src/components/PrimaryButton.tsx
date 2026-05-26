@@ -45,6 +45,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 8,
     paddingHorizontal: 18,
+    shadowColor: '#171615',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
   },
   dark: {
     backgroundColor: '#171615',
@@ -55,7 +59,7 @@ const styles = StyleSheet.create({
   light: {
     borderWidth: 1,
     borderColor: '#D8D2C8',
-    backgroundColor: '#FFFEFB',
+    backgroundColor: '#FFFDF8',
   },
   disabled: {
     opacity: 0.5,
@@ -65,7 +69,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   darkLabel: {
     color: '#FFFEFB',
