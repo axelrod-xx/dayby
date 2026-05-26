@@ -161,6 +161,8 @@ Phase 8: Preservation and archive foundation.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/7fb1ea83-4797-487d-93e0-fbe3154891d9`
 - Signed-out Home rebuilt as a full-screen monthly-memory demo surface with rotating moment metadata, raised CTA, dark translucent status bar, and mobile screenshot verification.
 - Camera format guide updated to avoid deprecated `pointerEvents` prop warnings during web verification.
+- iOS device development build with polished full-screen signed-out Home finished: `9d85306c-1680-492b-9231-6df1f573fd2c`.
+- iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/9d85306c-1680-492b-9231-6df1f573fd2c`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
