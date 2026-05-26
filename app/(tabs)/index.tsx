@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Link, type Href, useFocusEffect } from 'expo-router';
 
@@ -12,6 +12,7 @@ const demoMoments = [
   { date: '05.03 SAT', name: 'RYO', time: '18:42' },
   { date: '05.11 SUN', name: 'MIKA', time: '21:08' },
   { date: '05.20 WED', name: 'YUN', time: '07:31' },
+  { date: '05.28 THU', name: 'SORA', time: '22:14' },
 ];
 
 export default function TabOneScreen() {
@@ -44,6 +45,10 @@ export default function TabOneScreen() {
     }, [canLoadGroups]),
   );
 
+  if (!isSignedIn) {
+    return <SignedOutHome isSupabaseConfigured={isSupabaseConfigured} todayLabel={todayLabel} />;
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -55,7 +60,7 @@ export default function TabOneScreen() {
         <Text style={styles.copy}>A quiet memory, made by your group.</Text>
       </View>
 
-      {!isSignedIn ? <MonthlyDemo /> : <TodayOverview />}
+      <TodayOverview />
 
       {!isSupabaseConfigured ? (
         <View style={styles.notice}>
@@ -152,26 +157,53 @@ export default function TabOneScreen() {
   );
 }
 
-function MonthlyDemo() {
+function SignedOutHome({
+  isSupabaseConfigured,
+  todayLabel,
+}: {
+  isSupabaseConfigured: boolean;
+  todayLabel: string;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeMoment = demoMoments[activeIndex];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % demoMoments.length);
+    }, 1700);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <View style={styles.demoFrame}>
-      <View style={styles.demoHeader}>
-        <Text style={styles.demoKicker}>OUR MAY</Text>
-        <Text style={styles.demoGroup}>GARNET FRIENDS</Text>
+    <View style={styles.signedOutScreen}>
+      <View style={styles.demoVideo}>
+        <View style={styles.demoWash} />
+        <View style={styles.demoBlockLarge} />
+        <View style={styles.demoBlockSmall} />
+        <View style={styles.demoTopMeta}>
+          <Text style={styles.demoTopKicker}>{todayLabel.toUpperCase()}</Text>
+          <Text style={styles.demoTopSub}>A month, made by friends</Text>
+        </View>
+        <View style={styles.demoBottomMeta}>
+          <Text style={styles.demoDate}>{activeMoment.date}</Text>
+          <Text style={styles.demoTime}>{activeMoment.time}</Text>
+          <Text style={styles.demoName}>{activeMoment.name}</Text>
+        </View>
       </View>
-      <View style={styles.demoStack}>
-        {demoMoments.map((moment, index) => (
-          <View key={moment.date} style={[styles.demoMoment, index === 1 && styles.demoMomentActive]}>
-            <Text style={styles.demoDate}>{moment.date}</Text>
-            <Text style={styles.demoTime}>{moment.time}</Text>
-            <Text style={styles.demoName}>{moment.name}</Text>
-          </View>
-        ))}
+
+      <View style={styles.signedOutBrand}>
+        <Text style={styles.signedOutWordmark}>dayby</Text>
+        <Text style={styles.signedOutCopy}>Two seconds a day.{'\n'}One minute a month.</Text>
       </View>
-      <View style={styles.demoEnd}>
-        <Text style={styles.demoEndTitle}>31 DAYS</Text>
-        <Text style={styles.demoEndCopy}>31 MOMENTS</Text>
-        <Text style={styles.demoMade}>made with dayby</Text>
+
+      <View style={styles.signedOutFooter}>
+        <Link href="/(auth)/sign-in" asChild>
+          <PrimaryButton disabled={!isSupabaseConfigured} onPress={() => undefined} variant="accent">
+            Start with friends
+          </PrimaryButton>
+        </Link>
+        <Text style={styles.signedOutHint}>No music here. Bring it to Reels or TikTok later.</Text>
       </View>
     </View>
   );
@@ -253,86 +285,114 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 24,
   },
-  demoFrame: {
-    overflow: 'hidden',
-    borderRadius: 8,
-    padding: 18,
+  signedOutScreen: {
+    flex: 1,
+    minHeight: '100%',
     backgroundColor: '#141312',
   },
-  demoHeader: {
-    minHeight: 92,
-    justifyContent: 'flex-end',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,254,251,0.16)',
-    paddingBottom: 14,
+  demoVideo: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden',
+    backgroundColor: '#171615',
   },
-  demoKicker: {
-    color: '#FFFEFB',
-    fontSize: 31,
-    fontWeight: '900',
-    letterSpacing: 0,
+  demoWash: {
+    position: 'absolute',
+    left: -70,
+    right: -70,
+    top: -40,
+    bottom: -40,
+    backgroundColor: '#211F1D',
+    transform: [{ rotate: '-7deg' }],
   },
-  demoGroup: {
-    marginTop: 4,
-    color: '#BEB6AC',
-    fontSize: 12,
-    fontWeight: '900',
-  },
-  demoStack: {
-    gap: 8,
-    paddingVertical: 18,
-  },
-  demoMoment: {
-    minHeight: 66,
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,254,251,0.12)',
+  demoBlockLarge: {
+    position: 'absolute',
+    left: -28,
+    right: 44,
+    top: 134,
+    height: 360,
     borderRadius: 8,
-    paddingHorizontal: 14,
-    backgroundColor: 'rgba(255,254,251,0.04)',
+    backgroundColor: '#2F3430',
+    opacity: 0.82,
   },
-  demoMomentActive: {
-    borderColor: 'rgba(255,254,251,0.44)',
-    backgroundColor: 'rgba(255,254,251,0.1)',
+  demoBlockSmall: {
+    position: 'absolute',
+    right: -24,
+    top: 366,
+    width: 170,
+    height: 250,
+    borderRadius: 8,
+    backgroundColor: '#5B3A2F',
+    opacity: 0.7,
+  },
+  demoTopMeta: {
+    position: 'absolute',
+    left: 22,
+    top: 72,
+  },
+  demoTopKicker: {
+    color: '#FFFEFB',
+    fontSize: 13,
+    fontWeight: '900',
+  },
+  demoTopSub: {
+    marginTop: 5,
+    color: '#BEB6AC',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  demoBottomMeta: {
+    position: 'absolute',
+    left: 22,
+    bottom: 194,
   },
   demoDate: {
     color: '#FFFEFB',
-    fontSize: 17,
+    fontSize: 19,
     fontWeight: '900',
   },
   demoTime: {
-    marginTop: 4,
+    marginTop: 6,
     color: '#FFFEFB',
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: '900',
   },
   demoName: {
-    marginTop: 4,
-    color: '#AFA79D',
-    fontSize: 12,
-    fontWeight: '900',
-  },
-  demoEnd: {
-    minHeight: 84,
-    justifyContent: 'center',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,254,251,0.16)',
-  },
-  demoEndTitle: {
-    color: '#FFFEFB',
-    fontSize: 18,
-    fontWeight: '900',
-  },
-  demoEndCopy: {
-    marginTop: 3,
+    marginTop: 5,
     color: '#D8D2C8',
-    fontSize: 15,
-    fontWeight: '800',
+    fontSize: 13,
+    fontWeight: '900',
   },
-  demoMade: {
-    marginTop: 12,
-    color: '#8F877E',
+  signedOutBrand: {
+    position: 'absolute',
+    left: 22,
+    right: 22,
+    bottom: 176,
+  },
+  signedOutWordmark: {
+    color: '#FFFEFB',
+    fontSize: 54,
+    fontWeight: '800',
+    letterSpacing: 0,
+  },
+  signedOutCopy: {
+    marginTop: 10,
+    color: '#F1ECE4',
+    fontSize: 22,
+    fontWeight: '900',
+    lineHeight: 28,
+  },
+  signedOutFooter: {
+    position: 'absolute',
+    left: 22,
+    right: 22,
+    bottom: 34,
+    gap: 12,
+  },
+  signedOutHint: {
+    color: '#BEB6AC',
     fontSize: 12,
+    lineHeight: 17,
+    textAlign: 'center',
   },
   focusPanel: {
     borderWidth: 1,
