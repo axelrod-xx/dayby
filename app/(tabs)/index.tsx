@@ -197,7 +197,6 @@ function SignedOutHome({
             Start with friends
           </PrimaryButton>
         </Link>
-        <Text style={styles.signedOutHint}>No music here. Bring it to Reels or TikTok later.</Text>
       </View>
     </View>
   );
@@ -303,7 +302,7 @@ const styles = StyleSheet.create({
     left: -28,
     right: 44,
     top: 238,
-    height: 360,
+    bottom: 0,
     borderRadius: 8,
     backgroundColor: '#2F3430',
     opacity: 0.82,
@@ -363,14 +362,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 22,
     right: 22,
-    bottom: 36,
-    gap: 12,
-  },
-  signedOutHint: {
-    color: '#BEB6AC',
-    fontSize: 12,
-    lineHeight: 17,
-    textAlign: 'center',
+    bottom: 74,
   },
   focusPanel: {
     borderWidth: 1,

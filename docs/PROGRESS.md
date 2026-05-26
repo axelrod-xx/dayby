@@ -154,6 +154,9 @@ Phase 8: Preservation and archive foundation.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/7dd01c4d-e301-4c66-9be0-2bb2522f831a`
 - iOS device development build with fixed signed-out full-screen layout finished: `43acb231-f791-46a6-9fb0-44f761fd7d85`.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/43acb231-f791-46a6-9fb0-44f761fd7d85`
+- iOS device development build with duplicate Home demo metadata removed finished: `28cb45b9-10fd-4fe6-8cef-ab0091fff3ba`.
+- iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/28cb45b9-10fd-4fe6-8cef-ab0091fff3ba`
+- Signed-out Home CTA moved higher, bottom helper copy removed, and the pseudo video background now continues to the bottom edge.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
