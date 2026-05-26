@@ -169,6 +169,8 @@ Phase 8: Preservation and archive foundation.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/0453789d-fee5-40ca-9599-5a0f24cdbf1e`
 - Expanded the non-Home UI pass across Groups, Group Detail, Post to Groups, Daily Reel, Monthly Memory, Vote, Create/Join Group, Profile Setup, Archive, Safety, and Post Success.
 - Shifted memory playback screens darker and more cinematic, and kept input screens lighter with larger editorial headers and quieter cards.
+- iOS device development build with expanded non-Home UI pass finished: `a45c9a0f-0634-4bb3-8936-bed8a57a872c`.
+- iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a45c9a0f-0634-4bb3-8936-bed8a57a872c`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
