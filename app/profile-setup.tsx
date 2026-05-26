@@ -33,7 +33,7 @@ export default function ProfileSetupScreen() {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.hero}>
         <Text style={styles.kicker}>Profile</Text>
         <Text style={styles.title}>Set your name</Text>
         <Text style={styles.copy}>This is how friends will see your 2-second moments.</Text>
@@ -62,27 +62,33 @@ export default function ProfileSetupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 28,
-    paddingLeft: 22,
-    paddingRight: 44,
+    gap: 24,
+    paddingHorizontal: 22,
     paddingTop: 82,
     backgroundColor: '#FFFDF8',
   },
+  hero: {
+    minHeight: 190,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
+  },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#D8D2C8',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 40,
     fontWeight: '900',
   },
   copy: {
     marginTop: 12,
-    color: '#68625D',
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 24,
   },

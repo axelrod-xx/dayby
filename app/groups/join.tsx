@@ -24,7 +24,7 @@ export default function JoinGroupScreen() {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.hero}>
         <Text style={styles.kicker}>Invite</Text>
         <Text style={styles.title}>Join group</Text>
         <Text style={styles.copy}>Enter the invite code from a friend.</Text>
@@ -53,27 +53,33 @@ export default function JoinGroupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 26,
-    paddingLeft: 22,
-    paddingRight: 44,
+    gap: 24,
+    paddingHorizontal: 22,
     paddingTop: 82,
     backgroundColor: '#FFFDF8',
   },
+  hero: {
+    minHeight: 190,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
+  },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#D8D2C8',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 40,
     fontWeight: '900',
   },
   copy: {
     marginTop: 10,
-    color: '#68625D',
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 23,
   },

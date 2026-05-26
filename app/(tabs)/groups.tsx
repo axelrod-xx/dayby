@@ -240,14 +240,18 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   empty: {
-    borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
-    paddingTop: 18,
+    minHeight: 172,
+    justifyContent: 'flex-end',
+    borderWidth: 1,
+    borderColor: '#E5E1DA',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#FFFEFB',
   },
   emptyTitle: {
     color: '#171615',
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: '900',
   },
   emptyCopy: {
     marginTop: 8,

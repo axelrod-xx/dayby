@@ -211,8 +211,7 @@ export default function TrimScreen() {
 const styles = StyleSheet.create({
   container: {
     gap: 18,
-    paddingLeft: 22,
-    paddingRight: 44,
+    paddingHorizontal: 22,
     paddingBottom: 36,
     paddingTop: 72,
     backgroundColor: '#171615',

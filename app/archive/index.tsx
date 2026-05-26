@@ -43,7 +43,7 @@ export default function ArchiveScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View>
+      <View style={styles.hero}>
         <Text style={styles.kicker}>Memory shelf</Text>
         <Text style={styles.title}>Archive</Text>
         <Text style={styles.copy}>Quiet groups stay here. Opening or posting keeps their memories alive.</Text>
@@ -52,7 +52,7 @@ export default function ArchiveScreen() {
       {loading ? (
         <ActivityIndicator color="#171615" />
       ) : groups.length === 0 ? (
-        <View style={styles.empty}>
+        <View style={styles.emptyCard}>
           <Text style={styles.emptyTitle}>Nothing quiet yet</Text>
           <Text style={styles.emptyCopy}>Groups move here after long pauses, without making anyone feel late.</Text>
         </View>
@@ -64,16 +64,16 @@ export default function ArchiveScreen() {
                 href={{ pathname: '/groups/[groupId]', params: { groupId: group.id } } as unknown as Href}
                 asChild>
                 <Pressable style={({ pressed }) => [styles.groupMain, pressed && styles.pressed]}>
-                  <View>
+                  <View style={styles.groupText}>
                     <Text style={styles.groupName}>{group.name}</Text>
                     <Text style={styles.groupMeta}>
-                      {group.status.replace('_', ' ')} · {getGroupActivityLabel(group)}
+                      {group.status.replace('_', ' ')} / {getGroupActivityLabel(group)}
                     </Text>
                     {group.delete_after ? (
                       <Text style={styles.deleteHint}>Download before {new Date(group.delete_after).toLocaleDateString()}</Text>
                     ) : null}
                   </View>
-                  <Text style={styles.chevron}>›</Text>
+                  <Text style={styles.chevron}>&gt;</Text>
                 </Pressable>
               </Link>
               {group.status === 'archived' || group.status === 'quiet' ? (
@@ -97,21 +97,28 @@ const styles = StyleSheet.create({
     paddingTop: 74,
     backgroundColor: '#FFFDF8',
   },
+  hero: {
+    minHeight: 176,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#26322D',
+  },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#D8D2C8',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 40,
     fontWeight: '900',
   },
   copy: {
     marginTop: 12,
-    color: '#68625D',
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -127,10 +134,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFEFB',
   },
   groupMain: {
-    minHeight: 58,
+    minHeight: 64,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: 12,
+  },
+  groupText: {
+    flex: 1,
   },
   pressed: {
     opacity: 0.75,
@@ -138,7 +149,7 @@ const styles = StyleSheet.create({
   groupName: {
     color: '#171615',
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   groupMeta: {
     marginTop: 6,
@@ -156,15 +167,19 @@ const styles = StyleSheet.create({
     color: '#A49B91',
     fontSize: 28,
   },
-  empty: {
-    borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
-    paddingTop: 18,
+  emptyCard: {
+    minHeight: 176,
+    justifyContent: 'flex-end',
+    borderWidth: 1,
+    borderColor: '#E5E1DA',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#FFFEFB',
   },
   emptyTitle: {
     color: '#171615',
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 22,
+    fontWeight: '900',
   },
   emptyCopy: {
     marginTop: 8,

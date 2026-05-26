@@ -167,6 +167,8 @@ const styles = StyleSheet.create({
   endCard: {
     minHeight: 170,
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,254,251,0.18)',
     borderRadius: 8,
     padding: 22,
     backgroundColor: '#171615',

@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   timelineTextActive: {
-    color: '#171615',
+    color: '#FFFEFB',
   },
   actions: {
     gap: 10,

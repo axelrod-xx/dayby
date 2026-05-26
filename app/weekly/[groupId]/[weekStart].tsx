@@ -60,8 +60,7 @@ export default function WeeklyMemoryScreen() {
 const styles = StyleSheet.create({
   container: {
     gap: 22,
-    paddingLeft: 22,
-    paddingRight: 44,
+    paddingHorizontal: 22,
     paddingBottom: 42,
     paddingTop: 74,
     backgroundColor: '#FFFDF8',

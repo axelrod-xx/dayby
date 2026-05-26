@@ -31,7 +31,7 @@ export default function ReportScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View>
+      <View style={styles.hero}>
         <Text style={styles.kicker}>Safety</Text>
         <Text style={styles.title}>Report</Text>
         <Text style={styles.copy}>Tell us what feels off. dayby is for small groups, not pressure.</Text>
@@ -47,7 +47,7 @@ export default function ReportScreen() {
               style={({ pressed }) => [styles.option, selected && styles.optionSelected, pressed && styles.pressed]}>
               <Text style={[styles.optionText, selected && styles.optionTextSelected]}>{item.label}</Text>
               <View style={[styles.radio, selected && styles.radioSelected]}>
-                <Text style={styles.radioMark}>{selected ? '✓' : ''}</Text>
+                {selected ? <View style={styles.radioDot} /> : null}
               </View>
             </Pressable>
           );
@@ -64,7 +64,7 @@ export default function ReportScreen() {
         value={note}
       />
 
-      <PrimaryButton loading={saving} onPress={() => void submit()}>
+      <PrimaryButton loading={saving} onPress={() => void submit()} variant="accent">
         Send report
       </PrimaryButton>
     </ScrollView>
@@ -79,21 +79,28 @@ const styles = StyleSheet.create({
     paddingTop: 74,
     backgroundColor: '#FFFDF8',
   },
+  hero: {
+    minHeight: 176,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
+  },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#D8D2C8',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 40,
     fontWeight: '900',
   },
   copy: {
     marginTop: 12,
-    color: '#68625D',
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   option: {
-    minHeight: 62,
+    minHeight: 64,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -113,7 +120,7 @@ const styles = StyleSheet.create({
   },
   optionSelected: {
     borderColor: '#171615',
-    backgroundColor: '#F5F1EA',
+    backgroundColor: '#EFE7DD',
   },
   pressed: {
     opacity: 0.75,
@@ -123,31 +130,33 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     color: '#57534E',
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   optionTextSelected: {
     color: '#171615',
   },
   radio: {
-    width: 28,
-    height: 28,
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#D8D2C8',
-    borderRadius: 14,
+    borderRadius: 15,
+    backgroundColor: '#FFFEFB',
   },
   radioSelected: {
     borderColor: '#171615',
     backgroundColor: '#171615',
   },
-  radioMark: {
-    color: '#FFFEFB',
-    fontSize: 14,
-    fontWeight: '900',
+  radioDot: {
+    width: 9,
+    height: 9,
+    borderRadius: 5,
+    backgroundColor: '#FFFEFB',
   },
   input: {
-    minHeight: 118,
+    minHeight: 124,
     borderWidth: 1,
     borderColor: '#D8D2C8',
     borderRadius: 8,

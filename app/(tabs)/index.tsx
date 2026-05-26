@@ -82,13 +82,15 @@ export default function TabOneScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
+      <View style={styles.headerCard}>
         <View style={styles.topline}>
           <Text style={styles.wordmark}>dayby</Text>
           <Text style={styles.date}>{todayLabel}</Text>
         </View>
-        <Text style={styles.hero}>Two seconds a day.{'\n'}One minute a month.</Text>
-        <Text style={styles.copy}>A quiet memory, made by your group.</Text>
+        <View>
+          <Text style={styles.hero}>A month,{'\n'}made by friends.</Text>
+          <Text style={styles.copy}>Keep one tiny moment today. Vote tomorrow. Let the month become the memory.</Text>
+        </View>
       </View>
 
       <TodayOverview />
@@ -167,11 +169,20 @@ export default function TabOneScreen() {
         </View>
       </View>
 
-      <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Memory rhythm</Text>
-        <Text style={styles.panelText}>
-          Tonight is for posting. Tomorrow is for voting. The month stays the main memory.
-        </Text>
+      <View style={styles.rhythmPanel}>
+        <Text style={styles.rhythmKicker}>How it flows</Text>
+        <View style={styles.rhythmRow}>
+          <Text style={styles.rhythmNumber}>01</Text>
+          <Text style={styles.rhythmText}>Keep 2 seconds today.</Text>
+        </View>
+        <View style={styles.rhythmRow}>
+          <Text style={styles.rhythmNumber}>02</Text>
+          <Text style={styles.rhythmText}>Vote for yesterday.</Text>
+        </View>
+        <View style={styles.rhythmRow}>
+          <Text style={styles.rhythmNumber}>03</Text>
+          <Text style={styles.rhythmText}>Watch the month come together.</Text>
+        </View>
       </View>
 
       {isSignedIn ? (
@@ -324,8 +335,12 @@ const styles = StyleSheet.create({
     paddingTop: 84,
     backgroundColor: '#FFFDF8',
   },
-  header: {
-    gap: 9,
+  headerCard: {
+    minHeight: 248,
+    justifyContent: 'space-between',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
   },
   topline: {
     flexDirection: 'row',
@@ -333,26 +348,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   wordmark: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 28,
-    fontWeight: '700',
+    fontWeight: '900',
     letterSpacing: 0,
   },
   date: {
-    color: '#7A736B',
+    color: '#D8D2C8',
     fontSize: 13,
     fontWeight: '800',
     textTransform: 'uppercase',
   },
   hero: {
-    color: '#141312',
-    fontSize: 40,
+    color: '#FFFEFB',
+    fontSize: 42,
     fontWeight: '800',
-    lineHeight: 44,
+    lineHeight: 46,
     letterSpacing: 0,
   },
   copy: {
-    color: '#57514B',
+    marginTop: 12,
+    color: '#D8D2C8',
     fontSize: 17,
     lineHeight: 24,
   },
@@ -438,12 +454,13 @@ const styles = StyleSheet.create({
   },
   signedOutFooter: {
     position: 'absolute',
-    left: 45,
-    width: 300,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
   },
   signedOutCta: {
     minHeight: 52,
-    width: '100%',
+    width: 300,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 8,
@@ -462,15 +479,40 @@ const styles = StyleSheet.create({
   },
   focusPanel: {
     borderWidth: 1,
-    borderColor: '#E4DED5',
+    borderColor: '#171615',
     borderRadius: 8,
     padding: 18,
     backgroundColor: '#FFFFFF',
   },
-  panel: {
-    borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
-    paddingTop: 18,
+  rhythmPanel: {
+    gap: 12,
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#26322D',
+  },
+  rhythmKicker: {
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  rhythmRow: {
+    minHeight: 42,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  rhythmNumber: {
+    width: 34,
+    color: '#E65A3C',
+    fontSize: 15,
+    fontWeight: '900',
+  },
+  rhythmText: {
+    flex: 1,
+    color: '#FFFEFB',
+    fontSize: 16,
+    fontWeight: '800',
   },
   notice: {
     borderWidth: 1,

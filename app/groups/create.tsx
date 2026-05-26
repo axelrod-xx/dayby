@@ -32,7 +32,7 @@ export default function CreateGroupScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-      <View>
+      <View style={styles.hero}>
         <Text style={styles.kicker}>New circle</Text>
         <Text style={styles.title}>Create group</Text>
         <Text style={styles.copy}>Small by default. Built for friends, not followers.</Text>
@@ -86,27 +86,33 @@ export default function CreateGroupScreen() {
 const styles = StyleSheet.create({
   container: {
     gap: 22,
-    paddingLeft: 22,
-    paddingRight: 44,
+    paddingHorizontal: 22,
     paddingBottom: 40,
     paddingTop: 74,
     backgroundColor: '#FFFDF8',
   },
+  hero: {
+    minHeight: 190,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
+  },
   kicker: {
     marginBottom: 10,
-    color: '#E65A3C',
+    color: '#D8D2C8',
     fontSize: 12,
     fontWeight: '900',
     textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 40,
     fontWeight: '900',
   },
   copy: {
     marginTop: 10,
-    color: '#68625D',
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 23,
   },

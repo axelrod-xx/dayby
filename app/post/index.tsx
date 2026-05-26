@@ -103,11 +103,9 @@ export default function PostToGroupsScreen() {
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.topBar}>
-          <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
-            <Text style={styles.backText}>Back</Text>
-          </Pressable>
-        </View>
+        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
+          <Text style={styles.backText}>Back</Text>
+        </Pressable>
 
         <View>
           <Text style={styles.kicker}>Send moment</Text>
@@ -115,10 +113,10 @@ export default function PostToGroupsScreen() {
           <Text style={styles.copy}>One 2-second file, shared into the groups you pick.</Text>
         </View>
 
-        <View style={styles.soundPill}>
-          <Text style={styles.soundText}>
-            {muted === '1' ? 'Muted export' : 'Original sound'} · {Number(trimStartMs ?? 0) / 1000}s start
-          </Text>
+        <View style={styles.momentCard}>
+          <Text style={styles.momentKicker}>Ready to post</Text>
+          <Text style={styles.momentTitle}>{muted === '1' ? 'Muted export' : 'Original sound'}</Text>
+          <Text style={styles.momentMeta}>{Number(trimStartMs ?? 0) / 1000}s start / 2 sec kept</Text>
         </View>
 
         {isNativeTrimmed !== '1' ? (
@@ -155,14 +153,19 @@ export default function PostToGroupsScreen() {
                     pressed && !group.posted_today && styles.pressed,
                   ]}>
                   <View style={styles.groupHeader}>
-                    <Text style={styles.groupName}>{group.name}</Text>
+                    <View style={styles.groupMark}>
+                      <Text style={styles.groupInitial}>{group.name.slice(0, 1).toUpperCase()}</Text>
+                    </View>
+                    <View style={styles.groupText}>
+                      <Text style={styles.groupName}>{group.name}</Text>
+                      <Text style={styles.groupMeta}>
+                        {group.posted_today ? 'Already posted today' : `${group.member_role} / ready for today`}
+                      </Text>
+                    </View>
                     <View style={[styles.check, selected && styles.checkSelected]}>
-                      <Text style={[styles.checkText, selected && styles.checkTextSelected]}>{selected ? '✓' : ''}</Text>
+                      {selected ? <View style={styles.checkDot} /> : null}
                     </View>
                   </View>
-                  <Text style={styles.groupMeta}>
-                    {group.posted_today ? 'Already posted today' : `${group.member_role} · ready for today`}
-                  </Text>
                 </Pressable>
               );
             })}
@@ -195,9 +198,6 @@ const styles = StyleSheet.create({
     paddingTop: 74,
     backgroundColor: '#FFFDF8',
   },
-  topBar: {
-    marginBottom: -8,
-  },
   backButton: {
     alignSelf: 'flex-start',
     paddingVertical: 6,
@@ -226,19 +226,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 23,
   },
-  soundPill: {
-    alignSelf: 'flex-start',
-    borderWidth: 1,
-    borderColor: '#171615',
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    backgroundColor: '#F2EEE7',
+  momentCard: {
+    minHeight: 132,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#171615',
   },
-  soundText: {
-    color: '#3F3A35',
-    fontSize: 13,
-    fontWeight: '700',
+  momentKicker: {
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+  },
+  momentTitle: {
+    marginTop: 8,
+    color: '#FFFEFB',
+    fontSize: 25,
+    fontWeight: '900',
+  },
+  momentMeta: {
+    marginTop: 8,
+    color: '#BDB5AA',
+    fontSize: 14,
+    fontWeight: '800',
   },
   notice: {
     borderWidth: 1,
@@ -265,7 +276,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E5E1DA',
     borderRadius: 8,
-    padding: 18,
+    padding: 14,
     backgroundColor: '#FFFEFB',
   },
   groupCardSelected: {
@@ -279,43 +290,56 @@ const styles = StyleSheet.create({
     opacity: 0.76,
   },
   groupHeader: {
+    minHeight: 58,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     gap: 12,
   },
-  groupName: {
+  groupMark: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 22,
+    backgroundColor: '#F5F1EA',
+  },
+  groupInitial: {
+    color: '#171615',
+    fontSize: 17,
+    fontWeight: '900',
+  },
+  groupText: {
     flex: 1,
+  },
+  groupName: {
     color: '#171615',
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: '900',
   },
   groupMeta: {
-    marginTop: 8,
+    marginTop: 6,
     color: '#78716C',
     fontSize: 13,
   },
   check: {
-    width: 28,
-    height: 28,
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#D8D2C8',
-    borderRadius: 14,
+    borderRadius: 15,
     backgroundColor: '#FFFEFB',
   },
   checkSelected: {
     borderColor: '#171615',
     backgroundColor: '#171615',
   },
-  checkText: {
-    color: '#FFFEFB',
-    fontSize: 15,
-    fontWeight: '800',
-  },
-  checkTextSelected: {
-    color: '#FFFEFB',
+  checkDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#FFFEFB',
   },
   empty: {
     borderTopWidth: 1,

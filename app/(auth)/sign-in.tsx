@@ -177,8 +177,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     width: 300,
-    alignSelf: 'flex-start',
-    marginLeft: 23,
+    alignSelf: 'center',
     gap: 12,
   },
   devPanel: {
