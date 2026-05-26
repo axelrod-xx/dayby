@@ -56,7 +56,7 @@ export default function CameraScreen() {
     return (
       <View style={styles.permission}>
         <Pressable onPress={() => router.back()} hitSlop={12} style={styles.permissionBack}>
-          <Text style={styles.backText}>Back</Text>
+          <Text style={styles.backText}>Cancel</Text>
         </Pressable>
         <Text style={styles.title}>Camera</Text>
         <Text style={styles.copy}>Record a short take. You will keep just 2 seconds next.</Text>
@@ -71,17 +71,19 @@ export default function CameraScreen() {
   return (
     <View style={styles.container}>
       <CameraView ref={cameraRef} mode="video" mute={muted} style={styles.camera} videoQuality="720p" />
-      <View style={styles.overlay}>
-        <Pressable disabled={isRecording} onPress={() => router.back()} hitSlop={12} style={styles.closeButton}>
-          <Text style={[styles.closeText, isRecording && styles.closeTextDisabled]}>Close</Text>
+      <View style={styles.topBar}>
+        <Pressable disabled={isRecording} onPress={() => router.back()} hitSlop={12} style={styles.cancelButton}>
+          <Text style={[styles.cancelText, isRecording && styles.cancelTextDisabled]}>Cancel</Text>
         </Pressable>
+        <Pressable onPress={() => setMuted((current) => !current)} style={styles.muteButton}>
+          <Text style={styles.muteButtonText}>{muted ? 'Muted' : 'Sound'}</Text>
+        </Pressable>
+      </View>
+      <View style={styles.overlay}>
         <View>
           <Text style={styles.captureTitle}>{isRecording ? 'Recording' : 'Today'}</Text>
           <Text style={styles.captureCopy}>Up to 10 sec. Keep 2 sec next.</Text>
         </View>
-        <Pressable onPress={() => setMuted((current) => !current)} style={styles.muteButton}>
-          <Text style={styles.muteButtonText}>{muted ? 'Muted' : 'Sound'}</Text>
-        </Pressable>
       </View>
       <View style={styles.controls}>
         <Pressable onPress={isRecording ? stop : () => void record()} style={styles.recordButton}>
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  overlay: {
+  topBar: {
     position: 'absolute',
     left: 22,
     right: 22,
@@ -142,19 +144,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  closeButton: {
-    position: 'absolute',
-    left: 0,
-    top: -42,
+  cancelButton: {
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.35)',
+    borderRadius: 8,
+    paddingHorizontal: 12,
     paddingVertical: 6,
+    backgroundColor: 'rgba(0,0,0,0.25)',
   },
-  closeText: {
+  cancelText: {
     color: '#FFFEFB',
     fontSize: 15,
     fontWeight: '800',
   },
-  closeTextDisabled: {
+  cancelTextDisabled: {
     opacity: 0.36,
+  },
+  overlay: {
+    position: 'absolute',
+    left: 22,
+    right: 22,
+    top: 124,
   },
   captureTitle: {
     color: '#FFFEFB',
