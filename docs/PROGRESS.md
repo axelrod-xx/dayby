@@ -171,6 +171,7 @@ Phase 8: Preservation and archive foundation.
 - Shifted memory playback screens darker and more cinematic, and kept input screens lighter with larger editorial headers and quieter cards.
 - iOS device development build with expanded non-Home UI pass finished: `a45c9a0f-0634-4bb3-8936-bed8a57a872c`.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a45c9a0f-0634-4bb3-8936-bed8a57a872c`
+- Continued UI polish on capture flow: camera permission now feels like a dayby capture screen, Trim is darker and more cinematic, Weekly is visually secondary, and Home overview cards use the updated palette.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 

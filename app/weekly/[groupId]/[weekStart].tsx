@@ -60,25 +60,28 @@ export default function WeeklyMemoryScreen() {
 const styles = StyleSheet.create({
   container: {
     gap: 22,
-    paddingHorizontal: 22,
+    paddingLeft: 22,
+    paddingRight: 44,
     paddingBottom: 42,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 74,
+    backgroundColor: '#FFFDF8',
   },
   hero: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E1DA',
-    paddingBottom: 20,
+    borderWidth: 1,
+    borderColor: '#E5E1DA',
+    borderRadius: 8,
+    padding: 18,
+    backgroundColor: '#FFFEFB',
   },
   kicker: {
-    color: '#78716C',
+    color: '#E65A3C',
     fontSize: 12,
     fontWeight: '900',
   },
   title: {
     marginTop: 8,
     color: '#171615',
-    fontSize: 34,
+    fontSize: 32,
     fontWeight: '900',
   },
   copy: {
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
     borderColor: '#E5E1DA',
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#FFFEFB',
   },
   date: {
     width: 64,

@@ -58,9 +58,16 @@ export default function CameraScreen() {
         <Pressable onPress={() => router.back()} hitSlop={12} style={styles.permissionBack}>
           <Text style={styles.backText}>Cancel</Text>
         </Pressable>
-        <Text style={styles.title}>Camera</Text>
-        <Text style={styles.copy}>Record a short take. You will keep just 2 seconds next.</Text>
-        <PrimaryButton onPress={() => void requestPermissions()}>Allow camera</PrimaryButton>
+        <View style={styles.permissionHero}>
+          <Text style={styles.permissionKicker}>Camera</Text>
+          <Text style={styles.title}>Capture today.</Text>
+          <Text style={styles.copy}>Record up to 10 seconds. You will keep only 2 next.</Text>
+        </View>
+        <View style={styles.permissionActions}>
+          <PrimaryButton onPress={() => void requestPermissions()} variant="accent">
+            Allow camera
+          </PrimaryButton>
+        </View>
         <Pressable onPress={() => setMuted((current) => !current)}>
           <Text style={styles.muteText}>{muted ? 'Muted recording selected' : 'Record with sound'}</Text>
         </Pressable>
@@ -82,9 +89,15 @@ export default function CameraScreen() {
       <View style={styles.overlay}>
         <View>
           <Text style={styles.captureTitle}>{isRecording ? 'Recording' : 'Today'}</Text>
-          <Text style={styles.captureCopy}>Hold upright. Keep 2 sec next.</Text>
+          <Text style={styles.captureCopy}>Vertical only. Keep 2 sec next.</Text>
         </View>
       </View>
+      {isRecording ? (
+        <View style={styles.recordingPill}>
+          <View style={styles.liveDot} />
+          <Text style={styles.recordingText}>10 sec max</Text>
+        </View>
+      ) : null}
       <View style={styles.formatGuide}>
         <View style={styles.formatCornerTopLeft} />
         <View style={styles.formatCornerTopRight} />
@@ -104,22 +117,42 @@ const styles = StyleSheet.create({
   permission: {
     flex: 1,
     gap: 22,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     paddingHorizontal: 22,
-    backgroundColor: '#FFFEFB',
+    paddingBottom: 54,
+    backgroundColor: '#171615',
+  },
+  permissionHero: {
+    minHeight: 260,
+    justifyContent: 'flex-end',
+    borderRadius: 8,
+    padding: 20,
+    backgroundColor: '#26322D',
+  },
+  permissionKicker: {
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
-    fontSize: 34,
-    fontWeight: '700',
+    marginTop: 10,
+    color: '#FFFEFB',
+    fontSize: 42,
+    fontWeight: '900',
+    letterSpacing: 0,
   },
   copy: {
-    color: '#68625D',
+    marginTop: 10,
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 24,
   },
+  permissionActions: {
+    gap: 10,
+  },
   muteText: {
-    color: '#57534E',
+    color: '#D8D2C8',
     fontSize: 15,
     textAlign: 'center',
   },
@@ -130,7 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   backText: {
-    color: '#57534E',
+    color: '#FFFEFB',
     fontSize: 15,
     fontWeight: '800',
   },
@@ -174,8 +207,8 @@ const styles = StyleSheet.create({
   },
   captureTitle: {
     color: '#FFFEFB',
-    fontSize: 30,
-    fontWeight: '800',
+    fontSize: 34,
+    fontWeight: '900',
   },
   captureCopy: {
     marginTop: 4,
@@ -200,6 +233,29 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
+  },
+  recordingPill: {
+    position: 'absolute',
+    left: 22,
+    bottom: 142,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+  },
+  liveDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#E65A3C',
+  },
+  recordingText: {
+    color: '#FFFEFB',
+    fontSize: 12,
+    fontWeight: '900',
   },
   formatGuide: {
     position: 'absolute',

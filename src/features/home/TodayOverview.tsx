@@ -2,8 +2,8 @@ import { StyleSheet, Text, View } from 'react-native';
 
 const items = [
   { accent: '#E65A3C', label: 'Today', value: '2 sec' },
-  { accent: '#2F6F68', label: 'Together', value: 'Group' },
-  { accent: '#2E5AAC', label: 'Month', value: '1 min' },
+  { accent: '#8DAA91', label: 'Together', value: 'Group' },
+  { accent: '#D9B36D', label: 'Month', value: '1 min' },
 ];
 
 export function TodayOverview() {
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     borderColor: '#E4DED5',
     borderRadius: 8,
     padding: 13,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFEFB',
   },
   accent: {
     width: 22,
@@ -42,12 +42,13 @@ const styles = StyleSheet.create({
   value: {
     color: '#141312',
     fontSize: 19,
-    fontWeight: '700',
+    fontWeight: '900',
   },
   label: {
     marginTop: 6,
     color: '#78716C',
     fontSize: 12,
+    fontWeight: '800',
     textTransform: 'uppercase',
   },
 });

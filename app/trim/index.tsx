@@ -138,8 +138,9 @@ export default function TrimScreen() {
             <Text style={styles.backText}>Retake</Text>
           </Pressable>
         </View>
+        <Text style={styles.kicker}>Trim</Text>
         <Text style={styles.title}>Keep 2 sec</Text>
-        <Text style={styles.copy}>Pick the two seconds worth keeping. dayby memories stay vertical.</Text>
+        <Text style={styles.copy}>Move the window until the loop feels right.</Text>
       </View>
 
       <View style={styles.previewWrap}>
@@ -195,12 +196,14 @@ export default function TrimScreen() {
         </Text>
       </View>
 
-      <PrimaryButton disabled={!uri} loading={processing} onPress={() => void processClip()} variant="light">
-        Use this 2 sec
-      </PrimaryButton>
-      <PrimaryButton disabled={!uri || !trimResult} onPress={continueToPost}>
-        Choose groups
-      </PrimaryButton>
+      <View style={styles.actionStack}>
+        <PrimaryButton disabled={!uri} loading={processing} onPress={() => void processClip()} variant="light">
+          Use this 2 sec
+        </PrimaryButton>
+        <PrimaryButton disabled={!uri || !trimResult} onPress={continueToPost} variant="accent">
+          Choose groups
+        </PrimaryButton>
+      </View>
     </ScrollView>
   );
 }
@@ -208,19 +211,27 @@ export default function TrimScreen() {
 const styles = StyleSheet.create({
   container: {
     gap: 18,
-    paddingHorizontal: 22,
+    paddingLeft: 22,
+    paddingRight: 44,
     paddingBottom: 36,
-    paddingTop: 84,
-    backgroundColor: '#FFFEFB',
+    paddingTop: 72,
+    backgroundColor: '#171615',
+  },
+  kicker: {
+    marginBottom: 10,
+    color: '#D8D2C8',
+    fontSize: 12,
+    fontWeight: '900',
+    textTransform: 'uppercase',
   },
   title: {
-    color: '#171615',
-    fontSize: 34,
-    fontWeight: '700',
+    color: '#FFFEFB',
+    fontSize: 40,
+    fontWeight: '900',
   },
   copy: {
     marginTop: 10,
-    color: '#68625D',
+    color: '#D8D2C8',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -232,7 +243,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   backText: {
-    color: '#57534E',
+    color: '#D8D2C8',
     fontSize: 15,
     fontWeight: '800',
   },
@@ -263,18 +274,20 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   panel: {
-    borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
-    paddingTop: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,254,251,0.14)',
+    borderRadius: 8,
+    padding: 16,
+    backgroundColor: 'rgba(255,254,251,0.06)',
   },
   panelTitle: {
-    color: '#171615',
+    color: '#FFFEFB',
     fontSize: 18,
     fontWeight: '700',
   },
   panelText: {
     marginTop: 8,
-    color: '#68625D',
+    color: '#D8D2C8',
     fontSize: 15,
     lineHeight: 22,
   },
@@ -286,7 +299,7 @@ const styles = StyleSheet.create({
   track: {
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#D8D2C8',
+    backgroundColor: 'rgba(255,254,251,0.22)',
   },
   window: {
     position: 'absolute',
@@ -302,7 +315,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#FFFEFB',
     borderRadius: 11,
-    backgroundColor: '#171615',
+    backgroundColor: '#FFFEFB',
   },
   markRow: {
     flexDirection: 'row',
@@ -310,20 +323,23 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   markText: {
-    color: '#78716C',
+    color: '#BDB5AA',
     fontSize: 12,
     fontWeight: '800',
   },
   helperText: {
     marginTop: 10,
-    color: '#78716C',
+    color: '#BDB5AA',
     fontSize: 13,
     lineHeight: 19,
   },
   statusText: {
     marginTop: 14,
-    color: '#78716C',
+    color: '#BDB5AA',
     fontSize: 13,
     lineHeight: 19,
+  },
+  actionStack: {
+    gap: 10,
   },
 });
