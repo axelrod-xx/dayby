@@ -11,6 +11,11 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - App-facing vote route removed and Daily Reel now supports private bookmarks.
 - Monthly and weekly memory services now read archive posts instead of daily winners.
 - Local migration added for `post_bookmarks`, `monthly_highlight_items`, and bookmark activity events.
+- Remote Supabase migration `bookmarks_and_monthly_highlights` applied and verified.
+- R2 signed upload URL smoke test passed with the development auth account.
+- EAS development env now has `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true`; uploads remain guarded by native trim success.
+- Daily, Weekly, and Monthly export actions now generate a clean MP4 on-device using native video merge/compress.
+- Expo SDK 55 patch dependencies aligned and `npm audit` now reports zero vulnerabilities via a targeted `uuid` override for Expo's `xcode` toolchain.
 - Project documentation scaffold.
 - Expo + TypeScript + Expo Router scaffold.
 - Expo SDK 55 dependency alignment.
@@ -200,11 +205,9 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - Install Android development APK and verify native 2-second trim on device.
 - Install iOS development build and verify native 2-second trim on device.
 - Install the follow-up iOS build after it finishes and re-test Trim drag selection plus the fixed Post action bar.
-- After native trimming, enable `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true` for real R2 upload testing.
-- Run signed URL smoke test after Auth rate limit clears or after Apple/Google/dev session is available.
+- Verify real R2 upload on device after native trim succeeds.
 - Check Android development build result and install the APK when complete.
-- Add export/save/share for Daily Reel and Monthly Memory.
-- Add actual server-generated Daily/Monthly MP4 cache later.
+- Add server-generated Daily/Monthly MP4 cache later if on-device export is too slow.
 - Keep Weekly Memory visually secondary; Monthly remains the product promise.
 - Add automatic scheduled status transitions for Active / Quiet / Archived / Dormant.
 - Re-run `npm audit` and `npx expo install --check` when npm registry requests stop timing out.

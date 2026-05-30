@@ -52,7 +52,7 @@ export default function WeeklyMemoryScreen() {
         </View>
       )}
 
-      {groupId ? <ExportActions groupId={groupId} videoUri={null} /> : null}
+      {groupId ? <ExportActions groupId={groupId} sourceUris={moments.map((moment) => moment.playback_url)} /> : null}
     </ScrollView>
   );
 }

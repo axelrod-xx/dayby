@@ -1,4 +1,5 @@
 import { requireSupabase } from '@/src/lib/supabase';
+import { requestPlaybackUrl } from '@/src/features/video/playbackService';
 
 export type WeeklyMoment = {
   id: string;
@@ -8,6 +9,7 @@ export type WeeklyMoment = {
   time_label: string;
   display_name: string;
   r2_key: string;
+  playback_url: string | null;
 };
 
 const timeLabel = (capturedAt: string) =>
@@ -71,19 +73,23 @@ export async function listWeeklyMoments(input: {
     throw error;
   }
 
-  return (data ?? []).map((row) => {
-    const user = Array.isArray(row.users) ? row.users[0] : row.users;
-    const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
-    const capturedAt = row.captured_at ?? `${row.date}T00:00:00.000Z`;
+  return Promise.all(
+    (data ?? []).map(async (row) => {
+      const user = Array.isArray(row.users) ? row.users[0] : row.users;
+      const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
+      const capturedAt = row.captured_at ?? `${row.date}T00:00:00.000Z`;
+      const r2Key = asset?.r2_key ?? '';
 
-    return {
-      id: row.id,
-      date: row.date,
-      captured_at: capturedAt,
-      day_label: dayLabel(row.date),
-      time_label: timeLabel(capturedAt),
-      display_name: user?.display_name ?? 'dayby friend',
-      r2_key: asset?.r2_key ?? '',
-    };
-  });
+      return {
+        id: row.id,
+        date: row.date,
+        captured_at: capturedAt,
+        day_label: dayLabel(row.date),
+        time_label: timeLabel(capturedAt),
+        display_name: user?.display_name ?? 'dayby friend',
+        r2_key: r2Key,
+        playback_url: await requestPlaybackUrl(r2Key),
+      };
+    }),
+  );
 }

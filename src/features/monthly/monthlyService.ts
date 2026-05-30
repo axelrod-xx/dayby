@@ -1,4 +1,5 @@
 import { requireSupabase } from '@/src/lib/supabase';
+import { requestPlaybackUrl } from '@/src/features/video/playbackService';
 
 export type MonthlyMoment = {
   id: string;
@@ -9,6 +10,7 @@ export type MonthlyMoment = {
   time_label: string;
   display_name: string;
   r2_key: string;
+  playback_url: string | null;
   source: 'snapshot' | 'archive';
 };
 
@@ -126,17 +128,20 @@ async function listSnapshotMoments(input: {
     return null;
   }
 
-  return data.map((row) => ({
-    id: row.id,
-    post_id: row.post_id,
-    user_id: row.user_id,
-    date: row.source_date,
-    captured_at: row.captured_at,
-    time_label: timeLabel(row.captured_at),
-    display_name: row.display_name,
-    r2_key: row.r2_key,
-    source: 'snapshot',
-  }));
+  return Promise.all(
+    data.map(async (row) => ({
+      id: row.id,
+      post_id: row.post_id,
+      user_id: row.user_id,
+      date: row.source_date,
+      captured_at: row.captured_at,
+      time_label: timeLabel(row.captured_at),
+      display_name: row.display_name,
+      r2_key: row.r2_key,
+      playback_url: await requestPlaybackUrl(row.r2_key),
+      source: 'snapshot' as const,
+    })),
+  );
 }
 
 async function listArchiveMoments(input: {
@@ -172,21 +177,37 @@ async function listArchiveMoments(input: {
     throw error;
   }
 
-  return (data ?? []).map((row) => {
-    const user = Array.isArray(row.users) ? row.users[0] : row.users;
-    const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
+  return Promise.all(
+    (data ?? []).map(async (row) => {
+      const user = Array.isArray(row.users) ? row.users[0] : row.users;
+      const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
+      const r2Key = asset?.r2_key ?? '';
 
-    return {
-      id: row.id,
-      post_id: row.id,
-      user_id: row.user_id,
-      date: row.date,
-      captured_at: row.captured_at,
-      time_label: timeLabel(row.captured_at),
-      display_name: user?.display_name ?? 'dayby friend',
-      r2_key: asset?.r2_key ?? '',
-    };
-  });
+      return {
+        id: row.id,
+        post_id: row.id,
+        user_id: row.user_id,
+        date: row.date,
+        captured_at: row.captured_at,
+        time_label: timeLabel(row.captured_at),
+        display_name: user?.display_name ?? 'dayby friend',
+        r2_key: r2Key,
+        playback_url: await requestPlaybackUrl(r2Key),
+      };
+    }),
+  );
+}
+
+export async function listMonthlyArchiveMoments(input: {
+  groupId: string;
+  year: number;
+  month: number;
+}): Promise<MonthlyMoment[]> {
+  const archive = await listArchiveMoments(input);
+  return archive.map((moment) => ({
+    ...moment,
+    source: 'archive',
+  }));
 }
 
 export async function listMonthlyMoments(input: {

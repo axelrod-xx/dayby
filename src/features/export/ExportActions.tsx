@@ -1,68 +1,136 @@
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { recordGroupActivity } from '@/src/features/groups/groupService';
 
 type ExportActionsProps = {
   groupId: string;
+  sourceUris?: Array<string | null | undefined>;
   videoUri?: string | null;
 };
 
-export function ExportActions({ groupId, videoUri }: ExportActionsProps) {
+const normalizeFileUri = (path: string) => {
+  if (path.startsWith('file://') || path.startsWith('content://') || path.startsWith('http')) {
+    return path;
+  }
+
+  return `file://${path}`;
+};
+
+export function ExportActions({ groupId, sourceUris = [], videoUri }: ExportActionsProps) {
+  const [generatedUri, setGeneratedUri] = useState<string | null>(videoUri ?? null);
+  const [saving, setSaving] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const sources = useMemo(
+    () => (videoUri ? [videoUri] : sourceUris.filter((source): source is string => Boolean(source))),
+    [sourceUris, videoUri],
+  );
+
   const unavailable = () => {
-    Alert.alert('Export is not ready yet', 'The generated MP4 flow is wired next. Your kept clips remain safe.');
+    Alert.alert(
+      'Export is not ready yet',
+      sources.length === 0
+        ? 'Open this after uploaded clips have playback URLs. Your moments remain safe in the archive.'
+        : 'Export needs a development build or device build with native video tools.',
+    );
+  };
+
+  const prepareVideo = async () => {
+    if (generatedUri) {
+      return generatedUri;
+    }
+
+    if (Platform.OS === 'web' || sources.length === 0) {
+      unavailable();
+      return null;
+    }
+
+    const videoTrim = await import('react-native-video-trim');
+    const output =
+      sources.length === 1
+        ? await videoTrim.compress(sources[0], {
+            bitrate: 1_200_000,
+            frameRate: 30,
+            outputExt: 'mp4',
+            width: 720,
+          })
+        : await videoTrim.merge(sources, { outputExt: 'mp4' });
+    const nextUri = normalizeFileUri(output.outputPath);
+    setGeneratedUri(nextUri);
+    return nextUri;
   };
 
   const save = async () => {
-    if (!videoUri) {
-      unavailable();
-      return;
-    }
+    try {
+      setSaving(true);
+      const uri = await prepareVideo();
 
-    const permission = await MediaLibrary.requestPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert('Permission needed', 'Allow photo library access to save this memory.');
-      return;
-    }
+      if (!uri) {
+        return;
+      }
 
-    await MediaLibrary.createAssetAsync(videoUri);
-    await recordGroupActivity(groupId, 'download');
-    Alert.alert('Saved', 'Video saved to your library.');
+      const permission = await MediaLibrary.requestPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert('Permission needed', 'Allow photo library access to save this memory.');
+        return;
+      }
+
+      await MediaLibrary.createAssetAsync(uri);
+      await recordGroupActivity(groupId, 'download');
+      Alert.alert('Saved', 'Video saved to your library.');
+    } catch (error) {
+      Alert.alert('Export failed', error instanceof Error ? error.message : 'Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const share = async () => {
-    if (!videoUri) {
-      unavailable();
-      return;
-    }
+    try {
+      setSharing(true);
+      const uri = await prepareVideo();
 
-    const available = await Sharing.isAvailableAsync();
-    if (!available) {
-      Alert.alert('Sharing unavailable', 'This device cannot open the share sheet right now.');
-      return;
-    }
+      if (!uri) {
+        return;
+      }
 
-    await Sharing.shareAsync(videoUri);
-    await recordGroupActivity(groupId, 'download');
+      const available = await Sharing.isAvailableAsync();
+      if (!available) {
+        Alert.alert('Sharing unavailable', 'This device cannot open the share sheet right now.');
+        return;
+      }
+
+      await Sharing.shareAsync(uri);
+      await recordGroupActivity(groupId, 'download');
+    } catch (error) {
+      Alert.alert('Share failed', error instanceof Error ? error.message : 'Please try again.');
+    } finally {
+      setSharing(false);
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.kicker}>Export</Text>
-      <Text style={styles.copy}>Save the clean memory, then choose the sound in the app where you post it.</Text>
+      <Text style={styles.copy}>
+        {sources.length > 0
+          ? `${sources.length} ${sources.length === 1 ? 'clip' : 'clips'} become a clean MP4 for Reels, TikTok, Stories, or LINE.`
+          : 'Uploaded clips can be saved or shared from here once playback URLs are ready.'}
+      </Text>
       <View style={styles.actions}>
-        <PrimaryButton onPress={() => void save()} variant="light">
+        <PrimaryButton loading={saving} onPress={() => void save()} variant="light">
           Save Video
         </PrimaryButton>
-        <PrimaryButton onPress={() => void share()} variant="light">
+        <PrimaryButton loading={sharing} onPress={() => void share()} variant="light">
           Share
         </PrimaryButton>
       </View>
       <View style={styles.pillRow}>
-        <Text style={styles.pill}>Original Sound</Text>
-        <Text style={styles.pill}>Muted for Reels</Text>
+        <Text style={styles.pill}>{generatedUri ? 'MP4 Ready' : 'Clean MP4'}</Text>
+        <Text style={styles.pill}>Add music later</Text>
       </View>
     </View>
   );

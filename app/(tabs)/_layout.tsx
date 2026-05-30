@@ -34,7 +34,7 @@ function FloatingTabBar() {
   const isGroups = pathname.includes('/groups');
 
   return (
-    <View pointerEvents="box-none" style={[styles.floatingWrap, { bottom: Math.max(bottom + 10, 20) }]}>
+    <View style={[styles.floatingWrap, { bottom: Math.max(bottom + 10, 20), pointerEvents: 'box-none' }]}>
       <View style={styles.floatingBar}>
         <TabItem active={!isGroups} href="/(tabs)" icon="home" label="Home" />
         <Pressable

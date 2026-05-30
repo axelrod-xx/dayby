@@ -6,6 +6,7 @@ import { ExportActions } from '@/src/features/export/ExportActions';
 import { recordGroupActivity } from '@/src/features/groups/groupService';
 import {
   calculateMonthlyHighlight,
+  listMonthlyArchiveMoments,
   listMonthlyMoments,
   type MonthlyMoment,
 } from '@/src/features/monthly/monthlyService';
@@ -18,6 +19,7 @@ export default function MonthlyMemoryScreen() {
   const year = Number(params.year);
   const month = Number(params.month);
   const [moments, setMoments] = useState<MonthlyMoment[]>([]);
+  const [archiveMoments, setArchiveMoments] = useState<MonthlyMoment[]>([]);
   const [loading, setLoading] = useState(true);
   const highlight = useMemo(() => calculateMonthlyHighlight(moments), [moments]);
 
@@ -26,8 +28,14 @@ export default function MonthlyMemoryScreen() {
       return;
     }
 
-    listMonthlyMoments({ groupId: params.groupId, year, month })
-      .then(setMoments)
+    Promise.all([
+      listMonthlyMoments({ groupId: params.groupId, year, month }),
+      listMonthlyArchiveMoments({ groupId: params.groupId, year, month }),
+    ])
+      .then(([nextMoments, nextArchiveMoments]) => {
+        setMoments(nextMoments);
+        setArchiveMoments(nextArchiveMoments);
+      })
       .catch((error) => Alert.alert('Could not load monthly memory', error.message))
       .finally(() => setLoading(false));
     recordGroupActivity(params.groupId, 'view').catch(() => undefined);
@@ -49,18 +57,39 @@ export default function MonthlyMemoryScreen() {
           <Text style={styles.emptyCopy}>When your group posts, this month starts taking shape.</Text>
         </View>
       ) : (
-        <View style={styles.timeline}>
-          {moments.map((moment) => (
-            <View key={moment.id} style={styles.row}>
-              <Text style={styles.date}>{moment.date.slice(5).replace('-', '.')}</Text>
-              <View style={styles.rowBody}>
-                <Text style={styles.time}>{moment.time_label}</Text>
-                <Text style={styles.name}>{moment.display_name.toUpperCase()}</Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Highlight sample</Text>
+          <Text style={styles.sectionCopy}>Kept to one minute for sharing.</Text>
+          <View style={styles.timeline}>
+            {moments.map((moment) => (
+              <View key={moment.id} style={styles.row}>
+                <Text style={styles.date}>{moment.date.slice(5).replace('-', '.')}</Text>
+                <View style={styles.rowBody}>
+                  <Text style={styles.time}>{moment.time_label}</Text>
+                  <Text style={styles.name}>{moment.display_name.toUpperCase()}</Text>
+                </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
       )}
+
+      {!loading && archiveMoments.length > 0 ? (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Full archive</Text>
+          <Text style={styles.sectionCopy}>Every non-deleted post from the month stays here for the group.</Text>
+          <View style={styles.timeline}>
+            {archiveMoments.map((moment) => (
+              <View key={moment.id} style={styles.archiveRow}>
+                <Text style={styles.archiveDate}>{moment.date.slice(5).replace('-', '.')}</Text>
+                <Text numberOfLines={1} style={styles.archiveName}>
+                  {moment.time_label} / {moment.display_name.toUpperCase()}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : null}
 
       {highlight ? (
         <View style={styles.endCard}>
@@ -82,7 +111,9 @@ export default function MonthlyMemoryScreen() {
         </Text>
       </View>
 
-      {params.groupId ? <ExportActions groupId={params.groupId} videoUri={null} /> : null}
+      {params.groupId ? (
+        <ExportActions groupId={params.groupId} sourceUris={moments.map((moment) => moment.playback_url)} />
+      ) : null}
     </ScrollView>
   );
 }
@@ -129,6 +160,22 @@ const styles = StyleSheet.create({
   timeline: {
     gap: 10,
   },
+  section: {
+    gap: 10,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,254,251,0.18)',
+    paddingTop: 18,
+  },
+  sectionTitle: {
+    color: '#FFFFFF',
+    fontSize: 19,
+    fontWeight: '900',
+  },
+  sectionCopy: {
+    color: '#9FB8CC',
+    fontSize: 14,
+    lineHeight: 20,
+  },
   row: {
     minHeight: 76,
     flexDirection: 'row',
@@ -159,6 +206,28 @@ const styles = StyleSheet.create({
     marginTop: 4,
     color: '#9FB8CC',
     fontSize: 12,
+    fontWeight: '800',
+  },
+  archiveRow: {
+    minHeight: 54,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,254,251,0.12)',
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    backgroundColor: 'rgba(255,254,251,0.04)',
+  },
+  archiveDate: {
+    width: 58,
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '900',
+  },
+  archiveName: {
+    flex: 1,
+    color: '#9FB8CC',
+    fontSize: 13,
     fontWeight: '800',
   },
   empty: {

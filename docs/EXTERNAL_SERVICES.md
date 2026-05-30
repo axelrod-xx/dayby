@@ -19,9 +19,6 @@ Applied migrations:
 - `add_trim_metadata`
 - `group_lifecycle_rpc`
 - `add_weekly_generated_video_type`
-
-Pending local migration:
-
 - `bookmarks_and_monthly_highlights`
 
 Local app values:
@@ -59,11 +56,11 @@ R2 secrets are configured in Supabase Edge Function secrets. Rotate the developm
 Mobile uploads are also guarded by:
 
 ```bash
-EXPO_PUBLIC_ENABLE_R2_UPLOADS=false
+EXPO_PUBLIC_ENABLE_R2_UPLOADS=true
 EXPO_PUBLIC_HOME_DEMO_VIDEO_URL=
 ```
 
-Keep this `false` until native 2-second trimming outputs a real 2-second MP4. This prevents accidentally uploading the original 10-second capture.
+Development EAS builds now use `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true`. The app still blocks upload unless the native trim step marks the file as a real 2-second export.
 
 ## Expo / EAS
 
