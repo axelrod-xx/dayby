@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#E4DED5',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 14,
     padding: 13,
     backgroundColor: '#FFFFFF',
   },
@@ -46,9 +46,10 @@ const styles = StyleSheet.create({
   },
   label: {
     marginTop: 6,
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 12,
     fontWeight: '800',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
 });

@@ -125,14 +125,20 @@ const styles = StyleSheet.create({
   permissionHero: {
     minHeight: 260,
     justifyContent: 'flex-end',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 20,
-    backgroundColor: '#26322D',
+    backgroundColor: '#1B3458',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.24,
+    shadowRadius: 16,
+    elevation: 6,
   },
   permissionKicker: {
     color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 42,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 10,
@@ -186,7 +192,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.35)',
-    borderRadius: 8,
+    borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 6,
     backgroundColor: 'rgba(0,0,0,0.25)',
@@ -212,13 +218,13 @@ const styles = StyleSheet.create({
   },
   captureCopy: {
     marginTop: 4,
-    color: '#E7E1D8',
+    color: '#C8DCEE',
     fontSize: 14,
   },
   muteButton: {
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.35)',
-    borderRadius: 8,
+    borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: 'rgba(0,0,0,0.25)',
@@ -263,7 +269,7 @@ const styles = StyleSheet.create({
     right: 28,
     top: 144,
     bottom: 148,
-    borderRadius: 8,
+    borderRadius: 16,
     pointerEvents: 'none',
   },
   formatCornerTopLeft: {

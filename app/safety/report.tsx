@@ -58,7 +58,7 @@ export default function ReportScreen() {
         multiline
         onChangeText={setNote}
         placeholder="Add a little context"
-        placeholderTextColor="#A49B91"
+        placeholderTextColor="#8FAFC2"
         style={styles.input}
         textAlignVertical="top"
         value={note}
@@ -85,19 +85,21 @@ const styles = StyleSheet.create({
   },
   kicker: {
     marginBottom: 10,
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
     color: '#102033',
     fontSize: 38,
     fontWeight: '900',
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 12,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -110,22 +112,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     paddingHorizontal: 14,
     backgroundColor: '#FFFFFF',
   },
   optionSelected: {
-    borderColor: '#102033',
-    backgroundColor: '#EFE7DD',
+    borderColor: '#2F80ED',
+    backgroundColor: '#DCEEFF',
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
   },
   optionText: {
     flex: 1,
     paddingRight: 12,
-    color: '#57534E',
+    color: '#617B8F',
     fontSize: 15,
     fontWeight: '800',
   },
@@ -143,8 +146,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   radioSelected: {
-    borderColor: '#102033',
-    backgroundColor: '#102033',
+    borderColor: '#2F80ED',
+    backgroundColor: '#2F80ED',
   },
   radioDot: {
     width: 9,

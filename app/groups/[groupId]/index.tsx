@@ -130,7 +130,7 @@ export default function GroupDetailScreen() {
         <Text style={styles.todayTitle}>{group.posted_today ? 'Posted today.' : "Keep today's 2 seconds."}</Text>
         <Text style={styles.panelText}>
           {group.posted_today
-            ? 'Your moment is already in this group. Come back tomorrow to vote.'
+            ? 'Your moment is already in this group. Open yesterday when you want the group day back.'
             : 'A tiny moment from today, saved with the people who were there.'}
         </Text>
         <View style={styles.action}>
@@ -177,7 +177,7 @@ export default function GroupDetailScreen() {
         <View style={styles.panelHeader}>
           <View>
             <Text style={styles.panelTitle}>Yesterday</Text>
-            <Text style={styles.panelText}>Watch by time, then choose what stays.</Text>
+            <Text style={styles.panelText}>Watch the group day by time. Save favorites privately.</Text>
           </View>
           <Link
             href={{
@@ -194,7 +194,7 @@ export default function GroupDetailScreen() {
         <View style={styles.memoryPreview}>
           <Text style={styles.memoryKicker}>OUR MONTH</Text>
           <Text style={styles.memoryTitle}>{group.name.toUpperCase()}</Text>
-          <Text style={styles.memoryCopy}>Daily winners become a one-minute memory.</Text>
+          <Text style={styles.memoryCopy}>Everything stays in the archive. The month becomes one minute.</Text>
           <Link
             href={{
               pathname: '/monthly/[groupId]/[year]/[month]',
@@ -266,8 +266,7 @@ export default function GroupDetailScreen() {
       <View style={styles.panel}>
         <Text style={styles.panelTitle}>Settings</Text>
         <Text style={styles.panelText}>
-          {group.plan} plan / monthly highlight {group.monthly_highlight_enabled ? 'on' : 'off'} / downloads{' '}
-          {group.download_enabled ? 'on' : 'off'}
+          {group.plan} plan / monthly highlight included / downloads {group.download_enabled ? 'on' : 'off'}
         </Text>
       </View>
 
@@ -305,26 +304,27 @@ const styles = StyleSheet.create({
   hero: {
     minHeight: 178,
     justifyContent: 'flex-end',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#EAF4FF',
   },
   kicker: {
     marginBottom: 9,
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
     color: '#102033',
     fontSize: 38,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 10,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -333,14 +333,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   friendBubble: {
-    width: 34,
-    height: 34,
+    width: 38,
+    height: 38,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#D5E5F6',
-    borderRadius: 17,
-    marginRight: -7,
+    borderColor: '#BAD4EC',
+    borderRadius: 19,
+    marginRight: -8,
     backgroundColor: '#F6FAFF',
   },
   friendInitial: {
@@ -350,13 +350,13 @@ const styles = StyleSheet.create({
   },
   panel: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: '#D8E9F5',
     paddingTop: 18,
   },
   todayPanel: {
     borderWidth: 1,
-    borderColor: '#102033',
-    borderRadius: 8,
+    borderColor: '#2F80ED',
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#FFFFFF',
   },
@@ -365,12 +365,13 @@ const styles = StyleSheet.create({
     color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   inviteNudge: {
     borderWidth: 1,
-    borderColor: '#D5E5F6',
-    borderRadius: 8,
+    borderColor: '#BAD4EC',
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#F1F7FF',
   },
@@ -401,14 +402,15 @@ const styles = StyleSheet.create({
   memoryPreview: {
     minHeight: 174,
     justifyContent: 'flex-end',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#EAF4FF',
   },
   memoryKicker: {
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
   },
   memoryTitle: {
     marginTop: 8,
@@ -418,7 +420,7 @@ const styles = StyleSheet.create({
   },
   memoryCopy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -430,7 +432,7 @@ const styles = StyleSheet.create({
   },
   subtlePanel: {
     borderTopWidth: 1,
-    borderTopColor: '#EEEAE3',
+    borderTopColor: '#D8E9F5',
     paddingTop: 16,
   },
   panelTitle: {
@@ -439,13 +441,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   subtleTitle: {
-    color: '#57534E',
+    color: '#617B8F',
     fontSize: 15,
     fontWeight: '800',
   },
   panelText: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },
@@ -457,10 +459,10 @@ const styles = StyleSheet.create({
     minHeight: 58,
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 14,
     paddingHorizontal: 14,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#F3F8FC',
   },
   rowTitle: {
     color: '#102033',
@@ -469,22 +471,22 @@ const styles = StyleSheet.create({
   },
   rowMeta: {
     marginTop: 5,
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 13,
   },
   codeBox: {
     marginTop: 14,
     borderWidth: 1,
     borderColor: '#B8C9DA',
-    borderRadius: 8,
+    borderRadius: 14,
     padding: 16,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#F3F8FC',
   },
   code: {
     color: '#102033',
     fontSize: 28,
     fontWeight: '800',
-    letterSpacing: 0,
+    letterSpacing: 2,
   },
   action: {
     gap: 10,

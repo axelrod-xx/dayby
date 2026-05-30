@@ -2,7 +2,13 @@ import { requireSupabase } from '@/src/lib/supabase';
 
 import type { Group, GroupInvite, GroupMember, GroupMemberProfile, GroupWithMembership } from './types';
 
-export type GroupActivityEventType = 'post' | 'view' | 'download' | 'vote' | 'open' | 'archive_restore';
+export type GroupActivityEventType =
+  | 'post'
+  | 'view'
+  | 'download'
+  | 'bookmark'
+  | 'open'
+  | 'archive_restore';
 
 type CreateGroupInput = {
   name: string;

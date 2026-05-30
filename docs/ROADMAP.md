@@ -51,22 +51,23 @@
 - Overlay `time · display name`.
 - Save/share export path.
 
-## Phase 6: Vote and Winner
+## Phase 6: Private Bookmarks and Archive
 
-- Vote UI.
-- Deadline handling.
-- Winner decision function.
-- Tie handling.
-- `daily_winners` creation.
+- Remove Vote UI and daily winner dependency from app-facing flows.
+- Add private bookmark action for Daily Reel moments.
+- Add one bookmark per member per post.
+- Keep bookmarks private; expose no public counts.
+- Keep every non-deleted group post available in the archive.
+- Add post-owner delete path that quietly removes the post from archive and future highlights.
 
 ## Phase 7: Monthly Memory
 
 - Weekly preview as a quiet progress reward.
-- Fetch winners by month.
-- Monthly preview.
+- Fetch archive/sample moments by month.
+- Monthly highlight preview capped at 30 clips.
 - Date/time/name overlay.
 - Intro and end card.
-- Highlight end card if enabled.
+- Snapshot/frozen highlight metadata for generated monthly videos.
 - Save/share export.
 
 ## Phase 8: Retention and Archive

@@ -69,7 +69,6 @@ function RootLayoutNav() {
           <Stack.Screen name="post/index" options={{ headerShown: false }} />
           <Stack.Screen name="post/success" options={{ headerShown: false }} />
           <Stack.Screen name="daily/[groupId]/[date]" options={{ headerShown: false }} />
-          <Stack.Screen name="vote/[groupId]/[date]" options={{ headerShown: false }} />
           <Stack.Screen name="weekly/[groupId]/[weekStart]" options={{ headerShown: false }} />
           <Stack.Screen name="monthly/[groupId]/[year]/[month]" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />

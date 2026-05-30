@@ -46,7 +46,7 @@ export default function ProfileSetupScreen() {
           maxLength={40}
           onChangeText={setDisplayName}
           placeholder="RYO"
-          placeholderTextColor="#A49B91"
+          placeholderTextColor="#8FAFC2"
           style={styles.input}
           value={displayName}
         />
@@ -73,19 +73,21 @@ const styles = StyleSheet.create({
   },
   kicker: {
     marginBottom: 10,
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
     color: '#102033',
     fontSize: 38,
     fontWeight: '900',
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 12,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -93,9 +95,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   label: {
-    color: '#5D7488',
+    color: '#4E6A80',
     fontSize: 12,
     fontWeight: '800',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   input: {

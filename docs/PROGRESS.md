@@ -2,10 +2,15 @@
 
 ## Current Phase
 
-Phase 8: Preservation and archive foundation.
+Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 
 ## Completed
 
+- Product direction pivot documented: no voting, no public view counts, complete archive plus 1-minute monthly highlight.
+- Design direction documented in `docs/DESIGN.md` to preserve the current quiet blue memory-first UI.
+- App-facing vote route removed and Daily Reel now supports private bookmarks.
+- Monthly and weekly memory services now read archive posts instead of daily winners.
+- Local migration added for `post_bookmarks`, `monthly_highlight_items`, and bookmark activity events.
 - Project documentation scaffold.
 - Expo + TypeScript + Expo Router scaffold.
 - Expo SDK 55 dependency alignment.
@@ -26,12 +31,12 @@ Phase 8: Preservation and archive foundation.
 - Phase 4 R2 upload/download signed URL Edge Function stubs.
 - Phase 4 post-to-groups flow with single asset and multiple daily posts.
 - R2 upload guard added: uploads stay disabled until real native 2-second trimming is implemented.
-- Phase 4+ tables for assets, daily posts, votes, winners, generated videos, activity events, reports, and subscriptions.
+- Phase 4+ tables for assets, daily posts, generated videos, activity events, reports, and subscriptions.
 - Phase 5 Daily Reel fetch/display route.
-- Phase 6 Vote route and one-vote insert flow.
-- Phase 6 winner decision RPC with random tie handling.
+- Phase 6 private bookmark flow replaced the old vote route.
+- Phase 6/7 monthly sampling now uses archive posts instead of winners.
 - Phase 7 Monthly Memory preview route.
-- Phase 8 group activity RPC for post/view/download/vote/open/archive_restore.
+- Phase 8 group activity RPC for post/view/download/bookmark/open/archive_restore.
 - Phase 8 Archive route for quiet and archived groups.
 - Group list now separates active groups from quiet/archive candidates.
 - Phase 9 report form and group detail safety entry point.
@@ -77,7 +82,7 @@ Phase 8: Preservation and archive foundation.
 - `/trim?uri=&muted=0` returns HTTP 200 and contains `Use this 2 sec`
 - `/post?uri=local-dev/test.mp4&muted=0&trimStartMs=0&trimDurationMs=2000&isNativeTrimmed=0` returns HTTP 200 and shows dev upload guard copy
 - `/daily/demo/2026-05-20` returns HTTP 200 and contains `Daily Reel`
-- `/vote/demo/2026-05-20` returns HTTP 200 and contains `Best 2 sec`
+- Vote route removed from the app-facing route set.
 - `/monthly/demo/2026/5` returns HTTP 200 and contains `moments`
 - `/weekly/demo/2026-05-18` returns HTTP 200 and contains `THIS WEEK`
 - `/archive` returns HTTP 200 and contains `Archive`
@@ -95,8 +100,8 @@ Phase 8: Preservation and archive foundation.
 - Added `docs/I18N.md` to track the English-first UI and planned Japanese/Korean localization path.
 - Home now changes its primary action for no groups, open groups, and all-posted states.
 - Group Detail now shows `Posted today` instead of another capture CTA when the user already posted to that group.
-- Vote completion now offers `Back to group` and `Back home`.
-- Remaining mojibake markers were removed from Groups, Group Detail, and Vote.
+- Bookmark flow now offers `Back to group` and `Back home` through Daily Reel.
+- Remaining mojibake markers were removed from Groups and Group Detail.
 - Daily Reel now presents one active moment at a time with auto-advance, previous/next controls, a timeline, and Group/Home return paths.
 - Group Detail now nudges one-person groups to invite friends and can share the latest invite code through the native share sheet.
 - Camera now shows a clear `Cancel` control before recording and on the permission screen, so users do not need to rely on swipe-back.

@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   backText: {
-    color: '#57534E',
+    color: '#617B8F',
     fontSize: 15,
     fontWeight: '800',
   },
@@ -212,31 +212,39 @@ const styles = StyleSheet.create({
     color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
     color: '#102033',
     fontSize: 40,
     fontWeight: '900',
+    letterSpacing: -0.5,
     lineHeight: 44,
   },
   copy: {
     marginTop: 10,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 23,
   },
   momentCard: {
     minHeight: 132,
     justifyContent: 'flex-end',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#102033',
+    shadowColor: '#102033',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 6,
   },
   momentKicker: {
     color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   momentTitle: {
@@ -247,16 +255,16 @@ const styles = StyleSheet.create({
   },
   momentMeta: {
     marginTop: 8,
-    color: '#BDB5AA',
+    color: '#9FB8CC',
     fontSize: 14,
     fontWeight: '800',
   },
   notice: {
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 14,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#F3F8FC',
   },
   noticeTitle: {
     color: '#102033',
@@ -265,7 +273,7 @@ const styles = StyleSheet.create({
   },
   noticeCopy: {
     marginTop: 6,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -274,20 +282,21 @@ const styles = StyleSheet.create({
   },
   groupCard: {
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 14,
     backgroundColor: '#FFFFFF',
   },
   groupCardSelected: {
-    borderColor: '#102033',
-    backgroundColor: '#EFE7DD',
+    borderColor: '#2F80ED',
+    backgroundColor: '#DCEEFF',
   },
   groupCardDisabled: {
     opacity: 0.42,
   },
   pressed: {
-    opacity: 0.76,
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
   },
   groupHeader: {
     minHeight: 58,
@@ -300,11 +309,11 @@ const styles = StyleSheet.create({
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 22,
-    backgroundColor: '#F5F1EA',
+    borderRadius: 14,
+    backgroundColor: '#DCEEFF',
   },
   groupInitial: {
-    color: '#102033',
+    color: '#1B4A7A',
     fontSize: 17,
     fontWeight: '900',
   },
@@ -318,7 +327,7 @@ const styles = StyleSheet.create({
   },
   groupMeta: {
     marginTop: 6,
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 13,
   },
   check: {
@@ -332,8 +341,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   checkSelected: {
-    borderColor: '#102033',
-    backgroundColor: '#102033',
+    borderColor: '#2F80ED',
+    backgroundColor: '#2F80ED',
   },
   checkDot: {
     width: 10,
@@ -343,7 +352,7 @@ const styles = StyleSheet.create({
   },
   empty: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: '#D8E9F5',
     paddingTop: 18,
   },
   emptyTitle: {
@@ -353,7 +362,7 @@ const styles = StyleSheet.create({
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },
@@ -366,7 +375,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: '#D8E9F5',
     paddingHorizontal: 22,
     paddingBottom: 28,
     paddingTop: 14,

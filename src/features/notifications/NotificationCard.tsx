@@ -72,8 +72,8 @@ export function NotificationCard() {
 const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
-    borderColor: '#DCEAF8',
-    borderRadius: 8,
+    borderColor: '#BAD4EC',
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#F1F7FF',
   },
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
   },
   copy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },

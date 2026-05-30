@@ -20,6 +20,10 @@ Applied migrations:
 - `group_lifecycle_rpc`
 - `add_weekly_generated_video_type`
 
+Pending local migration:
+
+- `bookmarks_and_monthly_highlights`
+
 Local app values:
 
 ```bash

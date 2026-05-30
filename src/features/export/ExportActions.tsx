@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
   container: {
     gap: 12,
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 16,
     backgroundColor: '#F7FBFF',
   },
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   copy: {
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -101,9 +101,9 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: 12,
     paddingVertical: 7,
-    color: '#57534E',
+    color: '#4E6A80',
     fontSize: 12,
     fontWeight: '800',
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#F3F8FC',
   },
 });

@@ -41,7 +41,7 @@ Expo Go is fine for early UI checks, but dayby needs camera capture, native vide
 - Issue signed upload URLs.
 - Issue signed playback/download URLs.
 - Validate invite joins.
-- Decide daily winners.
+- Generate monthly highlight snapshots from archive posts and private signals.
 - Generate or queue generated Daily/Weekly/Monthly MP4s when needed. Weekly is a quiet progress preview; Monthly remains the main memory.
 - Enforce retention jobs and notification windows later.
 - Store push tokens server-side later; the app currently requests permission, configures Android channels, and can preview a local reminder without requiring the iOS push entitlement.
@@ -49,7 +49,7 @@ Expo Go is fine for early UI checks, but dayby needs camera capture, native vide
 ## Date and Time Rules
 
 - Group day is based on `groups.timezone`.
-- Posting date, voting window, and winner target date should use group timezone.
+- Posting date, archive grouping, and monthly highlight bounds should use group timezone.
 - `captured_at` remains `timestamptz`.
 - Display time is local to group or viewer depending on screen; MVP should prefer group timezone for consistency.
 

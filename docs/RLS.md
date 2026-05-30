@@ -48,17 +48,17 @@
 - Update/delete: post owner can delete own post; owner/admin can moderate.
 - Database unique key enforces one post per user per group per date.
 
-### votes
+### post_bookmarks
 
-- Select: voter can see own vote. Aggregate results should be exposed through controlled views/functions after deadline.
-- Insert: voter must be group member, vote as self, and target a post in the same group/date.
-- Update: not allowed in MVP, or allow replacement before deadline through a function.
-- Database unique key enforces one vote per user per group per date.
+- Select: user can see only their own bookmarks.
+- Insert: user must bookmark as self, be a group member, and target a visible post in the same group.
+- Delete: user can remove only their own bookmark.
+- Database unique key enforces one bookmark per user per post.
 
-### daily_winners
+### monthly_highlight_items
 
 - Select: group members only.
-- Insert/update/delete: backend service only.
+- Insert/update/delete: backend service only. The app should not let users regenerate or hand-edit the shared monthly snapshot.
 
 ### generated_videos
 
@@ -75,6 +75,6 @@
 - Create signed R2 upload URL.
 - Create signed playback/download URL.
 - Join group invite safely.
-- Decide daily winner.
+- Generate monthly highlight snapshots.
 - Generate Daily/Weekly/Monthly video artifacts.
 - Run retention and deletion scheduling.

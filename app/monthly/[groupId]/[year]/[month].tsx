@@ -37,8 +37,8 @@ export default function MonthlyMemoryScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
         <Text style={styles.kicker}>OUR {monthName(year, month).toUpperCase()}</Text>
-        <Text style={styles.title}>{moments.length || 0} moments</Text>
-        <Text style={styles.copy}>A quiet cut of the days your group chose to keep.</Text>
+        <Text style={styles.title}>{highlight?.durationLabel ?? '0s'} ready</Text>
+        <Text style={styles.copy}>A one-minute sample of the month. The full archive stays with the group.</Text>
       </View>
 
       {loading ? (
@@ -46,7 +46,7 @@ export default function MonthlyMemoryScreen() {
       ) : moments.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>No kept moments yet</Text>
-          <Text style={styles.emptyCopy}>Daily winners will appear here in date order.</Text>
+          <Text style={styles.emptyCopy}>When your group posts, this month starts taking shape.</Text>
         </View>
       ) : (
         <View style={styles.timeline}>
@@ -64,12 +64,11 @@ export default function MonthlyMemoryScreen() {
 
       {highlight ? (
         <View style={styles.endCard}>
-          <Text style={styles.endKicker}>
-            {highlight.names.length > 1 ? "THIS MONTH'S HIGHLIGHTS" : "THIS MONTH'S HIGHLIGHT"}
-          </Text>
-          <Text style={styles.endName}>{highlight.names.join(' / ').toUpperCase()}</Text>
+          <Text style={styles.endKicker}>THIS MONTH'S SAMPLE</Text>
+          <Text style={styles.endName}>{highlight.names.slice(0, 4).join(' / ').toUpperCase()}</Text>
           <Text style={styles.endCopy}>
-            {highlight.count} {highlight.count === 1 ? 'MOMENT' : 'MOMENTS'} KEPT
+            {highlight.count} {highlight.count === 1 ? 'MOMENT' : 'MOMENTS'} / {highlight.dayCount}{' '}
+            {highlight.dayCount === 1 ? 'DAY' : 'DAYS'}
           </Text>
           <Text style={styles.made}>made with dayby</Text>
         </View>
@@ -77,9 +76,9 @@ export default function MonthlyMemoryScreen() {
 
       <View style={styles.shareCue}>
         <Text style={styles.shareKicker}>Made to leave the app</Text>
-        <Text style={styles.shareTitle}>Export clean. Add music later.</Text>
+        <Text style={styles.shareTitle}>One minute to share.</Text>
         <Text style={styles.shareCopy}>
-          dayby keeps the memory quiet here, then your group can bring it to Reels, TikTok, Stories, or LINE.
+          dayby keeps the archive quiet here, then your group can bring the highlight to Reels, TikTok, Stories, or LINE.
         </Text>
       </View>
 
@@ -99,21 +98,27 @@ const styles = StyleSheet.create({
   hero: {
     minHeight: 260,
     justifyContent: 'flex-end',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 22,
-    backgroundColor: '#26322D',
+    backgroundColor: '#1B3458',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.24,
+    shadowRadius: 16,
+    elevation: 6,
   },
   kicker: {
     color: '#B8C9DA',
     fontSize: 13,
     fontWeight: '900',
+    letterSpacing: 1,
   },
   title: {
     marginTop: 8,
     color: '#FFFFFF',
     fontSize: 46,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 10,
@@ -130,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255,254,251,0.14)',
-    borderRadius: 8,
+    borderRadius: 14,
     paddingHorizontal: 16,
     backgroundColor: 'rgba(255,254,251,0.06)',
   },
@@ -152,7 +157,7 @@ const styles = StyleSheet.create({
   },
   name: {
     marginTop: 4,
-    color: '#BDB5AA',
+    color: '#9FB8CC',
     fontSize: 12,
     fontWeight: '800',
   },
@@ -168,7 +173,7 @@ const styles = StyleSheet.create({
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#BDB5AA',
+    color: '#9FB8CC',
     fontSize: 15,
     lineHeight: 22,
   },
@@ -177,7 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255,254,251,0.18)',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 22,
     backgroundColor: '#102033',
   },
@@ -185,6 +190,7 @@ const styles = StyleSheet.create({
     color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
   },
   endName: {
     marginTop: 10,
@@ -200,13 +206,13 @@ const styles = StyleSheet.create({
   },
   made: {
     marginTop: 22,
-    color: '#A49B91',
+    color: '#9FB8CC',
     fontSize: 12,
   },
   shareCue: {
     borderWidth: 1,
     borderColor: 'rgba(255,254,251,0.18)',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 18,
     backgroundColor: 'rgba(255,254,251,0.07)',
   },
@@ -214,6 +220,7 @@ const styles = StyleSheet.create({
     color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   shareTitle: {
@@ -224,7 +231,7 @@ const styles = StyleSheet.create({
   },
   shareCopy: {
     marginTop: 8,
-    color: '#BDB5AA',
+    color: '#9FB8CC',
     fontSize: 15,
     lineHeight: 22,
   },

@@ -1,3 +1,4 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, type Href, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -91,7 +92,7 @@ export default function GroupsScreen() {
                     {getGroupActivityLabel(group)} / {group.member_role}
                   </Text>
                 </View>
-                <Text style={styles.chevron}>&gt;</Text>
+                <FontAwesome color="#8FAFC2" name="chevron-right" size={14} />
               </Pressable>
             </Link>
           ))}
@@ -101,7 +102,7 @@ export default function GroupsScreen() {
                 <Text style={styles.archiveText}>
                   {archivedGroups.length} quiet group{archivedGroups.length > 1 ? 's' : ''}
                 </Text>
-                <Text style={styles.chevron}>&gt;</Text>
+                <FontAwesome color="#8FAFC2" name="chevron-right" size={14} />
               </Pressable>
             </Link>
           ) : null}
@@ -134,17 +135,18 @@ const styles = StyleSheet.create({
     color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
     color: '#102033',
     fontSize: 44,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -0.5,
   },
   body: {
     marginTop: 10,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -160,14 +162,20 @@ const styles = StyleSheet.create({
   monthPreview: {
     minHeight: 154,
     justifyContent: 'flex-end',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#EAF4FF',
+    shadowColor: '#102033',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
   },
   previewKicker: {
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   previewTitle: {
@@ -178,7 +186,7 @@ const styles = StyleSheet.create({
   },
   previewCopy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -187,25 +195,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     gap: 14,
     paddingHorizontal: 14,
     backgroundColor: '#FFFFFF',
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
   },
   groupMark: {
     width: 46,
     height: 46,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 23,
-    backgroundColor: '#EFE7DD',
+    borderRadius: 14,
+    backgroundColor: '#DCEEFF',
   },
   groupInitial: {
-    color: '#102033',
+    color: '#1B4A7A',
     fontSize: 18,
     fontWeight: '900',
   },
@@ -219,12 +228,8 @@ const styles = StyleSheet.create({
   },
   groupMeta: {
     marginTop: 6,
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 13,
-  },
-  chevron: {
-    color: '#A49B91',
-    fontSize: 28,
   },
   archiveLink: {
     minHeight: 58,
@@ -232,11 +237,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: '#D8E9F5',
     paddingHorizontal: 4,
   },
   archiveText: {
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 14,
     fontWeight: '800',
   },
@@ -244,8 +249,8 @@ const styles = StyleSheet.create({
     minHeight: 172,
     justifyContent: 'flex-end',
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#FFFFFF',
   },
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },

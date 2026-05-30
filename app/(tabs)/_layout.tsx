@@ -20,7 +20,7 @@ function TabItem({
   return (
     <Link href={href} asChild>
       <Pressable accessibilityRole="tab" style={({ pressed }) => [styles.tabItem, active && styles.tabItemActive, pressed && styles.pressed]}>
-        <FontAwesome color={active ? '#FFFFFF' : '#5D7488'} name={icon} size={16} />
+        <FontAwesome color={active ? '#FFFFFF' : '#4E6A80'} name={icon} size={16} />
         <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>{label}</Text>
       </Pressable>
     </Link>
@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   tabItemActive: {
-    backgroundColor: '#102033',
+    backgroundColor: '#2F80ED',
   },
   tabLabel: {
-    color: '#5D7488',
+    color: '#4E6A80',
     fontSize: 12,
     fontWeight: '800',
   },
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   pressed: {
-    opacity: 0.82,
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
   },
 });

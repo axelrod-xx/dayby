@@ -2,22 +2,26 @@
 
 ## Summary
 
-dayby turns a friend group's daily 2-second moments into a monthly memory.
+dayby turns a friend group's daily 2-second moments into a private archive and a 1-minute monthly memory.
 
 Primary copy direction: `Two seconds a day. One minute a month.`
 
-The app is not a video editor, not a public social feed, and not a music app. It helps a private group keep the moments that mattered, then leaves music and final posting context to Instagram, TikTok, Reels, Stories, LINE, or the user's camera roll.
+The app is not a video editor, not a public social feed, not a voting game, and not a music app. It helps a private group preserve the texture of a month, then leaves music and final posting context to Instagram, TikTok, Reels, Stories, LINE, or the user's camera roll.
+
+Current product direction: `全部は残る。でも見せる時は1分にして届く。`
+
+The monthly memory is a sample of the group's atmosphere, not a ranking of the funniest clips.
 
 ## Core Loop
 
 1. Today: capture up to 10 seconds.
 2. Today: trim the capture to exactly 2 seconds.
 3. Today: post the same 2-second asset to one or more groups.
-4. Tomorrow: watch yesterday's group Daily Reel.
-5. Tomorrow: vote for the one moment worth keeping.
-6. Every day: one winner becomes the group's saved daily memory.
+4. Tomorrow: watch yesterday's group Daily Reel as a time-ordered collection.
+5. Any time: privately bookmark moments worth finding again.
+6. Every post remains in the group's complete archive unless the owner removes it.
 7. During the week: a quiet Weekly Memory can be previewed, but it is not the main product promise.
-8. Month end: daily winners become a roughly 1-minute Monthly Memory.
+8. Month end: a 1-minute Monthly Highlight arrives automatically, sampled from the archive.
 
 ## MVP Features
 
@@ -30,10 +34,11 @@ The app is not a video editor, not a public social feed, and not a music app. It
 - Multi-group posting with a single shared video asset.
 - One post per user per group per local group day.
 - Daily Reel ordered by captured time.
-- One vote per member for the previous day.
-- Winner decision at the deadline, including tie handling.
+- Private bookmark per member per post.
+- No public view counts, vote counts, streaks, or rankings.
+- Complete archive of group posts by day.
 - Quiet Weekly Memory as a lightweight progress preview.
-- Monthly Memory from daily winners and metadata.
+- Monthly Highlight from archive posts and metadata, capped at 30 two-second moments.
 - Save/share exports without in-app BGM.
 - Basic report, delete, and admin moderation paths.
 - Activity records for retention policy.
@@ -45,6 +50,8 @@ The app is not a video editor, not a public social feed, and not a music app. It
 - Filters, stickers, advanced editing, AI editing.
 - Public feed, followers, chat, like lists.
 - Post count rankings or non-post shaming.
+- Public view counts or public bookmark counts.
+- Voting, winners, or daily scoreboards.
 - 10-second original cloud storage.
 - Constant video watermark.
 - Cloudflare Stream or Mux as the primary storage model.
@@ -57,7 +64,9 @@ The app is not a video editor, not a public social feed, and not a music app. It
 - The public-facing promise emphasizes daily 2-second memories becoming a 1-minute month.
 - The 10-second capture limit is a camera-time instruction, not the headline.
 - Daily Reel emphasizes time and person: `18:42 · RYO`.
+- Bookmarking is private and quiet. It can influence curation, but it should never create a visible score.
 - Weekly Memory is intentionally secondary: visible, useful, not pushed.
-- Monthly Memory emphasizes date, weekday, time, and group.
+- Monthly Highlight emphasizes date, weekday, time, person, and group.
+- The complete archive is for the group. The 1-minute highlight is for sharing.
 - The main video body stays clean.
 - A modest final `made with dayby` end card is acceptable.

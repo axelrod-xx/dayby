@@ -1,3 +1,4 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, type Href, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -73,7 +74,7 @@ export default function ArchiveScreen() {
                       <Text style={styles.deleteHint}>Download before {new Date(group.delete_after).toLocaleDateString()}</Text>
                     ) : null}
                   </View>
-                  <Text style={styles.chevron}>&gt;</Text>
+                  <FontAwesome color="#8FAFC2" name="chevron-right" size={14} />
                 </Pressable>
               </Link>
               {group.status === 'archived' || group.status === 'quiet' ? (
@@ -103,19 +104,21 @@ const styles = StyleSheet.create({
   },
   kicker: {
     marginBottom: 10,
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
     color: '#102033',
     fontSize: 40,
     fontWeight: '900',
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 12,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 24,
   },
@@ -125,10 +128,15 @@ const styles = StyleSheet.create({
   groupCard: {
     gap: 12,
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 14,
     backgroundColor: '#FFFFFF',
+    shadowColor: '#102033',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
   },
   groupMain: {
     minHeight: 64,
@@ -141,7 +149,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
   },
   groupName: {
     color: '#102033',
@@ -150,7 +159,7 @@ const styles = StyleSheet.create({
   },
   groupMeta: {
     marginTop: 6,
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 13,
     textTransform: 'capitalize',
   },
@@ -160,16 +169,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
   },
-  chevron: {
-    color: '#A49B91',
-    fontSize: 28,
-  },
   emptyCard: {
     minHeight: 176,
     justifyContent: 'flex-end',
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#FFFFFF',
   },
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },

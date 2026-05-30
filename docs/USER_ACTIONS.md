@@ -21,7 +21,7 @@
 7. Trimで2秒選択、選択部分がわかるか
 8. Post to Groups
 9. Post Successから共有
-10. Daily Reel / Vote / Monthly Memory
+10. Daily Reel / Bookmark / Monthly Memory
 11. Notification permissionとPreview reminder
 
 重点チェック:

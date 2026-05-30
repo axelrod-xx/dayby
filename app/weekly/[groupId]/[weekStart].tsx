@@ -36,7 +36,7 @@ export default function WeeklyMemoryScreen() {
       ) : moments.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>Still taking shape</Text>
-          <Text style={styles.emptyCopy}>Weekly memories appear quietly as days get kept.</Text>
+          <Text style={styles.emptyCopy}>Weekly memories appear quietly as your group posts.</Text>
         </View>
       ) : (
         <View style={styles.timeline}>
@@ -67,25 +67,32 @@ const styles = StyleSheet.create({
   },
   hero: {
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#FFFFFF',
+    shadowColor: '#102033',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
   },
   kicker: {
     color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
   },
   title: {
     marginTop: 8,
     color: '#102033',
     fontSize: 32,
     fontWeight: '900',
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
   },
   timeline: {
@@ -96,8 +103,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 14,
     paddingHorizontal: 16,
     backgroundColor: '#FFFFFF',
   },
@@ -119,13 +126,13 @@ const styles = StyleSheet.create({
   },
   name: {
     marginTop: 4,
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 12,
     fontWeight: '800',
   },
   empty: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: '#D8E9F5',
     paddingTop: 18,
   },
   emptyTitle: {
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },

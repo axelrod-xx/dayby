@@ -45,7 +45,7 @@ export default function PostSuccessScreen() {
 
       <View style={styles.panelSoft}>
         <Text style={styles.panelTitle}>Tomorrow</Text>
-        <Text style={styles.panelText}>Watch yesterday's reel, then vote for the moment worth keeping.</Text>
+        <Text style={styles.panelText}>Watch the group day. Save anything you want to find again.</Text>
       </View>
 
       <View style={styles.actions}>
@@ -86,9 +86,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   kicker: {
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
@@ -96,25 +97,25 @@ const styles = StyleSheet.create({
     color: '#102033',
     fontSize: 42,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -0.5,
     lineHeight: 47,
   },
   copy: {
     marginTop: 12,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 17,
     lineHeight: 25,
   },
   panel: {
     borderWidth: 1,
-    borderColor: '#D5E5F6',
-    borderRadius: 8,
+    borderColor: '#BAD4EC',
+    borderRadius: 16,
     padding: 16,
     backgroundColor: '#FFFFFF',
   },
   panelSoft: {
     borderTopWidth: 1,
-    borderTopColor: '#DCEAF8',
+    borderTopColor: '#D8E9F5',
     paddingTop: 18,
   },
   panelTitle: {
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   panelText: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },

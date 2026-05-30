@@ -46,16 +46,15 @@ export async function listWeeklyMoments(input: {
   const end = endDate.toISOString().slice(0, 10);
   const client = requireSupabase();
   const { data, error } = await client
-    .from('daily_winners')
+    .from('daily_posts')
     .select(
       `
       id,
+      user_id,
       date,
+      captured_at,
       users (
         display_name
-      ),
-      daily_posts (
-        captured_at
       ),
       video_assets (
         r2_key
@@ -65,6 +64,7 @@ export async function listWeeklyMoments(input: {
     .eq('group_id', input.groupId)
     .gte('date', start)
     .lt('date', end)
+    .is('deleted_at', null)
     .order('date', { ascending: true });
 
   if (error) {
@@ -73,9 +73,8 @@ export async function listWeeklyMoments(input: {
 
   return (data ?? []).map((row) => {
     const user = Array.isArray(row.users) ? row.users[0] : row.users;
-    const post = Array.isArray(row.daily_posts) ? row.daily_posts[0] : row.daily_posts;
     const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
-    const capturedAt = post?.captured_at ?? `${row.date}T00:00:00.000Z`;
+    const capturedAt = row.captured_at ?? `${row.date}T00:00:00.000Z`;
 
     return {
       id: row.id,

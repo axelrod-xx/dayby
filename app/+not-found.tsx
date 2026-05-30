@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
@@ -41,11 +42,12 @@ const styles = StyleSheet.create({
     color: '#102033',
     fontSize: 40,
     fontWeight: '900',
+    letterSpacing: -0.5,
     lineHeight: 44,
   },
   copy: {
     marginTop: 10,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 24,
   },

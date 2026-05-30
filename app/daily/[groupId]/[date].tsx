@@ -4,9 +4,10 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
+import { listMyBookmarkedPostIds, setPostBookmarked } from '@/src/features/bookmarks/bookmarkService';
 import { ExportActions } from '@/src/features/export/ExportActions';
 import { recordGroupActivity } from '@/src/features/groups/groupService';
-import { listDailyMoments, type DailyMoment } from '@/src/features/reels/reelService';
+import { listDailyMoments, removeDailyPost, type DailyMoment } from '@/src/features/reels/reelService';
 
 function ReelStage({
   activeIndex,
@@ -59,9 +60,13 @@ function ReelStage({
 export default function DailyReelScreen() {
   const { groupId, date } = useLocalSearchParams<{ groupId: string; date: string }>();
   const [moments, setMoments] = useState<DailyMoment[]>([]);
+  const [bookmarkedPostIds, setBookmarkedPostIds] = useState<Set<string>>(new Set());
   const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [bookmarkingPostId, setBookmarkingPostId] = useState<string | null>(null);
+  const [removingPostId, setRemovingPostId] = useState<string | null>(null);
   const activeMoment = moments[activeIndex] ?? null;
+  const activeBookmarked = activeMoment ? bookmarkedPostIds.has(activeMoment.post_id) : false;
   const totalDurationLabel = useMemo(() => `${moments.length * 2}s reel`, [moments.length]);
 
   useEffect(() => {
@@ -69,8 +74,11 @@ export default function DailyReelScreen() {
       return;
     }
 
-    listDailyMoments(groupId, date)
-      .then(setMoments)
+    Promise.all([listDailyMoments(groupId, date), listMyBookmarkedPostIds(groupId)])
+      .then(([nextMoments, nextBookmarks]) => {
+        setMoments(nextMoments);
+        setBookmarkedPostIds(nextBookmarks);
+      })
       .catch((error) => Alert.alert('Could not load daily reel', error.message))
       .finally(() => setLoading(false));
     recordGroupActivity(groupId, 'view').catch(() => undefined);
@@ -100,6 +108,69 @@ export default function DailyReelScreen() {
     setActiveIndex((current) => (current + 1) % moments.length);
   };
 
+  const toggleBookmark = async (moment: DailyMoment | null = activeMoment) => {
+    if (!moment || bookmarkingPostId) {
+      return;
+    }
+
+    const bookmarked = bookmarkedPostIds.has(moment.post_id);
+
+    try {
+      setBookmarkingPostId(moment.post_id);
+      await setPostBookmarked({
+        groupId: moment.group_id,
+        postId: moment.post_id,
+        bookmarked: !bookmarked,
+      });
+      setBookmarkedPostIds((current) => {
+        const next = new Set(current);
+
+        if (bookmarked) {
+          next.delete(moment.post_id);
+        } else {
+          next.add(moment.post_id);
+        }
+
+        return next;
+      });
+    } catch (error) {
+      Alert.alert('Could not save moment', error instanceof Error ? error.message : 'Please try again.');
+    } finally {
+      setBookmarkingPostId(null);
+    }
+  };
+
+  const removeActiveMoment = () => {
+    if (!activeMoment || removingPostId) {
+      return;
+    }
+
+    Alert.alert('Remove this moment?', 'It will disappear quietly from the archive and future monthly highlights.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            setRemovingPostId(activeMoment.post_id);
+            await removeDailyPost({ groupId: activeMoment.group_id, postId: activeMoment.post_id });
+            setMoments((current) => current.filter((moment) => moment.post_id !== activeMoment.post_id));
+            setBookmarkedPostIds((current) => {
+              const next = new Set(current);
+              next.delete(activeMoment.post_id);
+              return next;
+            });
+            setActiveIndex((current) => Math.max(0, Math.min(current, moments.length - 2)));
+          } catch (error) {
+            Alert.alert('Could not remove moment', error instanceof Error ? error.message : 'Please try again.');
+          } finally {
+            setRemovingPostId(null);
+          }
+        },
+      },
+    ]);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
@@ -120,6 +191,24 @@ export default function DailyReelScreen() {
       ) : activeMoment ? (
         <View style={styles.reel}>
           <ReelStage activeIndex={activeIndex} moment={activeMoment} total={moments.length} />
+          <View style={styles.momentActions}>
+            <PrimaryButton
+              disabled={Boolean(bookmarkingPostId)}
+              loading={bookmarkingPostId === activeMoment.post_id}
+              onPress={() => void toggleBookmark()}
+              variant={activeBookmarked ? 'light' : 'accent'}>
+              {activeBookmarked ? 'Saved for me' : 'Save for me'}
+            </PrimaryButton>
+            {activeMoment.is_mine ? (
+              <PrimaryButton
+                disabled={Boolean(removingPostId)}
+                loading={removingPostId === activeMoment.post_id}
+                onPress={removeActiveMoment}
+                variant="light">
+                Remove mine
+              </PrimaryButton>
+            ) : null}
+          </View>
           <View style={styles.reelControls}>
             <Pressable disabled={moments.length <= 1} onPress={goPrevious} style={styles.stepButton}>
               <Text style={styles.stepText}>Previous</Text>
@@ -132,13 +221,19 @@ export default function DailyReelScreen() {
             {moments.map((moment, index) => (
               <Pressable
                 key={moment.post_id}
+                onLongPress={() => void toggleBookmark(moment)}
                 onPress={() => setActiveIndex(index)}
-                style={[styles.timelineItem, index === activeIndex && styles.timelineItemActive]}>
+                style={[
+                  styles.timelineItem,
+                  index === activeIndex && styles.timelineItemActive,
+                  bookmarkedPostIds.has(moment.post_id) && styles.timelineItemSaved,
+                ]}>
                 <Text style={[styles.timelineTime, index === activeIndex && styles.timelineTextActive]}>
                   {moment.time_label}
                 </Text>
                 <Text style={[styles.timelineName, index === activeIndex && styles.timelineTextActive]}>
                   {moment.display_name.toUpperCase()}
+                  {bookmarkedPostIds.has(moment.post_id) ? ' / SAVED' : ''}
                 </Text>
               </Pressable>
             ))}
@@ -147,11 +242,6 @@ export default function DailyReelScreen() {
       ) : null}
 
       <View style={styles.actions}>
-        <Link href={{ pathname: '/vote/[groupId]/[date]', params: { groupId, date } }} asChild>
-          <PrimaryButton disabled={moments.length === 0} onPress={() => undefined} variant="accent">
-            Vote for yesterday
-          </PrimaryButton>
-        </Link>
         <Link href={{ pathname: '/groups/[groupId]', params: { groupId } } as unknown as Href} asChild>
           <PrimaryButton onPress={() => undefined} variant="light">
             Back to group
@@ -182,25 +272,29 @@ const styles = StyleSheet.create({
     color: '#B8C9DA',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   title: {
     color: '#FFFFFF',
     fontSize: 40,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 8,
-    color: '#BDB5AA',
+    color: '#9FB8CC',
     fontSize: 16,
   },
   reel: {
     gap: 14,
   },
+  momentActions: {
+    gap: 10,
+  },
   stage: {
     overflow: 'hidden',
-    borderRadius: 8,
+    borderRadius: 16,
     backgroundColor: '#0E0D0C',
   },
   stageVideo: {
@@ -262,7 +356,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255,254,251,0.22)',
-    borderRadius: 8,
+    borderRadius: 14,
     backgroundColor: 'rgba(255,254,251,0.08)',
   },
   stepText: {
@@ -278,13 +372,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255,254,251,0.14)',
-    borderRadius: 8,
+    borderRadius: 14,
     paddingHorizontal: 14,
     backgroundColor: 'rgba(255,254,251,0.06)',
   },
   timelineItemActive: {
     borderColor: '#FFFFFF',
     backgroundColor: 'rgba(255,254,251,0.14)',
+  },
+  timelineItemSaved: {
+    borderColor: '#7DB7FF',
   },
   timelineTime: {
     color: '#FFFFFF',
@@ -293,7 +390,7 @@ const styles = StyleSheet.create({
   },
   timelineName: {
     marginTop: 4,
-    color: '#BDB5AA',
+    color: '#9FB8CC',
     fontSize: 12,
     fontWeight: '800',
   },
@@ -315,7 +412,7 @@ const styles = StyleSheet.create({
   },
   emptyCopy: {
     marginTop: 8,
-    color: '#BDB5AA',
+    color: '#9FB8CC',
     fontSize: 15,
     lineHeight: 22,
   },

@@ -90,7 +90,7 @@ export default function TabOneScreen() {
         </View>
         <View>
           <Text style={styles.hero}>A month,{'\n'}made by friends.</Text>
-          <Text style={styles.copy}>Keep one tiny moment today. Vote tomorrow. Let the month become the memory.</Text>
+          <Text style={styles.copy}>Keep one tiny moment today. Watch the group day. Let the month arrive as one minute.</Text>
         </View>
       </View>
 
@@ -180,7 +180,7 @@ export default function TabOneScreen() {
         </View>
         <View style={styles.rhythmRow}>
           <Text style={styles.rhythmNumber}>02</Text>
-          <Text style={styles.rhythmText}>Vote for yesterday.</Text>
+          <Text style={styles.rhythmText}>Watch yesterday together.</Text>
         </View>
         <View style={styles.rhythmRow}>
           <Text style={styles.rhythmNumber}>03</Text>
@@ -341,9 +341,14 @@ const styles = StyleSheet.create({
   headerCard: {
     minHeight: 248,
     justifyContent: 'space-between',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#EAF4FF',
+    shadowColor: '#102033',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
   },
   topline: {
     flexDirection: 'row',
@@ -357,9 +362,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   date: {
-    color: '#5D7488',
+    color: '#4E6A80',
     fontSize: 13,
     fontWeight: '800',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   hero: {
@@ -367,11 +373,11 @@ const styles = StyleSheet.create({
     fontSize: 42,
     fontWeight: '800',
     lineHeight: 46,
-    letterSpacing: 0,
+    letterSpacing: -0.5,
   },
   copy: {
     marginTop: 12,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 17,
     lineHeight: 24,
   },
@@ -404,7 +410,7 @@ const styles = StyleSheet.create({
   demoFrame: {
     position: 'absolute',
     bottom: 0,
-    borderRadius: 8,
+    borderRadius: 16,
     backgroundColor: '#2C332D',
     opacity: 0.88,
   },
@@ -446,11 +452,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 54,
     fontWeight: '800',
-    letterSpacing: 0,
+    letterSpacing: -1,
   },
   signedOutCopy: {
     marginTop: 10,
-    color: '#F1ECE4',
+    color: '#E4F0FB',
     fontSize: 22,
     fontWeight: '900',
     lineHeight: 28,
@@ -466,14 +472,15 @@ const styles = StyleSheet.create({
     width: 300,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius: 20,
     backgroundColor: '#2F80ED',
   },
   signedOutCtaDisabled: {
     opacity: 0.5,
   },
   signedOutCtaPressed: {
-    opacity: 0.82,
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
   },
   signedOutCtaText: {
     color: '#FFFFFF',
@@ -482,21 +489,22 @@ const styles = StyleSheet.create({
   },
   focusPanel: {
     borderWidth: 1,
-    borderColor: '#102033',
-    borderRadius: 8,
+    borderColor: '#2F80ED',
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#FFFFFF',
   },
   rhythmPanel: {
     gap: 12,
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 18,
     backgroundColor: '#EAF4FF',
   },
   rhythmKicker: {
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   rhythmRow: {
@@ -519,10 +527,10 @@ const styles = StyleSheet.create({
   },
   notice: {
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 16,
-    backgroundColor: '#FBFAF7',
+    backgroundColor: '#F3F8FC',
   },
   noticeTitle: {
     color: '#102033',
@@ -539,11 +547,12 @@ const styles = StyleSheet.create({
     color: '#2F80ED',
     fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
   panelText: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 15,
     lineHeight: 22,
   },
@@ -555,12 +564,12 @@ const styles = StyleSheet.create({
   },
   accountPanel: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E1DA',
+    borderTopColor: '#D8E9F5',
     gap: 10,
     paddingTop: 18,
   },
   accountText: {
-    color: '#78716C',
+    color: '#617B8F',
     fontSize: 13,
     fontWeight: '700',
   },

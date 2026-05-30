@@ -43,7 +43,7 @@ const buttonStyles = StyleSheet.create({
     minHeight: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 18,
+    borderRadius: 20,
     paddingHorizontal: 20,
   },
   dark: {
@@ -54,7 +54,7 @@ const buttonStyles = StyleSheet.create({
   },
   light: {
     borderWidth: 1,
-    borderColor: '#D6E4F2',
+    borderColor: '#BAD4EC',
     backgroundColor: '#FFFFFF',
   },
   disabled: {
@@ -64,8 +64,8 @@ const buttonStyles = StyleSheet.create({
     opacity: 0.62,
   },
   pressed: {
-    opacity: 0.82,
-    transform: [{ scale: 0.99 }],
+    opacity: 0.84,
+    transform: [{ scale: 0.98 }],
   },
 });
 

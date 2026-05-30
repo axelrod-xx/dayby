@@ -88,14 +88,14 @@ export default function SignInScreen() {
                   inputMode="email"
                   onChangeText={setEmail}
                   placeholder="dev@dayby.app"
-                  placeholderTextColor="#A49B91"
+                  placeholderTextColor="#8FAFC2"
                   style={styles.input}
                   value={email}
                 />
                 <TextInput
                   onChangeText={setPassword}
                   placeholder="password"
-                  placeholderTextColor="#A49B91"
+                  placeholderTextColor="#8FAFC2"
                   secureTextEntry
                   style={styles.input}
                   value={password}
@@ -143,26 +143,32 @@ const styles = StyleSheet.create({
     color: '#102033',
     fontSize: 48,
     fontWeight: '900',
-    letterSpacing: 0,
+    letterSpacing: -1,
   },
   copy: {
     color: '#102033',
     fontSize: 24,
     fontWeight: '900',
+    letterSpacing: -0.3,
     lineHeight: 30,
   },
   subcopy: {
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 16,
     lineHeight: 23,
     maxWidth: 320,
   },
   notice: {
     borderWidth: 1,
-    borderColor: '#E5E1DA',
-    borderRadius: 8,
+    borderColor: '#D8E9F5',
+    borderRadius: 16,
     padding: 16,
     backgroundColor: 'rgba(255,253,248,0.92)',
+    shadowColor: '#102033',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 4,
   },
   noticeTitle: {
     color: '#102033',
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
   },
   noticeText: {
     marginTop: 8,
-    color: '#5D6974',
+    color: '#4E6A80',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -187,9 +193,10 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   devToggle: {
-    color: '#5D7488',
+    color: '#2F80ED',
     fontSize: 13,
     fontWeight: '800',
+    letterSpacing: 1,
     textAlign: 'center',
     textTransform: 'uppercase',
   },
@@ -201,14 +208,14 @@ const styles = StyleSheet.create({
     minHeight: 50,
     borderWidth: 1,
     borderColor: '#B8C9DA',
-    borderRadius: 8,
+    borderRadius: 14,
     paddingHorizontal: 14,
     color: '#102033',
     fontSize: 16,
     backgroundColor: '#FFFFFF',
   },
   devHint: {
-    color: '#5D7488',
+    color: '#4E6A80',
     fontSize: 12,
     textAlign: 'center',
   },

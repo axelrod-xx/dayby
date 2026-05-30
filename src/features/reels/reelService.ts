@@ -5,6 +5,7 @@ export type DailyMoment = {
   post_id: string;
   group_id: string;
   user_id: string;
+  is_mine: boolean;
   display_name: string;
   date: string;
   captured_at: string;
@@ -53,6 +54,9 @@ async function requestPlaybackUrl(r2Key: string): Promise<string | null> {
 
 export async function listDailyMoments(groupId: string, date: string): Promise<DailyMoment[]> {
   const client = requireSupabase();
+  const {
+    data: { user: currentUser },
+  } = await client.auth.getUser();
   const { data, error } = await client
     .from('daily_posts')
     .select(
@@ -90,6 +94,7 @@ export async function listDailyMoments(groupId: string, date: string): Promise<D
         post_id: row.id,
         group_id: row.group_id,
         user_id: row.user_id,
+        is_mine: row.user_id === currentUser?.id,
         display_name: user?.display_name ?? 'dayby friend',
         date: row.date,
         captured_at: row.captured_at,
@@ -102,6 +107,19 @@ export async function listDailyMoments(groupId: string, date: string): Promise<D
   );
 
   return moments;
+}
+
+export async function removeDailyPost(input: { groupId: string; postId: string }) {
+  const client = requireSupabase();
+  const { error } = await client
+    .from('daily_posts')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('group_id', input.groupId)
+    .eq('id', input.postId);
+
+  if (error) {
+    throw error;
+  }
 }
 
 export const previousDateString = () => {
