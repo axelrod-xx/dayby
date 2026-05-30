@@ -1,46 +1,40 @@
-# User Actions / あなたにお願いしたい作業
+# User Actions / あなたにお願いしたい確認
 
-このファイルは、アカウント所有者の操作や実機確認が必要なものだけをまとめます。
-コード側で進められる作業はCodex側で進めます。
+このファイルは、コードでは完了できない実機確認と外部アカウント設定だけをまとめます。
 
-## いま優先して確認したいこと
+## iOS実機テスト
 
-### iOS実機テスト
-
-最新のiOS development buildをiPhoneに入れて確認してください。
-確認用URLは `docs/PROGRESS.md` の最新行を参照してください。
+最新のiOS development buildをiPhoneに入れて確認してください。確認用URLは `docs/PROGRESS.md` と `docs/EXTERNAL_SERVICES.md` の最新行を見ます。
 
 確認してほしい流れ:
 
 1. 起動
-2. Dev login または Apple / Google login
+2. Dev login、またはApple / Google login
 3. Profile setup
 4. Group作成
 5. Invite作成と共有文面
-6. Cameraで10秒以内撮影
-7. Trimで2秒選択、選択部分がわかるか
+6. Cameraで10秒以内の撮影
+7. Trimで2秒選択
 8. Post to Groups
 9. Post Successから共有
 10. Daily Reel / Bookmark / Monthly Memory
-11. Notification permissionとPreview reminder
+11. Exportで端末に保存、または共有
 
 重点チェック:
 
 - 画面が暗すぎないか
 - 友達に見せても恥ずかしくないか
-- Trimの操作が震えないか
+- Trim操作が震えないか
 - 投稿後に迷わず戻れるか
-- 通知許可の出方が自然か
 - Share文面が自然か
+- 月間は「1分で届く」感覚になっているか
 
-### Android実機テスト
+## Android実機テスト
 
-Android端末でも同じ流れを確認してください。
-Androidは特に以下を見てください。
+Android端末でも同じ流れを確認してください。Androidでは特に以下を見ます。
 
 - Camera権限
 - Microphone権限
-- Notification権限
 - 10秒撮影
 - Native trim
 - Share sheet
@@ -49,30 +43,22 @@ Androidは特に以下を見てください。
 
 ## ログイン設定
 
-Apple / Googleログインは本番前に正式設定が必要です。
-開発中はDev loginを使えます。
+Apple / Googleログインは本番前に正式設定が必要です。開発中はDev loginを使えます。
 
 ```text
 Email: dev@dayby.app
 Password: dayby-dev-password
 ```
 
+## 通知
+
+通知はMVP実機レビューから外しています。Apple Push Notifications capabilityを有効化してiOS Ad Hoc profileを再生成した後に、静かなリマインダーとして戻します。
+
 ## R2 / Supabase
 
 - R2 bucketはprivateのまま維持してください。
-- R2 secretやSupabase service role keyはGitHubに入れません。
-- 本番前に、画面共有で一度見えたR2 keyはローテーションしてください。
-
-## 日本語・韓国語対応
-
-UIが固まったら開始します。
-順番:
-
-1. 文字列をコードから辞書へ切り出す
-2. Englishを基準言語にする
-3. Japaneseを追加
-4. Koreanを追加
-5. 実機で長い文言の折り返し確認
+- R2 secretやSupabase service role keyをGitHubに入れないでください。
+- 本番前に、セットアップ時に一度見えたR2 tokenをローテーションしてください。
 
 ## GitHubに絶対に上げないもの
 

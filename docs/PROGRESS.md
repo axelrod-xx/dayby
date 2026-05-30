@@ -192,7 +192,7 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - iOS device development build with friend-facing UI updates finished: `31eba391-50e5-479f-a154-b59dd4c9f010`.
 - iOS device install URL ready: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/31eba391-50e5-479f-a154-b59dd4c9f010`
 - Shifted the normal app UI away from dark cards toward a fresh, cool blue-first palette. Removed the strongest peach blocks from setup/safety/archive/post-success screens and modernized shared buttons.
-- Added Expo Notifications dependency and local reminder groundwork without enabling iOS remote push entitlements yet, to avoid unnecessary EAS build failures until Apple Push capability is configured.
+- Deferred Expo Notifications for the MVP device review. The native app does not request notification permission until Apple Push capability is configured and the iOS Ad Hoc profile is regenerated.
 - Restored `docs/USER_ACTIONS.md` in readable Japanese with iOS/Android real-device test focus points.
 - Replaced the default Expo tab bar with a custom floating pill navigation and a centered `Keep` action, then tuned button labels toward action/experience language.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`

@@ -8,7 +8,6 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { AuthProvider } from '@/src/features/auth/AuthProvider';
-import { configureNotificationChannels } from '@/src/features/notifications/notificationService';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -39,10 +38,6 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
-
-  useEffect(() => {
-    void configureNotificationChannels();
-  }, []);
 
   if (!loaded) {
     return null;

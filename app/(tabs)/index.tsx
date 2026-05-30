@@ -8,7 +8,6 @@ import { TodayOverview } from '@/src/features/home/TodayOverview';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
 import { listMyGroups } from '@/src/features/groups/groupService';
-import { NotificationCard } from '@/src/features/notifications/NotificationCard';
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 
 const homeDemoVideoUri = process.env.EXPO_PUBLIC_HOME_DEMO_VIDEO_URL ?? '';
@@ -95,8 +94,6 @@ export default function TabOneScreen() {
       </View>
 
       <TodayOverview />
-
-      {isSignedIn && isProfileComplete ? <NotificationCard /> : null}
 
       {!isSupabaseConfigured ? (
         <View style={styles.notice}>

@@ -26,7 +26,6 @@
     "expo-font": "~55.0.8",
     "expo-linking": "~55.0.15",
     "expo-media-library": "~55.0.17",
-    "expo-notifications": "~55.0.23",
     "expo-router": "~55.0.16",
     "expo-secure-store": "~55.0.14",
     "expo-sharing": "~55.0.20",
