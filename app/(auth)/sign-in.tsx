@@ -4,9 +4,13 @@ import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
+import { LanguageSwitcher } from '@/src/features/i18n/LanguageSwitcher';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function SignInScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const { isDevAuthEnabled, isSupabaseConfigured, signInWithApple, signInWithEmailForDev, signInWithGoogle } =
     useAuth();
   const [loadingProvider, setLoadingProvider] = useState<'apple' | 'google' | 'dev' | null>(null);
@@ -24,7 +28,7 @@ export default function SignInScreen() {
       }
       router.replace('/profile-setup');
     } catch (error) {
-      Alert.alert('Sign in failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('auth.alert.signInFailed'), resolveErrorMessage(error, t));
     } finally {
       setLoadingProvider(null);
     }
@@ -36,7 +40,7 @@ export default function SignInScreen() {
       await signInWithEmailForDev({ email, password });
       router.replace('/profile-setup');
     } catch (error) {
-      Alert.alert('Dev sign in failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('auth.alert.devSignInFailed'), resolveErrorMessage(error, t));
     } finally {
       setLoadingProvider(null);
     }
@@ -47,39 +51,40 @@ export default function SignInScreen() {
       <View style={styles.backdrop} />
       <View style={styles.header}>
         <Text style={styles.wordmark}>dayby</Text>
-        <Text style={styles.copy}>Two seconds a day.{'\n'}One minute a month.</Text>
-        <Text style={styles.subcopy}>Start with the people you actually want to remember this with.</Text>
+        <Text style={styles.copy}>{t('auth.copy')}</Text>
+        <Text style={styles.subcopy}>{t('auth.subcopy')}</Text>
       </View>
 
       {!isSupabaseConfigured ? (
         <View style={styles.notice}>
-          <Text style={styles.noticeTitle}>Supabase setup needed</Text>
+          <Text style={styles.noticeTitle}>{t('auth.supabaseNoticeTitle')}</Text>
           <Text style={styles.noticeText}>
-            Add your Supabase URL and publishable key to `.env.local` to enable sign in.
+            {t('auth.supabaseNoticeCopy')}
           </Text>
         </View>
       ) : null}
 
       <View style={styles.actions}>
+        <LanguageSwitcher />
         <PrimaryButton
           disabled={!isSupabaseConfigured}
           loading={loadingProvider === 'apple'}
           onPress={() => void run('apple')}
           variant="light">
-          Continue with Apple
+          {t('auth.continueApple')}
         </PrimaryButton>
         <PrimaryButton
           disabled={!isSupabaseConfigured}
           loading={loadingProvider === 'google'}
           onPress={() => void run('google')}
           variant="light">
-          Continue with Google
+          {t('auth.continueGoogle')}
         </PrimaryButton>
 
         {isDevAuthEnabled ? (
           <View style={styles.devPanel}>
             <Pressable onPress={() => setShowDevForm((current) => !current)}>
-              <Text style={styles.devToggle}>{showDevForm ? 'Hide dev login' : 'Use dev login'}</Text>
+              <Text style={styles.devToggle}>{showDevForm ? t('auth.hideDevLogin') : t('auth.useDevLogin')}</Text>
             </Pressable>
             {showDevForm ? (
               <View style={styles.devForm}>
@@ -94,7 +99,7 @@ export default function SignInScreen() {
                 />
                 <TextInput
                   onChangeText={setPassword}
-                  placeholder="password"
+                  placeholder={t('auth.passwordPlaceholder')}
                   placeholderTextColor="#8FAFC2"
                   secureTextEntry
                   style={styles.input}
@@ -105,9 +110,9 @@ export default function SignInScreen() {
                   loading={loadingProvider === 'dev'}
                   onPress={() => void runDev()}
                   variant="light">
-                  Continue for testing
+                  {t('auth.continueTesting')}
                 </PrimaryButton>
-                <Text style={styles.devHint}>Test account: dev@dayby.app</Text>
+                <Text style={styles.devHint}>{t('auth.testAccount')}</Text>
               </View>
             ) : null}
           </View>

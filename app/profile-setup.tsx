@@ -4,9 +4,12 @@ import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function ProfileSetupScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const { profile, status, upsertProfile } = useAuth();
   const [displayName, setDisplayName] = useState(profile?.display_name ?? '');
   const [saving, setSaving] = useState(false);
@@ -23,7 +26,7 @@ export default function ProfileSetupScreen() {
       await upsertProfile({ displayName });
       router.replace('/(tabs)');
     } catch (error) {
-      Alert.alert('Profile setup failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('profile.alert.setupFailed'), resolveErrorMessage(error, t));
     } finally {
       setSaving(false);
     }
@@ -34,13 +37,13 @@ export default function ProfileSetupScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Profile</Text>
-        <Text style={styles.title}>Set your name</Text>
-        <Text style={styles.copy}>This is how friends will see your 2-second moments.</Text>
+        <Text style={styles.kicker}>{t('profile.kicker')}</Text>
+        <Text style={styles.title}>{t('profile.title')}</Text>
+        <Text style={styles.copy}>{t('profile.copy')}</Text>
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.label}>Display name</Text>
+        <Text style={styles.label}>{t('profile.displayName')}</Text>
         <TextInput
           autoCapitalize="words"
           maxLength={40}
@@ -53,7 +56,7 @@ export default function ProfileSetupScreen() {
       </View>
 
       <PrimaryButton disabled={!canSave} loading={saving} onPress={() => void save()}>
-        Continue
+        {t('profile.continue')}
       </PrimaryButton>
     </View>
   );

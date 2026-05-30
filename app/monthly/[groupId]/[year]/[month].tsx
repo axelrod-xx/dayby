@@ -10,18 +10,21 @@ import {
   listMonthlyMoments,
   type MonthlyMoment,
 } from '@/src/features/monthly/monthlyService';
-
-const monthName = (year: number, month: number) =>
-  new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(new Date(year, month - 1, 1));
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function MonthlyMemoryScreen() {
   const params = useLocalSearchParams<{ groupId: string; year: string; month: string }>();
+  const { formatters, t } = useI18n();
   const year = Number(params.year);
   const month = Number(params.month);
   const [moments, setMoments] = useState<MonthlyMoment[]>([]);
   const [archiveMoments, setArchiveMoments] = useState<MonthlyMoment[]>([]);
   const [loading, setLoading] = useState(true);
   const highlight = useMemo(() => calculateMonthlyHighlight(moments), [moments]);
+  const durationLabel = highlight
+    ? formatDuration(highlight.durationSeconds, t)
+    : t('common.duration.secondsShort', { count: 0 });
 
   useEffect(() => {
     if (!params.groupId || !year || !month) {
@@ -36,36 +39,38 @@ export default function MonthlyMemoryScreen() {
         setMoments(nextMoments);
         setArchiveMoments(nextArchiveMoments);
       })
-      .catch((error) => Alert.alert('Could not load monthly memory', error.message))
+      .catch((error) => Alert.alert(t('monthly.alert.loadFailed'), resolveErrorMessage(error, t)))
       .finally(() => setLoading(false));
     recordGroupActivity(params.groupId, 'view').catch(() => undefined);
-  }, [month, params.groupId, year]);
+  }, [month, params.groupId, t, year]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>OUR {monthName(year, month).toUpperCase()}</Text>
-        <Text style={styles.title}>{highlight?.durationLabel ?? '0s'} ready</Text>
-        <Text style={styles.copy}>A one-minute sample of the month. The full archive stays with the group.</Text>
+        <Text style={styles.kicker}>
+          {t('monthly.kicker', { month: formatters.monthTitle(year, month).toUpperCase() })}
+        </Text>
+        <Text style={styles.title}>{t('monthly.readyTitle', { duration: durationLabel })}</Text>
+        <Text style={styles.copy}>{t('monthly.copy')}</Text>
       </View>
 
       {loading ? (
         <ActivityIndicator color="#102033" />
       ) : moments.length === 0 ? (
         <View style={styles.empty}>
-          <Text style={styles.emptyTitle}>No kept moments yet</Text>
-          <Text style={styles.emptyCopy}>When your group posts, this month starts taking shape.</Text>
+          <Text style={styles.emptyTitle}>{t('monthly.emptyTitle')}</Text>
+          <Text style={styles.emptyCopy}>{t('monthly.emptyCopy')}</Text>
         </View>
       ) : (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Highlight sample</Text>
-          <Text style={styles.sectionCopy}>Kept to one minute for sharing.</Text>
+          <Text style={styles.sectionTitle}>{t('monthly.highlightSample')}</Text>
+          <Text style={styles.sectionCopy}>{t('monthly.highlightCopy')}</Text>
           <View style={styles.timeline}>
             {moments.map((moment) => (
               <View key={moment.id} style={styles.row}>
-                <Text style={styles.date}>{moment.date.slice(5).replace('-', '.')}</Text>
+                <Text style={styles.date}>{formatters.monthDay(moment.date)}</Text>
                 <View style={styles.rowBody}>
-                  <Text style={styles.time}>{moment.time_label}</Text>
+                  <Text style={styles.time}>{formatters.time(moment.captured_at)}</Text>
                   <Text style={styles.name}>{moment.display_name.toUpperCase()}</Text>
                 </View>
               </View>
@@ -76,14 +81,14 @@ export default function MonthlyMemoryScreen() {
 
       {!loading && archiveMoments.length > 0 ? (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Full archive</Text>
-          <Text style={styles.sectionCopy}>Every non-deleted post from the month stays here for the group.</Text>
+          <Text style={styles.sectionTitle}>{t('monthly.fullArchive')}</Text>
+          <Text style={styles.sectionCopy}>{t('monthly.fullArchiveCopy')}</Text>
           <View style={styles.timeline}>
             {archiveMoments.map((moment) => (
               <View key={moment.id} style={styles.archiveRow}>
-                <Text style={styles.archiveDate}>{moment.date.slice(5).replace('-', '.')}</Text>
+                <Text style={styles.archiveDate}>{formatters.monthDay(moment.date)}</Text>
                 <Text numberOfLines={1} style={styles.archiveName}>
-                  {moment.time_label} / {moment.display_name.toUpperCase()}
+                  {formatters.time(moment.captured_at)} / {moment.display_name.toUpperCase()}
                 </Text>
               </View>
             ))}
@@ -93,22 +98,22 @@ export default function MonthlyMemoryScreen() {
 
       {highlight ? (
         <View style={styles.endCard}>
-          <Text style={styles.endKicker}>THIS MONTH'S SAMPLE</Text>
+          <Text style={styles.endKicker}>{t('monthly.endKicker')}</Text>
           <Text style={styles.endName}>{highlight.names.slice(0, 4).join(' / ').toUpperCase()}</Text>
           <Text style={styles.endCopy}>
-            {highlight.count} {highlight.count === 1 ? 'MOMENT' : 'MOMENTS'} / {highlight.dayCount}{' '}
-            {highlight.dayCount === 1 ? 'DAY' : 'DAYS'}
+            {t('monthly.endCopy', {
+              days: t('common.count.days', { count: highlight.dayCount }),
+              moments: t('common.count.moments', { count: highlight.count }),
+            })}
           </Text>
-          <Text style={styles.made}>made with dayby</Text>
+          <Text style={styles.made}>{t('monthly.made')}</Text>
         </View>
       ) : null}
 
       <View style={styles.shareCue}>
-        <Text style={styles.shareKicker}>Made to leave the app</Text>
-        <Text style={styles.shareTitle}>One minute to share.</Text>
-        <Text style={styles.shareCopy}>
-          dayby keeps the archive quiet here, then your group can bring the highlight to Reels, TikTok, Stories, or LINE.
-        </Text>
+        <Text style={styles.shareKicker}>{t('monthly.shareKicker')}</Text>
+        <Text style={styles.shareTitle}>{t('monthly.shareTitle')}</Text>
+        <Text style={styles.shareCopy}>{t('monthly.shareCopy')}</Text>
       </View>
 
       {params.groupId ? (
@@ -120,6 +125,14 @@ export default function MonthlyMemoryScreen() {
       ) : null}
     </ScrollView>
   );
+}
+
+function formatDuration(seconds: number, t: ReturnType<typeof useI18n>['t']) {
+  if (seconds < 60) {
+    return t('common.duration.secondsShort', { count: seconds });
+  }
+
+  return t('common.duration.minutes', { count: Math.round(seconds / 60) });
 }
 
 const styles = StyleSheet.create({

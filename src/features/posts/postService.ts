@@ -5,6 +5,7 @@ import {
 } from '@/src/features/video/uploadService';
 import { env } from '@/src/lib/env';
 import { dateStringInTimeZone } from '@/src/lib/groupTime';
+import { I18nError } from '@/src/lib/i18n/errors';
 import { requireSupabase } from '@/src/lib/supabase';
 
 import { recordGroupActivity } from '../groups/groupService';
@@ -86,7 +87,7 @@ async function createUploadKey(input: {
       return `local-dev/${uuid()}.mp4`;
     }
 
-    throw new Error('R2 uploads are disabled until native 2-second trimming is enabled.');
+    throw new I18nError('post.error.r2Disabled');
   }
 
   const signed = await requestSignedVideoUpload({
@@ -108,11 +109,11 @@ export async function createDailyPosts(input: CreatePostsInput) {
   } = await client.auth.getUser();
 
   if (!user) {
-    throw new Error('You need to sign in before posting.');
+    throw new I18nError('post.error.signInRequired');
   }
 
   if (input.groupIds.length === 0) {
-    throw new Error('Choose at least one group.');
+    throw new I18nError('post.error.chooseGroup');
   }
 
   const { data: selectedGroups, error: selectedGroupsError } = await client
@@ -126,7 +127,7 @@ export async function createDailyPosts(input: CreatePostsInput) {
 
   const timezoneByGroup = new Map((selectedGroups ?? []).map((group) => [group.id as string, group.timezone as string]));
   if (timezoneByGroup.size !== input.groupIds.length) {
-    throw new Error('Could not confirm every group timezone before posting.');
+    throw new I18nError('post.error.timezoneMissing');
   }
 
   assertTwoSecondUploadReady({
@@ -137,11 +138,11 @@ export async function createDailyPosts(input: CreatePostsInput) {
   const sizeBytes = input.sizeBytes ?? (await getLocalVideoFileSize(input.uri));
 
   if (typeof sizeBytes !== 'number' || !Number.isFinite(sizeBytes)) {
-    throw new Error('Could not confirm the processed video size. Try recording again.');
+    throw new I18nError('post.error.sizeUnknown');
   }
 
   if (sizeBytes > 3_000_000) {
-    throw new Error('This 2-second video is too large. Try recording again with less motion or better lighting.');
+    throw new I18nError('post.error.tooLarge');
   }
 
   const r2Key = await createUploadKey({

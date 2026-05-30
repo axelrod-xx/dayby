@@ -1,4 +1,5 @@
 import { requireSupabase } from '@/src/lib/supabase';
+import { I18nError } from '@/src/lib/i18n/errors';
 
 import { recordGroupActivity } from '../groups/groupService';
 
@@ -36,7 +37,7 @@ export async function setPostBookmarked(input: {
   } = await client.auth.getUser();
 
   if (!user) {
-    throw new Error('You need to sign in before saving a moment.');
+    throw new I18nError('bookmark.error.signInRequired');
   }
 
   if (input.bookmarked) {

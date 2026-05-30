@@ -3,9 +3,11 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
-import { createContext, type PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, type PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 
+import { I18nError, resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 import { env, envStatus } from '@/src/lib/env';
 import { requireSupabase, supabase } from '@/src/lib/supabase';
 
@@ -58,7 +60,7 @@ async function completeOAuth(url: string) {
   const code = typeof parsed.queryParams?.code === 'string' ? parsed.queryParams.code : null;
 
   if (!code) {
-    throw new Error('OAuth completed without a session code.');
+    throw new I18nError('auth.error.oauthNoCode');
   }
 
   const { error } = await client.auth.exchangeCodeForSession(code);
@@ -68,11 +70,12 @@ async function completeOAuth(url: string) {
 }
 
 export function AuthProvider({ children }: PropsWithChildren) {
+  const { t } = useI18n();
   const [status, setStatus] = useState<AuthStatus>(envStatus.hasSupabase ? 'checking' : 'missing-config');
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
 
-  const refreshProfile = async () => {
+  const refreshProfile = useCallback(async () => {
     if (!supabase) {
       setProfile(null);
       return;
@@ -94,7 +97,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
 
     setProfile(data as Profile | null);
-  };
+  }, []);
 
   useEffect(() => {
     if (!supabase) {
@@ -111,7 +114,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setSession(data.session);
       setStatus(data.session ? 'signed-in' : 'signed-out');
       if (data.session) {
-        void refreshProfile().catch((error) => Alert.alert('Profile error', error.message));
+        void refreshProfile().catch((error) =>
+          Alert.alert(t('auth.alert.profileError'), resolveErrorMessage(error, t)),
+        );
       }
     });
 
@@ -119,7 +124,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setSession(nextSession);
       setStatus(nextSession ? 'signed-in' : 'signed-out');
       if (nextSession) {
-        void refreshProfile().catch((error) => Alert.alert('Profile error', error.message));
+        void refreshProfile().catch((error) =>
+          Alert.alert(t('auth.alert.profileError'), resolveErrorMessage(error, t)),
+        );
       } else {
         setProfile(null);
       }
@@ -129,7 +136,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       mounted = false;
       data.subscription.unsubscribe();
     };
-  }, []);
+  }, [refreshProfile, t]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
@@ -143,7 +150,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       refreshProfile,
       signInWithEmailForDev: async ({ email, password }) => {
         if (!env.enableDevAuth) {
-          throw new Error('Development email sign-in is disabled.');
+          throw new I18nError('auth.error.devDisabled');
         }
 
         const client = requireSupabase();
@@ -176,7 +183,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
           });
 
           if (!credential.identityToken) {
-            throw new Error('Apple did not return an identity token.');
+            throw new I18nError('auth.error.appleNoToken');
           }
 
           const { error } = await requireSupabase().auth.signInWithIdToken({
@@ -237,7 +244,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         } = await client.auth.getUser();
 
         if (!user) {
-          throw new Error('You need to sign in before setting up a profile.');
+          throw new I18nError('auth.error.profileSignInRequired');
         }
 
         const { error } = await client.from('users').upsert({
@@ -254,7 +261,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         await refreshProfile();
       },
     }),
-    [profile, session, status],
+    [profile, refreshProfile, session, status, t],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { AuthProvider } from '@/src/features/auth/AuthProvider';
+import { I18nProvider, useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -33,13 +34,31 @@ export default function RootLayout() {
     if (error) throw error;
   }, [error]);
 
+  if (!loaded) {
+    return (
+      <I18nProvider>
+        <RootLayoutGate fontsLoaded={false} />
+      </I18nProvider>
+    );
+  }
+
+  return (
+    <I18nProvider>
+      <RootLayoutGate fontsLoaded={loaded} />
+    </I18nProvider>
+  );
+}
+
+function RootLayoutGate({ fontsLoaded }: { fontsLoaded: boolean }) {
+  const { isReady } = useI18n();
+
   useEffect(() => {
-    if (loaded) {
+    if (fontsLoaded && isReady) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [fontsLoaded, isReady]);
 
-  if (!loaded) {
+  if (!fontsLoaded || !isReady) {
     return null;
   }
 

@@ -4,9 +4,12 @@ import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { joinGroupWithCode } from '@/src/features/groups/groupService';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function JoinGroupScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const [code, setCode] = useState('');
   const [joining, setJoining] = useState(false);
 
@@ -16,7 +19,7 @@ export default function JoinGroupScreen() {
       const groupId = await joinGroupWithCode(code);
       router.replace({ pathname: '/groups/[groupId]', params: { groupId } } as unknown as Href);
     } catch (error) {
-      Alert.alert('Could not join group', error instanceof Error ? error.message : 'Please check the code.');
+      Alert.alert(t('groupJoin.alert.failed'), resolveErrorMessage(error, t, 'groupJoin.error.checkCode'));
     } finally {
       setJoining(false);
     }
@@ -25,18 +28,18 @@ export default function JoinGroupScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Invite</Text>
-        <Text style={styles.title}>Join group</Text>
-        <Text style={styles.copy}>Enter the invite code from a friend.</Text>
+        <Text style={styles.kicker}>{t('groupJoin.kicker')}</Text>
+        <Text style={styles.title}>{t('groupJoin.title')}</Text>
+        <Text style={styles.copy}>{t('groupJoin.copy')}</Text>
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.label}>Invite code</Text>
+        <Text style={styles.label}>{t('groupJoin.codeLabel')}</Text>
         <TextInput
           autoCapitalize="characters"
           maxLength={12}
           onChangeText={(value) => setCode(value.toUpperCase())}
-          placeholder="DAYBY1"
+          placeholder={t('groupJoin.codePlaceholder')}
           placeholderTextColor="#8FAFC2"
           style={styles.input}
           value={code}
@@ -44,7 +47,7 @@ export default function JoinGroupScreen() {
       </View>
 
       <PrimaryButton disabled={code.trim().length < 4} loading={joining} onPress={() => void join()}>
-        Join friends
+        {t('groupJoin.joinFriends')}
       </PrimaryButton>
     </View>
   );

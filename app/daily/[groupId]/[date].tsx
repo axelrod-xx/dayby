@@ -8,14 +8,20 @@ import { listMyBookmarkedPostIds, setPostBookmarked } from '@/src/features/bookm
 import { ExportActions } from '@/src/features/export/ExportActions';
 import { recordGroupActivity } from '@/src/features/groups/groupService';
 import { listDailyMoments, removeDailyPost, type DailyMoment } from '@/src/features/reels/reelService';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 function ReelStage({
   activeIndex,
+  countLabel,
   moment,
+  timeLabel,
   total,
 }: {
   activeIndex: number;
+  countLabel: string;
   moment: DailyMoment;
+  timeLabel: string;
   total: number;
 }) {
   const player = useVideoPlayer(moment.playback_url ?? '', (instance) => {
@@ -47,11 +53,9 @@ function ReelStage({
       )}
       <View style={styles.stageOverlay}>
         <Text numberOfLines={1} style={styles.stageMeta}>
-          {moment.time_label} / {moment.display_name.toUpperCase()}
+          {timeLabel} / {moment.display_name.toUpperCase()}
         </Text>
-        <Text style={styles.stageCount}>
-          {activeIndex + 1} of {total}
-        </Text>
+        <Text style={styles.stageCount}>{countLabel}</Text>
       </View>
     </View>
   );
@@ -59,6 +63,7 @@ function ReelStage({
 
 export default function DailyReelScreen() {
   const { groupId, date } = useLocalSearchParams<{ groupId: string; date: string }>();
+  const { formatters, t } = useI18n();
   const [moments, setMoments] = useState<DailyMoment[]>([]);
   const [bookmarkedPostIds, setBookmarkedPostIds] = useState<Set<string>>(new Set());
   const [activeIndex, setActiveIndex] = useState(0);
@@ -67,7 +72,10 @@ export default function DailyReelScreen() {
   const [removingPostId, setRemovingPostId] = useState<string | null>(null);
   const activeMoment = moments[activeIndex] ?? null;
   const activeBookmarked = activeMoment ? bookmarkedPostIds.has(activeMoment.post_id) : false;
-  const totalDurationLabel = useMemo(() => `${moments.length * 2}s reel`, [moments.length]);
+  const totalDurationLabel = useMemo(
+    () => t('daily.reelDuration', { duration: t('common.duration.secondsShort', { count: moments.length * 2 }) }),
+    [moments.length, t],
+  );
 
   useEffect(() => {
     if (!groupId || !date) {
@@ -79,10 +87,10 @@ export default function DailyReelScreen() {
         setMoments(nextMoments);
         setBookmarkedPostIds(nextBookmarks);
       })
-      .catch((error) => Alert.alert('Could not load daily reel', error.message))
+      .catch((error) => Alert.alert(t('daily.alert.loadFailed'), resolveErrorMessage(error, t)))
       .finally(() => setLoading(false));
     recordGroupActivity(groupId, 'view').catch(() => undefined);
-  }, [date, groupId]);
+  }, [date, groupId, t]);
 
   useEffect(() => {
     setActiveIndex(0);
@@ -134,7 +142,7 @@ export default function DailyReelScreen() {
         return next;
       });
     } catch (error) {
-      Alert.alert('Could not save moment', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('daily.alert.saveFailed'), resolveErrorMessage(error, t));
     } finally {
       setBookmarkingPostId(null);
     }
@@ -145,10 +153,10 @@ export default function DailyReelScreen() {
       return;
     }
 
-    Alert.alert('Remove this moment?', 'It will disappear quietly from the archive and future monthly highlights.', [
-      { text: 'Cancel', style: 'cancel' },
+    Alert.alert(t('daily.alert.removeTitle'), t('daily.alert.removeBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Remove',
+        text: t('common.remove'),
         style: 'destructive',
         onPress: async () => {
           try {
@@ -162,7 +170,7 @@ export default function DailyReelScreen() {
             });
             setActiveIndex((current) => Math.max(0, Math.min(current, moments.length - 2)));
           } catch (error) {
-            Alert.alert('Could not remove moment', error instanceof Error ? error.message : 'Please try again.');
+            Alert.alert(t('daily.alert.removeFailed'), resolveErrorMessage(error, t));
           } finally {
             setRemovingPostId(null);
           }
@@ -174,10 +182,11 @@ export default function DailyReelScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View>
-        <Text style={styles.kicker}>Yesterday</Text>
-        <Text style={styles.title}>Daily Reel</Text>
+        <Text style={styles.kicker}>{t('daily.kicker')}</Text>
+        <Text style={styles.title}>{t('daily.title')}</Text>
         <Text style={styles.copy}>
-          {date} / {moments.length > 0 ? totalDurationLabel : 'waiting for moments'}
+          {date ? formatters.date(`${date}T00:00:00.000Z`) : ''} /{' '}
+          {moments.length > 0 ? totalDurationLabel : t('daily.waiting')}
         </Text>
       </View>
 
@@ -185,19 +194,25 @@ export default function DailyReelScreen() {
         <ActivityIndicator color="#102033" />
       ) : moments.length === 0 ? (
         <View style={styles.empty}>
-          <Text style={styles.emptyTitle}>No moments yet</Text>
-          <Text style={styles.emptyCopy}>When your group posts, yesterday's air will show up here.</Text>
+          <Text style={styles.emptyTitle}>{t('daily.emptyTitle')}</Text>
+          <Text style={styles.emptyCopy}>{t('daily.emptyCopy')}</Text>
         </View>
       ) : activeMoment ? (
         <View style={styles.reel}>
-          <ReelStage activeIndex={activeIndex} moment={activeMoment} total={moments.length} />
+          <ReelStage
+            activeIndex={activeIndex}
+            countLabel={t('daily.stageCount', { current: activeIndex + 1, total: moments.length })}
+            moment={activeMoment}
+            timeLabel={formatters.time(activeMoment.captured_at)}
+            total={moments.length}
+          />
           <View style={styles.momentActions}>
             <PrimaryButton
               disabled={Boolean(bookmarkingPostId)}
               loading={bookmarkingPostId === activeMoment.post_id}
               onPress={() => void toggleBookmark()}
               variant={activeBookmarked ? 'light' : 'accent'}>
-              {activeBookmarked ? 'Saved for me' : 'Save for me'}
+              {activeBookmarked ? t('daily.savedForMe') : t('daily.saveForMe')}
             </PrimaryButton>
             {activeMoment.is_mine ? (
               <PrimaryButton
@@ -205,16 +220,16 @@ export default function DailyReelScreen() {
                 loading={removingPostId === activeMoment.post_id}
                 onPress={removeActiveMoment}
                 variant="light">
-                Remove mine
+                {t('daily.removeMine')}
               </PrimaryButton>
             ) : null}
           </View>
           <View style={styles.reelControls}>
             <Pressable disabled={moments.length <= 1} onPress={goPrevious} style={styles.stepButton}>
-              <Text style={styles.stepText}>Previous</Text>
+              <Text style={styles.stepText}>{t('daily.previous')}</Text>
             </Pressable>
             <Pressable disabled={moments.length <= 1} onPress={goNext} style={styles.stepButton}>
-              <Text style={styles.stepText}>Next</Text>
+              <Text style={styles.stepText}>{t('daily.next')}</Text>
             </Pressable>
           </View>
           <View style={styles.timeline}>
@@ -229,11 +244,11 @@ export default function DailyReelScreen() {
                   bookmarkedPostIds.has(moment.post_id) && styles.timelineItemSaved,
                 ]}>
                 <Text style={[styles.timelineTime, index === activeIndex && styles.timelineTextActive]}>
-                  {moment.time_label}
+                  {formatters.time(moment.captured_at)}
                 </Text>
                 <Text style={[styles.timelineName, index === activeIndex && styles.timelineTextActive]}>
                   {moment.display_name.toUpperCase()}
-                  {bookmarkedPostIds.has(moment.post_id) ? ' / SAVED' : ''}
+                  {bookmarkedPostIds.has(moment.post_id) ? ` / ${t('daily.savedSuffix')}` : ''}
                 </Text>
               </Pressable>
             ))}
@@ -244,12 +259,12 @@ export default function DailyReelScreen() {
       <View style={styles.actions}>
         <Link href={{ pathname: '/groups/[groupId]', params: { groupId } } as unknown as Href} asChild>
           <PrimaryButton onPress={() => undefined} variant="light">
-            Back to group
+            {t('daily.backToGroup')}
           </PrimaryButton>
         </Link>
         <Link href={'/(tabs)' as Href} asChild>
           <PrimaryButton onPress={() => undefined} variant="light">
-            Back home
+            {t('daily.backHome')}
           </PrimaryButton>
         </Link>
       </View>

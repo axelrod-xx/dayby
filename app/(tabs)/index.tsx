@@ -5,60 +5,59 @@ import { StatusBar } from 'expo-status-bar';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { TodayOverview } from '@/src/features/home/TodayOverview';
+import { LanguageSwitcher } from '@/src/features/i18n/LanguageSwitcher';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
 import { listMyGroups } from '@/src/features/groups/groupService';
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
+import { useI18n, type TranslateFn } from '@/src/lib/i18n/I18nProvider';
 
 const homeDemoVideoUri = process.env.EXPO_PUBLIC_HOME_DEMO_VIDEO_URL ?? '';
 
 const demoMoments = [
-  { date: '05.01 FRI', name: 'RYO', time: '18:42' },
-  { date: '05.02 SAT', name: 'MIKA', time: '21:08' },
-  { date: '05.03 SUN', name: 'YUN', time: '07:31' },
-  { date: '05.04 MON', name: 'SORA', time: '22:14' },
-  { date: '05.05 TUE', name: 'NANA', time: '17:56' },
-  { date: '05.06 WED', name: 'JIN', time: '20:11' },
-  { date: '05.07 THU', name: 'AOI', time: '16:33' },
-  { date: '05.08 FRI', name: 'REN', time: '23:02' },
-  { date: '05.09 SAT', name: 'MIO', time: '19:27' },
-  { date: '05.10 SUN', name: 'KAI', time: '12:44' },
-  { date: '05.11 MON', name: 'RYO', time: '21:15' },
-  { date: '05.12 TUE', name: 'MIKA', time: '18:03' },
-  { date: '05.13 WED', name: 'YUN', time: '07:54' },
-  { date: '05.14 THU', name: 'SORA', time: '22:30' },
-  { date: '05.15 FRI', name: 'NANA', time: '17:19' },
-  { date: '05.16 SAT', name: 'JIN', time: '20:48' },
-  { date: '05.17 SUN', name: 'AOI', time: '15:06' },
-  { date: '05.18 MON', name: 'REN', time: '23:11' },
-  { date: '05.19 TUE', name: 'MIO', time: '19:52' },
-  { date: '05.20 WED', name: 'KAI', time: '12:09' },
-  { date: '05.21 THU', name: 'RYO', time: '18:37' },
-  { date: '05.22 FRI', name: 'MIKA', time: '21:40' },
-  { date: '05.23 SAT', name: 'YUN', time: '08:20' },
-  { date: '05.24 SUN', name: 'SORA', time: '22:05' },
-  { date: '05.25 MON', name: 'NANA', time: '17:45' },
-  { date: '05.26 TUE', name: 'JIN', time: '20:14' },
-  { date: '05.27 WED', name: 'AOI', time: '16:58' },
-  { date: '05.28 THU', name: 'REN', time: '23:33' },
-  { date: '05.29 FRI', name: 'MIO', time: '19:01' },
-  { date: '05.30 SAT', name: 'KAI', time: '12:26' },
-  { date: '05.31 SUN', name: 'ALL', time: '21:59' },
+  { date: '2026-05-01', name: 'RYO', time: '18:42' },
+  { date: '2026-05-02', name: 'MIKA', time: '21:08' },
+  { date: '2026-05-03', name: 'YUN', time: '07:31' },
+  { date: '2026-05-04', name: 'SORA', time: '22:14' },
+  { date: '2026-05-05', name: 'NANA', time: '17:56' },
+  { date: '2026-05-06', name: 'JIN', time: '20:11' },
+  { date: '2026-05-07', name: 'AOI', time: '16:33' },
+  { date: '2026-05-08', name: 'REN', time: '23:02' },
+  { date: '2026-05-09', name: 'MIO', time: '19:27' },
+  { date: '2026-05-10', name: 'KAI', time: '12:44' },
+  { date: '2026-05-11', name: 'RYO', time: '21:15' },
+  { date: '2026-05-12', name: 'MIKA', time: '18:03' },
+  { date: '2026-05-13', name: 'YUN', time: '07:54' },
+  { date: '2026-05-14', name: 'SORA', time: '22:30' },
+  { date: '2026-05-15', name: 'NANA', time: '17:19' },
+  { date: '2026-05-16', name: 'JIN', time: '20:48' },
+  { date: '2026-05-17', name: 'AOI', time: '15:06' },
+  { date: '2026-05-18', name: 'REN', time: '23:11' },
+  { date: '2026-05-19', name: 'MIO', time: '19:52' },
+  { date: '2026-05-20', name: 'KAI', time: '12:09' },
+  { date: '2026-05-21', name: 'RYO', time: '18:37' },
+  { date: '2026-05-22', name: 'MIKA', time: '21:40' },
+  { date: '2026-05-23', name: 'YUN', time: '08:20' },
+  { date: '2026-05-24', name: 'SORA', time: '22:05' },
+  { date: '2026-05-25', name: 'NANA', time: '17:45' },
+  { date: '2026-05-26', name: 'JIN', time: '20:14' },
+  { date: '2026-05-27', name: 'AOI', time: '16:58' },
+  { date: '2026-05-28', name: 'REN', time: '23:33' },
+  { date: '2026-05-29', name: 'MIO', time: '19:01' },
+  { date: '2026-05-30', name: 'KAI', time: '12:26' },
+  { date: '2026-05-31', name: 'ALL', time: '21:59' },
 ];
 
 export default function TabOneScreen() {
   const { isProfileComplete, isSupabaseConfigured, profile, signOut, status } = useAuth();
+  const { formatters, t } = useI18n();
   const [groups, setGroups] = useState<PostableGroup[]>([]);
   const [loadingGroups, setLoadingGroups] = useState(false);
   const isSignedIn = status === 'signed-in';
   const canLoadGroups = isSignedIn && isProfileComplete;
   const availableGroups = groups.filter((group) => !group.posted_today);
   const postedGroups = groups.filter((group) => group.posted_today);
-  const todayLabel = new Intl.DateTimeFormat('en', {
-    day: '2-digit',
-    month: 'short',
-    weekday: 'short',
-  }).format(new Date());
+  const todayLabel = formatters.todayLabel();
 
   useFocusEffect(
     useCallback(() => {
@@ -88,8 +87,8 @@ export default function TabOneScreen() {
           <Text style={styles.date}>{todayLabel}</Text>
         </View>
         <View>
-          <Text style={styles.hero}>A month,{'\n'}made by friends.</Text>
-          <Text style={styles.copy}>Keep one tiny moment today. Watch the group day. Let the month arrive as one minute.</Text>
+          <Text style={styles.hero}>{t('home.heroTitle')}</Text>
+          <Text style={styles.copy}>{t('home.heroCopy')}</Text>
         </View>
       </View>
 
@@ -97,17 +96,21 @@ export default function TabOneScreen() {
 
       {!isSupabaseConfigured ? (
         <View style={styles.notice}>
-          <Text style={styles.noticeTitle}>Setup needed</Text>
+          <Text style={styles.noticeTitle}>{t('home.setupNeededTitle')}</Text>
           <Text style={styles.panelText}>
-            Add Supabase values to `.env.local` when your project is ready. The app can keep moving locally meanwhile.
+            {t('home.setupNeededCopy')}
           </Text>
         </View>
       ) : null}
 
       <View style={styles.focusPanel}>
-        <Text style={styles.kicker}>Today</Text>
+        <Text style={styles.kicker}>{t('home.todayKicker')}</Text>
         <Text style={styles.panelTitle}>
-          {isSignedIn ? `Hi${profile?.display_name ? `, ${profile.display_name}` : ''}` : 'Start'}
+          {isSignedIn
+            ? profile?.display_name
+              ? t('home.greetingWithName', { name: profile.display_name })
+              : t('home.greeting')
+            : t('home.startTitle')}
         </Text>
         <Text style={styles.panelText}>
           {getNextAction({
@@ -116,18 +119,19 @@ export default function TabOneScreen() {
             isProfileComplete,
             postedCount: postedGroups.length,
             status,
+            t,
           })}
         </Text>
         <View style={styles.actionRow}>
           {!isSignedIn ? (
             <Link href="/(auth)/sign-in" asChild>
               <PrimaryButton disabled={!isSupabaseConfigured} onPress={() => undefined} variant="accent">
-                Start with friends
+                {t('home.startWithFriends')}
               </PrimaryButton>
             </Link>
           ) : !isProfileComplete ? (
             <Link href="/profile-setup" asChild>
-              <PrimaryButton onPress={() => undefined}>Set profile</PrimaryButton>
+              <PrimaryButton onPress={() => undefined}>{t('home.setProfile')}</PrimaryButton>
             </Link>
           ) : loadingGroups ? (
             <ActivityIndicator color="#102033" />
@@ -135,12 +139,12 @@ export default function TabOneScreen() {
             <View style={styles.signedInActions}>
               <Link href="/groups/create" asChild>
                 <PrimaryButton onPress={() => undefined} variant="accent">
-                  Start a group
+                  {t('home.startGroup')}
                 </PrimaryButton>
               </Link>
               <Link href="/groups/join" asChild>
                 <PrimaryButton onPress={() => undefined} variant="light">
-                  Join friends
+                  {t('home.joinFriends')}
                 </PrimaryButton>
               </Link>
             </View>
@@ -148,12 +152,12 @@ export default function TabOneScreen() {
             <View style={styles.signedInActions}>
               <Link href={'/camera' as Href} asChild>
                 <PrimaryButton onPress={() => undefined} variant="accent">
-                  Keep today
+                  {t('home.keepToday')}
                 </PrimaryButton>
               </Link>
               <Link href={'/(tabs)/groups' as Href} asChild>
                 <PrimaryButton onPress={() => undefined} variant="light">
-                  {availableGroups.length} group{availableGroups.length > 1 ? 's' : ''} open today
+                  {t('home.groupOpenToday', { count: availableGroups.length })}
                 </PrimaryButton>
               </Link>
             </View>
@@ -161,7 +165,7 @@ export default function TabOneScreen() {
             <View style={styles.signedInActions}>
               <Link href={'/(tabs)/groups' as Href} asChild>
                 <PrimaryButton onPress={() => undefined} variant="accent">
-                  Open groups
+                  {t('home.openGroups')}
                 </PrimaryButton>
               </Link>
             </View>
@@ -170,28 +174,29 @@ export default function TabOneScreen() {
       </View>
 
       <View style={styles.rhythmPanel}>
-        <Text style={styles.rhythmKicker}>How it flows</Text>
+        <Text style={styles.rhythmKicker}>{t('home.flowTitle')}</Text>
         <View style={styles.rhythmRow}>
           <Text style={styles.rhythmNumber}>01</Text>
-          <Text style={styles.rhythmText}>Keep 2 seconds today.</Text>
+          <Text style={styles.rhythmText}>{t('home.flowStep1')}</Text>
         </View>
         <View style={styles.rhythmRow}>
           <Text style={styles.rhythmNumber}>02</Text>
-          <Text style={styles.rhythmText}>Watch yesterday together.</Text>
+          <Text style={styles.rhythmText}>{t('home.flowStep2')}</Text>
         </View>
         <View style={styles.rhythmRow}>
           <Text style={styles.rhythmNumber}>03</Text>
-          <Text style={styles.rhythmText}>Watch the month come together.</Text>
+          <Text style={styles.rhythmText}>{t('home.flowStep3')}</Text>
         </View>
       </View>
 
       {isSignedIn ? (
         <View style={styles.accountPanel}>
           <Text style={styles.accountText}>
-            Signed in{profile?.display_name ? ` as ${profile.display_name}` : ''}
+            {profile?.display_name ? t('home.signedInAs', { name: profile.display_name }) : t('home.signedIn')}
           </Text>
+          <LanguageSwitcher />
           <PrimaryButton onPress={() => void signOut()} variant="light">
-            Log out
+            {t('home.logOut')}
           </PrimaryButton>
         </View>
       ) : null}
@@ -204,6 +209,7 @@ function SignedOutHome({
 }: {
   isSupabaseConfigured: boolean;
 }) {
+  const { formatters, t } = useI18n();
   const [activeIndex, setActiveIndex] = useState(0);
   const activeMoment = demoMoments[activeIndex];
   const { height, width } = useWindowDimensions();
@@ -257,7 +263,9 @@ function SignedOutHome({
         )}
         <View style={styles.demoShadowBand} />
         <View style={[styles.demoBottomMeta, { bottom: isCompact ? 194 : 214 }]}>
-          <Text style={styles.demoDate}>{activeMoment.date}</Text>
+          <Text style={styles.demoDate}>
+            {formatters.monthDay(activeMoment.date)} {formatters.weekdayShort(activeMoment.date).toUpperCase()}
+          </Text>
           <Text style={styles.demoTime}>{activeMoment.time}</Text>
           <Text style={styles.demoName}>{activeMoment.name}</Text>
         </View>
@@ -265,7 +273,7 @@ function SignedOutHome({
 
       <View style={[styles.signedOutBrand, { top: isCompact ? 104 : 126 }]}>
         <Text style={styles.signedOutWordmark}>dayby</Text>
-        <Text style={styles.signedOutCopy}>Two seconds a day.{'\n'}One minute a month.</Text>
+        <Text style={styles.signedOutCopy}>{t('home.signedOutCopy')}</Text>
       </View>
 
       <View
@@ -284,8 +292,13 @@ function SignedOutHome({
             !isSupabaseConfigured && styles.signedOutCtaDisabled,
             pressed && styles.signedOutCtaPressed,
           ]}>
-          <Text style={styles.signedOutCtaText}>Start with friends</Text>
+          <Text adjustsFontSizeToFit numberOfLines={1} style={styles.signedOutCtaText}>
+            {t('home.startWithFriends')}
+          </Text>
         </Pressable>
+        <View style={styles.signedOutLanguage}>
+          <LanguageSwitcher variant="dark" />
+        </View>
       </View>
     </View>
   );
@@ -297,34 +310,35 @@ function getNextAction(input: {
   isProfileComplete: boolean;
   postedCount: number;
   status: string;
+  t: TranslateFn;
 }) {
-  const { availableCount, groupCount, isProfileComplete, postedCount, status } = input;
+  const { availableCount, groupCount, isProfileComplete, postedCount, status, t } = input;
 
   if (status === 'missing-config') {
-    return 'Create Supabase, add environment values, then sign in with Apple or Google.';
+    return t('home.nextAction.missingConfig');
   }
 
   if (status === 'checking') {
-    return 'Checking your session.';
+    return t('home.nextAction.checking');
   }
 
   if (status !== 'signed-in') {
-    return 'Sign in to create a group and keep one moment from today.';
+    return t('home.nextAction.signedOut');
   }
 
   if (!isProfileComplete) {
-    return 'Set your display name before creating your first group.';
+    return t('home.nextAction.profile');
   }
 
   if (groupCount === 0) {
-    return 'Create or join a group before keeping your first moment.';
+    return t('home.nextAction.noGroups');
   }
 
   if (availableCount > 0) {
-    return `${availableCount} group${availableCount > 1 ? 's' : ''} can still receive today's 2 seconds.`;
+    return t('home.nextAction.availableGroups', { count: availableCount });
   }
 
-  return `You're done for today. ${postedCount} group${postedCount > 1 ? 's' : ''} kept your moment.`;
+  return t('home.nextAction.doneToday', { count: postedCount });
 }
 
 const styles = StyleSheet.create({
@@ -483,6 +497,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '800',
+  },
+  signedOutLanguage: {
+    width: 326,
+    maxWidth: '88%',
+    marginTop: 12,
   },
   focusPanel: {
     borderWidth: 1,

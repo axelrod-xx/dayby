@@ -1,4 +1,5 @@
 import { env } from '@/src/lib/env';
+import { I18nError } from '@/src/lib/i18n/errors';
 import { requireSupabase } from '@/src/lib/supabase';
 import * as FileSystem from 'expo-file-system/legacy';
 
@@ -13,7 +14,7 @@ export async function requestSignedVideoUpload(input: {
   sizeBytes: number;
 }): Promise<SignedUploadResponse> {
   if (!env.apiBaseUrl) {
-    throw new Error('EXPO_PUBLIC_API_BASE_URL is required before uploading videos.');
+    throw new I18nError('upload.error.missingApiBase');
   }
 
   const {
@@ -21,7 +22,7 @@ export async function requestSignedVideoUpload(input: {
   } = await requireSupabase().auth.getSession();
 
   if (!session) {
-    throw new Error('You need to sign in before uploading.');
+    throw new I18nError('upload.error.signInRequired');
   }
 
   const response = await fetch(`${env.apiBaseUrl}/r2-upload-url`, {
@@ -35,7 +36,7 @@ export async function requestSignedVideoUpload(input: {
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => null);
-    throw new Error(errorBody?.error ?? 'Could not create upload URL.');
+    throw new I18nError(errorBody?.error ? 'common.unexpectedError' : 'upload.error.createUrl');
   }
 
   return (await response.json()) as SignedUploadResponse;
@@ -45,11 +46,11 @@ export async function getLocalVideoFileSize(uri: string): Promise<number> {
   const info = await FileSystem.getInfoAsync(uri);
 
   if (!info.exists) {
-    throw new Error('Processed video file was not found on this device.');
+    throw new I18nError('upload.error.missingFile');
   }
 
   if (typeof info.size !== 'number' || !Number.isFinite(info.size)) {
-    throw new Error('Could not confirm the processed video size. Try recording again.');
+    throw new I18nError('upload.error.sizeUnknown');
   }
 
   return info.size;
@@ -71,6 +72,6 @@ export async function uploadVideoToSignedUrl(input: {
   });
 
   if (!response.ok) {
-    throw new Error(`Video upload failed with status ${response.status}.`);
+    throw new I18nError('upload.error.failedStatus', { status: response.status });
   }
 }

@@ -7,6 +7,8 @@ import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { recordGroupActivity } from '@/src/features/groups/groupService';
 import { requestPlaybackUrls } from '@/src/features/video/playbackService';
+import { I18nError, resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 type ExportActionsProps = {
   groupId: string;
@@ -31,7 +33,7 @@ const downloadRemoteSource = async (uri: string, index: number) => {
   const cacheDirectory = FileSystem.cacheDirectory;
 
   if (!cacheDirectory) {
-    throw new Error('This device has no export cache directory available.');
+    throw new I18nError('export.error.noCacheDir');
   }
 
   const target = `${cacheDirectory}dayby-export-${Date.now()}-${index}.mp4`;
@@ -40,6 +42,7 @@ const downloadRemoteSource = async (uri: string, index: number) => {
 };
 
 export function ExportActions({ groupId, r2Keys = [], sourceUris = [], videoUri }: ExportActionsProps) {
+  const { t } = useI18n();
   const [generatedUri, setGeneratedUri] = useState<string | null>(videoUri ?? null);
   const [saving, setSaving] = useState(false);
   const [sharing, setSharing] = useState(false);
@@ -52,10 +55,10 @@ export function ExportActions({ groupId, r2Keys = [], sourceUris = [], videoUri 
 
   const unavailable = () => {
     Alert.alert(
-      'Export is not ready yet',
+      t('export.unavailableTitle'),
       sourceCount === 0
-        ? 'Open this after uploaded clips have playback URLs. Your moments remain safe in the archive.'
-        : 'Export needs a development build or device build with native video tools.',
+        ? t('export.unavailableNoSources')
+        : t('export.unavailableNative'),
     );
   };
 
@@ -115,15 +118,15 @@ export function ExportActions({ groupId, r2Keys = [], sourceUris = [], videoUri 
 
       const permission = await MediaLibrary.requestPermissionsAsync();
       if (!permission.granted) {
-        Alert.alert('Permission needed', 'Allow photo library access to save this memory.');
+        Alert.alert(t('export.permissionTitle'), t('export.permissionBody'));
         return;
       }
 
       await MediaLibrary.createAssetAsync(uri);
       await recordGroupActivity(groupId, 'download');
-      Alert.alert('Saved', 'Video saved to your library.');
+      Alert.alert(t('export.savedTitle'), t('export.savedBody'));
     } catch (error) {
-      Alert.alert('Export failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('export.failedTitle'), resolveErrorMessage(error, t));
     } finally {
       setSaving(false);
     }
@@ -140,14 +143,14 @@ export function ExportActions({ groupId, r2Keys = [], sourceUris = [], videoUri 
 
       const available = await Sharing.isAvailableAsync();
       if (!available) {
-        Alert.alert('Sharing unavailable', 'This device cannot open the share sheet right now.');
+        Alert.alert(t('export.sharingUnavailableTitle'), t('export.sharingUnavailableBody'));
         return;
       }
 
       await Sharing.shareAsync(uri);
       await recordGroupActivity(groupId, 'download');
     } catch (error) {
-      Alert.alert('Share failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('export.shareFailedTitle'), resolveErrorMessage(error, t));
     } finally {
       setSharing(false);
     }
@@ -155,23 +158,23 @@ export function ExportActions({ groupId, r2Keys = [], sourceUris = [], videoUri 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.kicker}>Export</Text>
+      <Text style={styles.kicker}>{t('export.kicker')}</Text>
       <Text style={styles.copy}>
         {sourceCount > 0
-          ? `${sourceCount} ${sourceCount === 1 ? 'clip' : 'clips'} become a clean MP4 for Reels, TikTok, Stories, or LINE.`
-          : 'Uploaded clips can be saved or shared from here once playback URLs are ready.'}
+          ? t('export.copy.ready', { clips: t('common.count.clips', { count: sourceCount }) })
+          : t('export.copy.empty')}
       </Text>
       <View style={styles.actions}>
         <PrimaryButton loading={saving} onPress={() => void save()} variant="light">
-          Save Video
+          {t('export.saveVideo')}
         </PrimaryButton>
         <PrimaryButton loading={sharing} onPress={() => void share()} variant="light">
-          Share
+          {t('export.share')}
         </PrimaryButton>
       </View>
       <View style={styles.pillRow}>
-        <Text style={styles.pill}>{generatedUri ? 'MP4 Ready' : 'Clean MP4'}</Text>
-        <Text style={styles.pill}>Add music later</Text>
+        <Text style={styles.pill}>{generatedUri ? t('export.mp4Ready') : t('export.cleanMp4')}</Text>
+        <Text style={styles.pill}>{t('export.addMusicLater')}</Text>
       </View>
     </View>
   );

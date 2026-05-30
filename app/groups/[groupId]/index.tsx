@@ -14,9 +14,12 @@ import type { GroupInvite, GroupMemberProfile } from '@/src/features/groups/type
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 import { previousDateString } from '@/src/features/reels/reelService';
 import { currentWeekStartStringInTimeZone, yearMonthInTimeZone } from '@/src/lib/groupTime';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n, type TranslateFn } from '@/src/lib/i18n/I18nProvider';
 
 export default function GroupDetailScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
+  const { t } = useI18n();
   const [group, setGroup] = useState<PostableGroup | null>(null);
   const [members, setMembers] = useState<GroupMemberProfile[]>([]);
   const [invites, setInvites] = useState<GroupInvite[]>([]);
@@ -46,11 +49,11 @@ export default function GroupDetailScreen() {
     }
 
     load()
-      .catch((error) => Alert.alert('Could not load group', error.message))
+      .catch((error) => Alert.alert(t('groupDetail.alert.loadFailed'), resolveErrorMessage(error, t)))
       .finally(() => setLoading(false));
 
     recordGroupActivity(groupId, 'open').catch(() => undefined);
-  }, [groupId]);
+  }, [groupId, t]);
 
   const addInvite = async () => {
     if (!groupId) {
@@ -62,7 +65,7 @@ export default function GroupDetailScreen() {
       const invite = await createGroupInvite(groupId);
       setInvites((current) => [invite, ...current]);
     } catch (error) {
-      Alert.alert('Could not create invite', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('groupDetail.alert.inviteFailed'), resolveErrorMessage(error, t));
     } finally {
       setCreatingInvite(false);
     }
@@ -71,12 +74,12 @@ export default function GroupDetailScreen() {
   const shareInvite = async () => {
     const invite = invites[0];
     if (!invite || !group) {
-      Alert.alert('Create a code first', 'Make an invite code before sharing this group.');
+      Alert.alert(t('groupDetail.alert.createCodeFirst'), t('groupDetail.alert.createCodeFirstBody'));
       return;
     }
 
     await Share.share({
-      message: `Join ${group.name} on dayby.\nInvite code: ${invite.code}\nTwo seconds a day. One minute a month.`,
+      message: t('groupDetail.shareMessage', { code: invite.code, groupName: group.name }),
     });
   };
 
@@ -91,8 +94,8 @@ export default function GroupDetailScreen() {
   if (!group) {
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Group not found</Text>
-        <Text style={styles.copy}>You may need to join this group first.</Text>
+        <Text style={styles.title}>{t('groupDetail.notFoundTitle')}</Text>
+        <Text style={styles.copy}>{t('groupDetail.notFoundCopy')}</Text>
       </ScrollView>
     );
   }
@@ -105,10 +108,14 @@ export default function GroupDetailScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Group memory</Text>
+        <Text style={styles.kicker}>{t('groupDetail.kicker')}</Text>
         <Text style={styles.title}>{group.name}</Text>
         <Text style={styles.copy}>
-          {members.length}/{group.member_limit} friends / {group.timezone}
+          {t('groupDetail.friendsWithLimit', {
+            count: members.length,
+            limit: group.member_limit,
+            timezone: group.timezone,
+          })}
         </Text>
         <View style={styles.friendStrip}>
           {members.slice(0, 5).map((member) => (
@@ -125,12 +132,14 @@ export default function GroupDetailScreen() {
       </View>
 
       <View style={styles.todayPanel}>
-        <Text style={styles.panelKicker}>Today</Text>
-        <Text style={styles.todayTitle}>{group.posted_today ? 'Posted today.' : "Keep today's 2 seconds."}</Text>
+        <Text style={styles.panelKicker}>{t('groupDetail.today')}</Text>
+        <Text style={styles.todayTitle}>
+          {group.posted_today ? t('groupDetail.postedTodayTitle') : t('groupDetail.keepTodayTitle')}
+        </Text>
         <Text style={styles.panelText}>
           {group.posted_today
-            ? 'Your moment is already in this group. Open yesterday when you want the group day back.'
-            : 'A tiny moment from today, saved with the people who were there.'}
+            ? t('groupDetail.postedTodayCopy')
+            : t('groupDetail.keepTodayCopy')}
         </Text>
         <View style={styles.action}>
           {group.posted_today ? (
@@ -141,13 +150,13 @@ export default function GroupDetailScreen() {
               }}
               asChild>
               <PrimaryButton onPress={() => undefined} variant="light">
-                Open yesterday
+                {t('groupDetail.openYesterday')}
               </PrimaryButton>
             </Link>
           ) : (
             <Link href={'/camera' as Href} asChild>
               <PrimaryButton onPress={() => undefined} variant="accent">
-                Keep today
+                {t('home.keepToday')}
               </PrimaryButton>
             </Link>
           )}
@@ -156,16 +165,16 @@ export default function GroupDetailScreen() {
 
       {members.length <= 1 && canManageInvites ? (
         <View style={styles.inviteNudge}>
-          <Text style={styles.inviteNudgeTitle}>This gets better when your friends are in it.</Text>
-          <Text style={styles.panelText}>Send the code now, then let the month become something worth showing later.</Text>
+          <Text style={styles.inviteNudgeTitle}>{t('groupDetail.inviteNudgeTitle')}</Text>
+          <Text style={styles.panelText}>{t('groupDetail.inviteNudgeCopy')}</Text>
           <View style={styles.action}>
             {invites[0] ? (
               <PrimaryButton onPress={() => void shareInvite()} variant="accent">
-                Send invite
+                {t('groupDetail.sendInvite')}
               </PrimaryButton>
             ) : (
               <PrimaryButton loading={creatingInvite} onPress={() => void addInvite()} variant="accent">
-                Create invite code
+                {t('groupDetail.createInviteCode')}
               </PrimaryButton>
             )}
           </View>
@@ -175,8 +184,8 @@ export default function GroupDetailScreen() {
       <View style={styles.panel}>
         <View style={styles.panelHeader}>
           <View>
-            <Text style={styles.panelTitle}>Yesterday</Text>
-            <Text style={styles.panelText}>Watch the group day by time. Save favorites privately.</Text>
+            <Text style={styles.panelTitle}>{t('groupDetail.yesterdayTitle')}</Text>
+            <Text style={styles.panelText}>{t('groupDetail.yesterdayCopy')}</Text>
           </View>
           <Link
             href={{
@@ -184,30 +193,30 @@ export default function GroupDetailScreen() {
               params: { groupId: group.id, date: yesterday },
             }}
             asChild>
-            <Text style={styles.inlineAction}>Open</Text>
+            <Text style={styles.inlineAction}>{t('common.open')}</Text>
           </Link>
         </View>
       </View>
 
       <View style={styles.panel}>
         <View style={styles.memoryPreview}>
-          <Text style={styles.memoryKicker}>OUR MONTH</Text>
+          <Text style={styles.memoryKicker}>{t('groupDetail.ourMonth')}</Text>
           <Text style={styles.memoryTitle}>{group.name.toUpperCase()}</Text>
-          <Text style={styles.memoryCopy}>Everything stays in the archive. The month becomes one minute.</Text>
+          <Text style={styles.memoryCopy}>{t('groupDetail.monthCopy')}</Text>
           <Link
             href={{
               pathname: '/monthly/[groupId]/[year]/[month]',
               params: { groupId: group.id, year: String(currentYear), month: String(currentMonth) },
             }}
             asChild>
-            <Text style={styles.memoryAction}>Open this month</Text>
+            <Text style={styles.memoryAction}>{t('groupDetail.openThisMonth')}</Text>
           </Link>
         </View>
       </View>
 
       <View style={styles.subtlePanel}>
-        <Text style={styles.subtleTitle}>This week is taking shape</Text>
-        <Text style={styles.panelText}>A small preview exists, but the month is the memory.</Text>
+        <Text style={styles.subtleTitle}>{t('groupDetail.weekTitle')}</Text>
+        <Text style={styles.panelText}>{t('groupDetail.weekCopy')}</Text>
         <View style={styles.action}>
           <Link
             href={{
@@ -216,20 +225,20 @@ export default function GroupDetailScreen() {
             }}
             asChild>
             <PrimaryButton onPress={() => undefined} variant="light">
-              Peek this week
+              {t('groupDetail.peekWeek')}
             </PrimaryButton>
           </Link>
         </View>
       </View>
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Members</Text>
+        <Text style={styles.panelTitle}>{t('groupDetail.members')}</Text>
         <View style={styles.list}>
           {members.map((member) => (
             <View key={member.id} style={styles.row}>
               <View>
                 <Text style={styles.rowTitle}>{member.display_name}</Text>
-                <Text style={styles.rowMeta}>{member.role}</Text>
+                <Text style={styles.rowMeta}>{roleLabel(member.role, t)}</Text>
               </View>
             </View>
           ))}
@@ -238,24 +247,26 @@ export default function GroupDetailScreen() {
 
       {canManageInvites ? (
         <View style={styles.panel}>
-          <Text style={styles.panelTitle}>Invite friends</Text>
-          <Text style={styles.panelText}>A simple code is easier to send in LINE, Instagram, or a group chat.</Text>
+          <Text style={styles.panelTitle}>{t('groupDetail.inviteFriends')}</Text>
+          <Text style={styles.panelText}>{t('groupDetail.inviteCopy')}</Text>
           {invites[0] ? (
             <View style={styles.codeBox}>
               <Text style={styles.code}>{invites[0].code}</Text>
               <Text style={styles.rowMeta}>
-                {invites[0].used_count}
-                {invites[0].max_uses ? `/${invites[0].max_uses}` : ''} uses
+                {t('groupDetail.uses', {
+                  max: invites[0].max_uses ? `/${invites[0].max_uses}` : '',
+                  used: invites[0].used_count,
+                })}
               </Text>
             </View>
           ) : null}
           <View style={styles.action}>
             <PrimaryButton loading={creatingInvite} onPress={() => void addInvite()} variant="light">
-              New invite code
+              {t('groupDetail.newInviteCode')}
             </PrimaryButton>
             {invites[0] ? (
               <PrimaryButton onPress={() => void shareInvite()} variant="light">
-                Send latest code
+                {t('groupDetail.sendLatestCode')}
               </PrimaryButton>
             ) : null}
           </View>
@@ -263,27 +274,41 @@ export default function GroupDetailScreen() {
       ) : null}
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Settings</Text>
+        <Text style={styles.panelTitle}>{t('groupDetail.settings')}</Text>
         <Text style={styles.panelText}>
-          {group.plan} plan / monthly highlight included / downloads {group.download_enabled ? 'on' : 'off'}
+          {t('groupDetail.settingsCopy', {
+            downloadState: group.download_enabled ? t('common.on') : t('common.off'),
+            plan: group.plan,
+          })}
         </Text>
       </View>
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Safety</Text>
-        <Text style={styles.panelText}>Report a moment or group issue without calling anyone out.</Text>
+        <Text style={styles.panelTitle}>{t('groupDetail.safety')}</Text>
+        <Text style={styles.panelText}>{t('groupDetail.safetyCopy')}</Text>
         <View style={styles.action}>
           <Link
             href={{ pathname: '/safety/report', params: { groupId: group.id } } as unknown as Href}
             asChild>
             <PrimaryButton onPress={() => undefined} variant="light">
-              Report something
+              {t('groupDetail.reportSomething')}
             </PrimaryButton>
           </Link>
         </View>
       </View>
     </ScrollView>
   );
+}
+
+function roleLabel(role: GroupMemberProfile['role'] | PostableGroup['member_role'], t: TranslateFn) {
+  switch (role) {
+    case 'owner':
+      return t('groups.role.owner');
+    case 'admin':
+      return t('groups.role.admin');
+    case 'member':
+      return t('groups.role.member');
+  }
 }
 
 const styles = StyleSheet.create({

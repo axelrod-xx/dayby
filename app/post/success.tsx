@@ -2,8 +2,10 @@ import { Link, type Href, useLocalSearchParams } from 'expo-router';
 import { ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function PostSuccessScreen() {
+  const { t } = useI18n();
   const { count, groupId, groupName } = useLocalSearchParams<{
     count?: string;
     groupId?: string;
@@ -11,60 +13,61 @@ export default function PostSuccessScreen() {
   }>();
   const postedCount = Math.max(Number(count ?? 0), 1);
   const hasSingleGroup = Boolean(groupId);
+  const resolvedGroupName = groupName || t('postSuccess.fallbackGroup');
   const shareText = hasSingleGroup
-    ? `I kept today's 2 seconds in ${groupName || 'our group'} on dayby.`
-    : `I kept today's 2 seconds in ${postedCount} groups on dayby.`;
+    ? t('postSuccess.share.single', { groupName: resolvedGroupName })
+    : t('postSuccess.share.multi', { count: postedCount });
 
   const shareMoment = async () => {
     await Share.share({
-      message: `${shareText}\nTwo seconds a day. One minute a month.`,
+      message: `${shareText}\n${t('common.brandPromise').replace('\n', ' ')}`,
     });
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Posted</Text>
-        <Text style={styles.title}>Kept for today.</Text>
+        <Text style={styles.kicker}>{t('postSuccess.kicker')}</Text>
+        <Text style={styles.title}>{t('postSuccess.title')}</Text>
         <Text style={styles.copy}>
           {hasSingleGroup
-            ? `Your 2 seconds are now in ${groupName || 'this group'}.`
-            : `Your 2 seconds are now in ${postedCount} groups.`}
+            ? t('postSuccess.copy.single', { groupName: resolvedGroupName })
+            : t('postSuccess.copy.multi', { count: postedCount })}
         </Text>
       </View>
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Tell the group</Text>
-        <Text style={styles.panelText}>The habit spreads best when one friend makes the first move.</Text>
+        <Text style={styles.panelTitle}>{t('postSuccess.tellGroup')}</Text>
+        <Text style={styles.panelText}>{t('postSuccess.tellCopy')}</Text>
         <View style={styles.panelAction}>
           <PrimaryButton onPress={() => void shareMoment()} variant="light">
-            Share this
+            {t('postSuccess.shareThis')}
           </PrimaryButton>
         </View>
       </View>
 
       <View style={styles.panelSoft}>
-        <Text style={styles.panelTitle}>Tomorrow</Text>
-        <Text style={styles.panelText}>Watch the group day. Save anything you want to find again.</Text>
+        <Text style={styles.panelTitle}>{t('postSuccess.tomorrow')}</Text>
+        <Text style={styles.panelText}>{t('postSuccess.tomorrowCopy')}</Text>
       </View>
 
       <View style={styles.actions}>
         {hasSingleGroup ? (
           <Link href={{ pathname: '/groups/[groupId]', params: { groupId } } as unknown as Href} asChild>
             <PrimaryButton onPress={() => undefined} variant="accent">
-            Open group
+              {t('postSuccess.openGroup')}
             </PrimaryButton>
           </Link>
         ) : (
           <Link href={'/(tabs)/groups' as Href} asChild>
             <PrimaryButton onPress={() => undefined} variant="accent">
-            Open groups
+              {t('postSuccess.openGroups')}
             </PrimaryButton>
           </Link>
         )}
         <Link href={'/(tabs)' as Href} asChild>
           <PrimaryButton onPress={() => undefined} variant="light">
-            Home
+            {t('common.home')}
           </PrimaryButton>
         </Link>
       </View>

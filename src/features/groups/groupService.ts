@@ -1,4 +1,5 @@
 import { requireSupabase } from '@/src/lib/supabase';
+import { I18nError } from '@/src/lib/i18n/errors';
 
 import type { Group, GroupInvite, GroupMember, GroupMemberProfile, GroupWithMembership } from './types';
 
@@ -114,29 +115,6 @@ export async function recordGroupActivity(groupId: string, eventType: GroupActiv
   }
 }
 
-export function getGroupActivityLabel(group: Pick<Group, 'last_posted_at' | 'last_viewed_at' | 'last_downloaded_at'>) {
-  const dates = [group.last_posted_at, group.last_viewed_at, group.last_downloaded_at]
-    .filter((value): value is string => Boolean(value))
-    .map((value) => new Date(value));
-
-  if (dates.length === 0) {
-    return 'No activity yet';
-  }
-
-  const latest = new Date(Math.max(...dates.map((date) => date.getTime())));
-  const days = Math.floor((Date.now() - latest.getTime()) / 86_400_000);
-
-  if (days <= 0) {
-    return 'Active today';
-  }
-
-  if (days === 1) {
-    return 'Active yesterday';
-  }
-
-  return `Active ${days} days ago`;
-}
-
 export function isArchiveCandidate(group: GroupWithMembership) {
   return ['quiet', 'archived', 'memory_active', 'dormant', 'delete_scheduled'].includes(group.status);
 }
@@ -148,14 +126,14 @@ export async function createGroup(input: CreateGroupInput): Promise<string> {
   } = await client.auth.getUser();
 
   if (!user) {
-    throw new Error('You need to sign in before creating a group.');
+    throw new I18nError('groups.error.signInCreate');
   }
 
   const groupId = uuid();
   const name = input.name.trim();
 
   if (!name) {
-    throw new Error('Group name is required.');
+    throw new I18nError('groups.error.nameRequired');
   }
 
   const { error: groupError } = await client.from('groups').insert({
@@ -249,7 +227,7 @@ export async function createGroupInvite(groupId: string): Promise<GroupInvite> {
   } = await client.auth.getUser();
 
   if (!user) {
-    throw new Error('You need to sign in before creating an invite.');
+    throw new I18nError('groups.error.signInInvite');
   }
 
   const { data, error } = await client

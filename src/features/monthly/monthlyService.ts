@@ -8,7 +8,6 @@ export type MonthlyMoment = {
   user_id: string;
   date: string;
   captured_at: string;
-  time_label: string;
   display_name: string;
   r2_key: string;
   playback_url: string | null;
@@ -18,20 +17,13 @@ export type MonthlyMoment = {
 export type MonthlyHighlight = {
   names: string[];
   count: number;
-  durationLabel: string;
+  durationSeconds: number;
   dayCount: number;
 };
 
 type ArchiveMoment = Omit<MonthlyMoment, 'source'>;
 
 const MAX_MONTHLY_MOMENTS = 30;
-
-const timeLabel = (capturedAt: string) =>
-  new Intl.DateTimeFormat(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).format(new Date(capturedAt));
 
 const stableScore = (moment: Pick<ArchiveMoment, 'id' | 'captured_at'>) => {
   const value = `${moment.id}:${moment.captured_at}`;
@@ -131,7 +123,6 @@ async function listSnapshotMoments(input: {
     user_id: row.user_id,
     date: row.source_date,
     captured_at: row.captured_at,
-    time_label: timeLabel(row.captured_at),
     display_name: row.display_name,
     r2_key: row.r2_key,
     playback_url: playbackUrls.get(row.r2_key) ?? null,
@@ -193,8 +184,7 @@ async function listArchiveMoments(input: {
       user_id: row.user_id,
       date: row.date,
       captured_at: row.captured_at,
-      time_label: timeLabel(row.captured_at),
-      display_name: user?.display_name ?? 'dayby friend',
+      display_name: user?.display_name ?? 'dayby',
       r2_key: r2Key,
       playback_url: playbackUrls.get(r2Key) ?? null,
     };
@@ -243,7 +233,7 @@ export function calculateMonthlyHighlight(moments: MonthlyMoment[]): MonthlyHigh
   return {
     names,
     count: moments.length,
-    durationLabel: seconds < 60 ? `${seconds}s` : '1 min',
+    durationSeconds: seconds,
     dayCount: days.size,
   };
 }

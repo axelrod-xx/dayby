@@ -5,11 +5,14 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
-import { getGroupActivityLabel, isArchiveCandidate, listMyGroups } from '@/src/features/groups/groupService';
+import { isArchiveCandidate, listMyGroups } from '@/src/features/groups/groupService';
 import type { GroupWithMembership } from '@/src/features/groups/types';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n, type TranslateFn } from '@/src/lib/i18n/I18nProvider';
 
 export default function GroupsScreen() {
   const { isProfileComplete, isSupabaseConfigured, status } = useAuth();
+  const { t } = useI18n();
   const [groups, setGroups] = useState<GroupWithMembership[]>([]);
   const [loading, setLoading] = useState(false);
   const canCreateGroup = status === 'signed-in' && isProfileComplete;
@@ -26,18 +29,18 @@ export default function GroupsScreen() {
       setLoading(true);
       listMyGroups()
         .then(setGroups)
-        .catch((error) => Alert.alert('Could not load groups', error.message))
+        .catch((error) => Alert.alert(t('groups.alert.loadFailed'), resolveErrorMessage(error, t)))
         .finally(() => setLoading(false));
-    }, [canCreateGroup]),
+    }, [canCreateGroup, t]),
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Your circles</Text>
-        <Text style={styles.title}>Groups</Text>
+        <Text style={styles.kicker}>{t('groups.kicker')}</Text>
+        <Text style={styles.title}>{t('groups.title')}</Text>
         <Text style={styles.body}>
-          Small rooms for the months you want to remember together.
+          {t('groups.copy')}
         </Text>
       </View>
 
@@ -45,23 +48,23 @@ export default function GroupsScreen() {
         {status !== 'signed-in' ? (
           <Link href="/(auth)/sign-in" asChild>
             <PrimaryButton disabled={!isSupabaseConfigured} onPress={() => undefined}>
-              Sign in first
+              {t('groups.signInFirst')}
             </PrimaryButton>
           </Link>
         ) : !isProfileComplete ? (
           <Link href="/profile-setup" asChild>
-            <PrimaryButton onPress={() => undefined}>Set profile</PrimaryButton>
+            <PrimaryButton onPress={() => undefined}>{t('home.setProfile')}</PrimaryButton>
           </Link>
         ) : (
           <View style={styles.actionGrid}>
             <Link href="/groups/create" asChild>
               <PrimaryButton onPress={() => undefined} variant="accent">
-                Start a group
+                {t('home.startGroup')}
               </PrimaryButton>
             </Link>
             <Link href="/groups/join" asChild>
               <PrimaryButton onPress={() => undefined} variant="light">
-                Join friends
+                {t('home.joinFriends')}
               </PrimaryButton>
             </Link>
           </View>
@@ -73,9 +76,9 @@ export default function GroupsScreen() {
       ) : groups.length > 0 ? (
         <View style={styles.list}>
           <View style={styles.monthPreview}>
-            <Text style={styles.previewKicker}>This month</Text>
-            <Text style={styles.previewTitle}>{activeGroups.length} active group{activeGroups.length === 1 ? '' : 's'}</Text>
-            <Text style={styles.previewCopy}>No feeds. Just the people and the days.</Text>
+            <Text style={styles.previewKicker}>{t('groups.thisMonth')}</Text>
+            <Text style={styles.previewTitle}>{t('groups.activeGroups', { count: activeGroups.length })}</Text>
+            <Text style={styles.previewCopy}>{t('groups.previewCopy')}</Text>
           </View>
           {activeGroups.map((group) => (
             <Link
@@ -89,7 +92,7 @@ export default function GroupsScreen() {
                 <View style={styles.groupText}>
                   <Text style={styles.groupName}>{group.name}</Text>
                   <Text style={styles.groupMeta}>
-                    {getGroupActivityLabel(group)} / {group.member_role}
+                    {groupActivityLabel(group, t)} / {roleLabel(group.member_role, t)}
                   </Text>
                 </View>
                 <FontAwesome color="#8FAFC2" name="chevron-right" size={14} />
@@ -100,7 +103,7 @@ export default function GroupsScreen() {
             <Link href={'/archive' as Href} asChild>
               <Pressable style={({ pressed }) => [styles.archiveLink, pressed && styles.pressed]}>
                 <Text style={styles.archiveText}>
-                  {archivedGroups.length} quiet group{archivedGroups.length > 1 ? 's' : ''}
+                  {t('groups.quietGroups', { count: archivedGroups.length })}
                 </Text>
                 <FontAwesome color="#8FAFC2" name="chevron-right" size={14} />
               </Pressable>
@@ -109,12 +112,49 @@ export default function GroupsScreen() {
         </View>
       ) : (
         <View style={styles.empty}>
-          <Text style={styles.emptyTitle}>No groups yet</Text>
-          <Text style={styles.emptyCopy}>Create a small group to start keeping this month together.</Text>
+          <Text style={styles.emptyTitle}>{t('groups.emptyTitle')}</Text>
+          <Text style={styles.emptyCopy}>{t('groups.emptyCopy')}</Text>
         </View>
       )}
     </View>
   );
+}
+
+function groupActivityLabel(
+  group: Pick<GroupWithMembership, 'last_posted_at' | 'last_viewed_at' | 'last_downloaded_at'>,
+  t: TranslateFn,
+) {
+  const dates = [group.last_posted_at, group.last_viewed_at, group.last_downloaded_at]
+    .filter((value): value is string => Boolean(value))
+    .map((value) => new Date(value));
+
+  if (dates.length === 0) {
+    return t('groups.activity.none');
+  }
+
+  const latest = new Date(Math.max(...dates.map((date) => date.getTime())));
+  const days = Math.floor((Date.now() - latest.getTime()) / 86_400_000);
+
+  if (days <= 0) {
+    return t('groups.activity.today');
+  }
+
+  if (days === 1) {
+    return t('groups.activity.yesterday');
+  }
+
+  return t('groups.activity.daysAgo', { count: days });
+}
+
+function roleLabel(role: GroupWithMembership['member_role'], t: TranslateFn) {
+  switch (role) {
+    case 'owner':
+      return t('groups.role.owner');
+    case 'admin':
+      return t('groups.role.admin');
+    case 'member':
+      return t('groups.role.member');
+  }
 }
 
 const styles = StyleSheet.create({

@@ -9,6 +9,7 @@
     "web": "expo start --web",
     "dev:clear": "expo start --clear",
     "check:secrets": "node scripts/check-secrets.js",
+    "check:i18n": "node scripts/check-i18n.js",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

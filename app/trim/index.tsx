@@ -5,18 +5,20 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { trimToTwoSeconds, type TwoSecondTrimResult } from '@/src/features/video/videoProcessingService';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 const maxStartMs = 8000;
 const selectedDurationMs = 2000;
 const timelineMarks = [0, 2000, 4000, 6000, 8000, 10000];
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-const formatSeconds = (valueMs: number) => `${(valueMs / 1000).toFixed(1)}s`;
 const normalizeStartMs = (startMs: number) => clamp(Math.round(startMs / 100) * 100, 0, maxStartMs);
 
 export default function TrimScreen() {
   const { uri, muted } = useLocalSearchParams<{ uri?: string; muted?: string }>();
   const router = useRouter();
+  const { t } = useI18n();
   const [selectedStartMs, setSelectedStartMs] = useState(0);
   const [trackWidth, setTrackWidth] = useState(0);
   const [processing, setProcessing] = useState(false);
@@ -30,6 +32,8 @@ export default function TrimScreen() {
   });
   const selectedStartSeconds = selectedStartMs / 1000;
   const selectedEndSeconds = (selectedStartMs + selectedDurationMs) / 1000;
+  const formatSeconds = (valueMs: number) =>
+    t('common.duration.secondsShort', { count: Number((valueMs / 1000).toFixed(1)) });
 
   const selectStart = (startMs: number) => {
     setSelectedStartMs(normalizeStartMs(startMs));
@@ -104,7 +108,7 @@ export default function TrimScreen() {
       });
       setTrimResult(result);
     } catch (error) {
-      Alert.alert('Trim failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('trim.alert.failed'), resolveErrorMessage(error, t));
     } finally {
       setProcessing(false);
     }
@@ -113,7 +117,7 @@ export default function TrimScreen() {
   const continueToPost = () => {
     const result = trimResult;
     if (!result) {
-      Alert.alert('Choose your 2 seconds', 'Process the selected 2 seconds before choosing groups.');
+      Alert.alert(t('trim.alert.chooseTitle'), t('trim.alert.chooseBody'));
       return;
     }
 
@@ -135,12 +139,12 @@ export default function TrimScreen() {
       <View>
         <View style={styles.topBar}>
           <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
-            <Text style={styles.backText}>Retake</Text>
+            <Text style={styles.backText}>{t('trim.retake')}</Text>
           </Pressable>
         </View>
-        <Text style={styles.kicker}>Trim</Text>
-        <Text style={styles.title}>Keep 2 sec</Text>
-        <Text style={styles.copy}>Move the window until the loop feels right.</Text>
+        <Text style={styles.kicker}>{t('trim.kicker')}</Text>
+        <Text style={styles.title}>{t('trim.title')}</Text>
+        <Text style={styles.copy}>{t('trim.copy')}</Text>
       </View>
 
       <View style={styles.previewWrap}>
@@ -151,16 +155,22 @@ export default function TrimScreen() {
         )}
         <View style={styles.previewBadge}>
           <Text style={styles.previewBadgeText}>
-            Previewing {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)}
+            {t('trim.previewing', {
+              end: formatSeconds(selectedStartMs + selectedDurationMs),
+              start: formatSeconds(selectedStartMs),
+            })}
           </Text>
         </View>
       </View>
 
       <View style={styles.panel}>
-        <Text style={styles.panelTitle}>Selected</Text>
+        <Text style={styles.panelTitle}>{t('trim.selected')}</Text>
         <Text style={styles.panelText}>
-          {formatSeconds(selectedStartMs)} - {formatSeconds(selectedStartMs + selectedDurationMs)} /{' '}
-          {muted === '1' ? 'Muted' : 'Original sound'}
+          {t('trim.selectedMeta', {
+            end: formatSeconds(selectedStartMs + selectedDurationMs),
+            sound: muted === '1' ? t('common.muted') : t('common.originalSound'),
+            start: formatSeconds(selectedStartMs),
+          })}
         </Text>
         <View
           onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}
@@ -182,26 +192,26 @@ export default function TrimScreen() {
         <View style={styles.markRow}>
           {timelineMarks.map((mark) => (
             <Pressable key={mark} onPress={() => selectStart(Math.min(mark, maxStartMs))} hitSlop={8}>
-              <Text style={styles.markText}>{mark / 1000}s</Text>
+              <Text style={styles.markText}>{t('common.duration.secondsShort', { count: mark / 1000 })}</Text>
             </Pressable>
           ))}
         </View>
-        <Text style={styles.helperText}>Drag the highlighted window. The preview loops only this 2-second part.</Text>
+        <Text style={styles.helperText}>{t('trim.helper')}</Text>
         <Text style={styles.statusText}>
           {trimResult?.isNativeTrimmed
-            ? '2-second file ready'
+            ? t('trim.status.ready')
             : trimResult
-              ? 'Dev preview ready. Upload stays blocked until native trim is enabled.'
-              : 'Not processed yet'}
+              ? t('trim.status.devReady')
+              : t('trim.status.notProcessed')}
         </Text>
       </View>
 
       <View style={styles.actionStack}>
         <PrimaryButton disabled={!uri} loading={processing} onPress={() => void processClip()} variant="light">
-          Use this 2 sec
+          {t('trim.useThis')}
         </PrimaryButton>
         <PrimaryButton disabled={!uri || !trimResult} onPress={continueToPost} variant="accent">
-          Choose groups
+          {t('trim.chooseGroups')}
         </PrimaryButton>
       </View>
     </ScrollView>

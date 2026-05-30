@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 
 import { env } from '@/src/lib/env';
+import { I18nError } from '@/src/lib/i18n/errors';
 
 export type TwoSecondTrimResult = {
   uri: string;
@@ -22,7 +23,7 @@ export async function trimToTwoSeconds(input: TwoSecondTrimInput): Promise<TwoSe
   const trimStartMs = Math.max(0, Math.round(input.startMs));
 
   if (!input.uri) {
-    throw new Error('No video to trim.');
+    throw new I18nError('video.error.noVideo');
   }
 
   if (Platform.OS === 'web') {
@@ -34,12 +35,12 @@ export async function trimToTwoSeconds(input: TwoSecondTrimInput): Promise<TwoSe
     const validation = await videoTrim.isValidFile(input.uri);
 
     if (!validation.isValid) {
-      throw new Error('The recorded file is not a valid video.');
+      throw new I18nError('video.error.invalidFile');
     }
 
     const endTime = Math.min(trimStartMs + TWO_SECONDS_MS, validation.duration);
     if (endTime - trimStartMs < 1500) {
-      throw new Error('The selected moment is too short. Record again and keep 2 seconds.');
+      throw new I18nError('video.error.tooShort');
     }
 
     const trimmed = await videoTrim.trim(input.uri, {
@@ -51,7 +52,7 @@ export async function trimToTwoSeconds(input: TwoSecondTrimInput): Promise<TwoSe
     });
 
     if (!trimmed.success || !trimmed.outputPath) {
-      throw new Error('The video could not be trimmed.');
+      throw new I18nError('video.error.trimFailed');
     }
 
     const compressed = await videoTrim.compress(trimmed.outputPath, {
@@ -91,7 +92,7 @@ function normalizeFileUri(path: string) {
 
 function devFallback(uri: string, trimStartMs: number): TwoSecondTrimResult {
   if (!__DEV__ && env.enableR2Uploads) {
-    throw new Error('Native 2-second trimming must be enabled before uploads.');
+    throw new I18nError('video.error.nativeTrimRequired');
   }
 
   return {
@@ -105,10 +106,10 @@ function devFallback(uri: string, trimStartMs: number): TwoSecondTrimResult {
 
 export function assertTwoSecondUploadReady(input: Pick<TwoSecondTrimResult, 'isNativeTrimmed' | 'trimDurationMs'>) {
   if (input.trimDurationMs < 1500 || input.trimDurationMs > 2500) {
-    throw new Error('dayby only uploads the selected 2 seconds.');
+    throw new I18nError('video.error.onlyTwoSeconds');
   }
 
   if (!input.isNativeTrimmed && env.enableR2Uploads) {
-    throw new Error('Uploads are blocked until native 2-second trimming is active.');
+    throw new I18nError('video.error.uploadBlocked');
   }
 }

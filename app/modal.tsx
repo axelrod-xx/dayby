@@ -3,20 +3,21 @@ import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function ModalScreen() {
+  const { t } = useI18n();
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <Text style={styles.wordmark}>dayby</Text>
-      <Text style={styles.title}>A month, made by friends.</Text>
-      <Text style={styles.copy}>
-        dayby keeps the final memory quiet. No in-app music, no public feed, no watermark over the moments.
-      </Text>
+      <Text style={styles.title}>{t('modal.title')}</Text>
+      <Text style={styles.copy}>{t('modal.copy')}</Text>
       <View style={styles.action}>
         <Link href="/" asChild>
           <PrimaryButton onPress={() => undefined} variant="light">
-            Back to dayby
+            {t('modal.back')}
           </PrimaryButton>
         </Link>
       </View>

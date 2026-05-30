@@ -6,15 +6,17 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { useAuth } from '@/src/features/auth/AuthProvider';
 import {
-  getGroupActivityLabel,
   isArchiveCandidate,
   listMyGroups,
   recordGroupActivity,
 } from '@/src/features/groups/groupService';
 import type { GroupWithMembership } from '@/src/features/groups/types';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n, type TranslateFn } from '@/src/lib/i18n/I18nProvider';
 
 export default function ArchiveScreen() {
   const { status } = useAuth();
+  const { formatters, t } = useI18n();
   const [groups, setGroups] = useState<GroupWithMembership[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -28,9 +30,9 @@ export default function ArchiveScreen() {
       setLoading(true);
       listMyGroups()
         .then((nextGroups) => setGroups(nextGroups.filter(isArchiveCandidate)))
-        .catch((error) => Alert.alert('Could not load archive', error.message))
+        .catch((error) => Alert.alert(t('archive.alert.loadFailed'), resolveErrorMessage(error, t)))
         .finally(() => setLoading(false));
-    }, [status]),
+    }, [status, t]),
   );
 
   const restore = async (groupId: string) => {
@@ -38,24 +40,24 @@ export default function ArchiveScreen() {
       await recordGroupActivity(groupId, 'archive_restore');
       setGroups((current) => current.filter((group) => group.id !== groupId));
     } catch (error) {
-      Alert.alert('Could not restore group', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('archive.alert.restoreFailed'), resolveErrorMessage(error, t));
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Memory shelf</Text>
-        <Text style={styles.title}>Archive</Text>
-        <Text style={styles.copy}>Quiet groups stay here. Opening or posting keeps their memories alive.</Text>
+        <Text style={styles.kicker}>{t('archive.kicker')}</Text>
+        <Text style={styles.title}>{t('archive.title')}</Text>
+        <Text style={styles.copy}>{t('archive.copy')}</Text>
       </View>
 
       {loading ? (
         <ActivityIndicator color="#102033" />
       ) : groups.length === 0 ? (
         <View style={styles.emptyCard}>
-          <Text style={styles.emptyTitle}>Nothing quiet yet</Text>
-          <Text style={styles.emptyCopy}>Groups move here after long pauses, without making anyone feel late.</Text>
+          <Text style={styles.emptyTitle}>{t('archive.emptyTitle')}</Text>
+          <Text style={styles.emptyCopy}>{t('archive.emptyCopy')}</Text>
         </View>
       ) : (
         <View style={styles.list}>
@@ -68,10 +70,12 @@ export default function ArchiveScreen() {
                   <View style={styles.groupText}>
                     <Text style={styles.groupName}>{group.name}</Text>
                     <Text style={styles.groupMeta}>
-                      {group.status.replace('_', ' ')} / {getGroupActivityLabel(group)}
+                      {statusLabel(group.status, t)} / {groupActivityLabel(group, t)}
                     </Text>
                     {group.delete_after ? (
-                      <Text style={styles.deleteHint}>Download before {new Date(group.delete_after).toLocaleDateString()}</Text>
+                      <Text style={styles.deleteHint}>
+                        {t('archive.downloadBefore', { date: formatters.date(group.delete_after) })}
+                      </Text>
                     ) : null}
                   </View>
                   <FontAwesome color="#8FAFC2" name="chevron-right" size={14} />
@@ -79,7 +83,7 @@ export default function ArchiveScreen() {
               </Link>
               {group.status === 'archived' || group.status === 'quiet' ? (
                 <PrimaryButton onPress={() => void restore(group.id)} variant="light">
-                  Move to active
+                  {t('archive.moveToActive')}
                 </PrimaryButton>
               ) : null}
             </View>
@@ -88,6 +92,51 @@ export default function ArchiveScreen() {
       )}
     </ScrollView>
   );
+}
+
+function groupActivityLabel(
+  group: Pick<GroupWithMembership, 'last_posted_at' | 'last_viewed_at' | 'last_downloaded_at'>,
+  t: TranslateFn,
+) {
+  const dates = [group.last_posted_at, group.last_viewed_at, group.last_downloaded_at]
+    .filter((value): value is string => Boolean(value))
+    .map((value) => new Date(value));
+
+  if (dates.length === 0) {
+    return t('groups.activity.none');
+  }
+
+  const latest = new Date(Math.max(...dates.map((date) => date.getTime())));
+  const days = Math.floor((Date.now() - latest.getTime()) / 86_400_000);
+
+  if (days <= 0) {
+    return t('groups.activity.today');
+  }
+
+  if (days === 1) {
+    return t('groups.activity.yesterday');
+  }
+
+  return t('groups.activity.daysAgo', { count: days });
+}
+
+function statusLabel(status: GroupWithMembership['status'], t: TranslateFn) {
+  switch (status) {
+    case 'active':
+      return t('groups.status.active');
+    case 'quiet':
+      return t('groups.status.quiet');
+    case 'archived':
+      return t('groups.status.archived');
+    case 'memory_active':
+      return t('groups.status.memory_active');
+    case 'dormant':
+      return t('groups.status.dormant');
+    case 'delete_scheduled':
+      return t('groups.status.delete_scheduled');
+    case 'deleted':
+      return t('groups.status.deleted');
+  }
 }
 
 const styles = StyleSheet.create({

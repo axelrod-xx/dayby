@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { useAuth } from '@/src/features/auth/AuthProvider';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 function TabItem({
   active,
@@ -21,7 +22,9 @@ function TabItem({
     <Link href={href} asChild>
       <Pressable accessibilityRole="tab" style={({ pressed }) => [styles.tabItem, active && styles.tabItemActive, pressed && styles.pressed]}>
         <FontAwesome color={active ? '#FFFFFF' : '#4E6A80'} name={icon} size={16} />
-        <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>{label}</Text>
+        <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.tabLabel, active && styles.tabLabelActive]}>
+          {label}
+        </Text>
       </Pressable>
     </Link>
   );
@@ -29,6 +32,7 @@ function TabItem({
 
 function FloatingTabBar() {
   const { bottom } = useSafeAreaInsets();
+  const { t } = useI18n();
   const pathname = usePathname();
   const router = useRouter();
   const isGroups = pathname.includes('/groups');
@@ -36,15 +40,17 @@ function FloatingTabBar() {
   return (
     <View pointerEvents={Platform.OS === 'web' ? undefined : 'box-none'} style={[styles.floatingWrap, { bottom: Math.max(bottom + 10, 20) }]}>
       <View style={styles.floatingBar}>
-        <TabItem active={!isGroups} href="/(tabs)" icon="home" label="Home" />
+        <TabItem active={!isGroups} href="/(tabs)" icon="home" label={t('tabs.home')} />
         <Pressable
           accessibilityRole="button"
           onPress={() => router.push('/camera')}
           style={({ pressed }) => [styles.keepButton, pressed && styles.keepButtonPressed]}>
           <FontAwesome color="#FFFFFF" name="circle" size={10} />
-          <Text style={styles.keepText}>Keep</Text>
+          <Text adjustsFontSizeToFit numberOfLines={1} style={styles.keepText}>
+            {t('tabs.keep')}
+          </Text>
         </Pressable>
-        <TabItem active={isGroups} href="/(tabs)/groups" icon="users" label="Groups" />
+        <TabItem active={isGroups} href="/(tabs)/groups" icon="users" label={t('tabs.groups')} />
       </View>
     </View>
   );
@@ -52,6 +58,7 @@ function FloatingTabBar() {
 
 export default function TabLayout() {
   const { status } = useAuth();
+  const { t } = useI18n();
   const isSignedIn = status === 'signed-in';
 
   return (
@@ -60,8 +67,8 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: useClientOnlyValue(false, false),
       }}>
-      <Tabs.Screen name="index" options={{ title: 'Home' }} />
-      <Tabs.Screen name="groups" options={{ title: 'Groups' }} />
+      <Tabs.Screen name="index" options={{ title: t('tabs.home') }} />
+      <Tabs.Screen name="groups" options={{ title: t('tabs.groups') }} />
     </Tabs>
   );
 }

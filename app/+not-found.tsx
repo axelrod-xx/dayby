@@ -2,19 +2,22 @@ import { Link, Stack } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function NotFoundScreen() {
+  const { t } = useI18n();
+
   return (
     <>
       <Stack.Screen options={{ title: 'dayby' }} />
       <View style={styles.container}>
-        <Text style={styles.kicker}>Lost moment</Text>
-        <Text style={styles.title}>This page is not here.</Text>
-        <Text style={styles.copy}>The memory is probably somewhere else.</Text>
+        <Text style={styles.kicker}>{t('notFound.kicker')}</Text>
+        <Text style={styles.title}>{t('notFound.title')}</Text>
+        <Text style={styles.copy}>{t('notFound.copy')}</Text>
         <View style={styles.action}>
           <Link href="/" asChild>
             <PrimaryButton onPress={() => undefined} variant="accent">
-              Back home
+              {t('notFound.backHome')}
             </PrimaryButton>
           </Link>
         </View>

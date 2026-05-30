@@ -1,4 +1,5 @@
 import { requireSupabase } from '@/src/lib/supabase';
+import { I18nError } from '@/src/lib/i18n/errors';
 
 export type ReportReason = 'uncomfortable' | 'privacy' | 'harassment' | 'other';
 
@@ -9,10 +10,7 @@ const reasonLabels: Record<ReportReason, string> = {
   other: 'Something else',
 };
 
-export const reportReasons = Object.entries(reasonLabels).map(([value, label]) => ({
-  label,
-  value: value as ReportReason,
-}));
+export const reportReasons: ReportReason[] = ['uncomfortable', 'privacy', 'harassment', 'other'];
 
 export async function createReport(input: {
   groupId?: string | null;
@@ -26,7 +24,7 @@ export async function createReport(input: {
   } = await client.auth.getUser();
 
   if (!user) {
-    throw new Error('You need to sign in before sending a report.');
+    throw new I18nError('safety.error.signInRequired');
   }
 
   const reason = input.note?.trim() ? `${reasonLabels[input.reason]}: ${input.note.trim()}` : reasonLabels[input.reason];

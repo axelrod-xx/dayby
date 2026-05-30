@@ -6,33 +6,13 @@ export type WeeklyMoment = {
   id: string;
   date: string;
   captured_at: string;
-  day_label: string;
-  time_label: string;
   display_name: string;
   r2_key: string;
   playback_url: string | null;
 };
 
-const timeLabel = (capturedAt: string) =>
-  new Intl.DateTimeFormat(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).format(new Date(capturedAt));
-
-const dayLabel = (date: string) =>
-  new Intl.DateTimeFormat(undefined, { weekday: 'short' }).format(new Date(`${date}T00:00:00.000Z`));
-
 export function currentWeekStartString(date = new Date()) {
   return currentWeekStartStringInTimeZone('UTC', date);
-}
-
-export function weekRangeLabel(weekStart: string) {
-  const start = new Date(`${weekStart}T00:00:00.000Z`);
-  const end = new Date(start);
-  end.setUTCDate(start.getUTCDate() + 6);
-  const formatter = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' });
-  return `${formatter.format(start)} - ${formatter.format(end)}`;
 }
 
 export async function listWeeklyMoments(input: {
@@ -88,9 +68,7 @@ export async function listWeeklyMoments(input: {
       id: row.id,
       date: row.date,
       captured_at: capturedAt,
-      day_label: dayLabel(row.date),
-      time_label: timeLabel(capturedAt),
-      display_name: user?.display_name ?? 'dayby friend',
+      display_name: user?.display_name ?? 'dayby',
       r2_key: r2Key,
       playback_url: playbackUrls.get(r2Key) ?? null,
     };

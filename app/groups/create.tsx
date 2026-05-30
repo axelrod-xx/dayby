@@ -4,9 +4,12 @@ import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-nati
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { createGroup, getLocalTimezone } from '@/src/features/groups/groupService';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function CreateGroupScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const [name, setName] = useState('');
   const [memberLimit, setMemberLimit] = useState('8');
   const [saving, setSaving] = useState(false);
@@ -23,7 +26,7 @@ export default function CreateGroupScreen() {
       });
       router.replace({ pathname: '/groups/[groupId]', params: { groupId } } as unknown as Href);
     } catch (error) {
-      Alert.alert('Group creation failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('groupCreate.alert.failed'), resolveErrorMessage(error, t));
     } finally {
       setSaving(false);
     }
@@ -32,17 +35,17 @@ export default function CreateGroupScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.hero}>
-        <Text style={styles.kicker}>New circle</Text>
-        <Text style={styles.title}>Create group</Text>
-        <Text style={styles.copy}>Small by default. Built for friends, not followers.</Text>
+        <Text style={styles.kicker}>{t('groupCreate.kicker')}</Text>
+        <Text style={styles.title}>{t('groupCreate.title')}</Text>
+        <Text style={styles.copy}>{t('groupCreate.copy')}</Text>
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.label}>Group name</Text>
+        <Text style={styles.label}>{t('groupCreate.nameLabel')}</Text>
         <TextInput
           maxLength={80}
           onChangeText={setName}
-          placeholder="Garnet Friends"
+          placeholder={t('groupCreate.namePlaceholder')}
           placeholderTextColor="#8FAFC2"
           style={styles.input}
           value={name}
@@ -50,14 +53,14 @@ export default function CreateGroupScreen() {
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.label}>Timezone</Text>
+        <Text style={styles.label}>{t('groupCreate.timezoneLabel')}</Text>
         <View style={styles.readOnlyBox}>
           <Text style={styles.readOnlyText}>{timezone}</Text>
         </View>
       </View>
 
       <View style={styles.form}>
-        <Text style={styles.label}>Free member limit</Text>
+        <Text style={styles.label}>{t('groupCreate.memberLimitLabel')}</Text>
         <TextInput
           inputMode="numeric"
           maxLength={2}
@@ -68,7 +71,7 @@ export default function CreateGroupScreen() {
       </View>
 
       <PrimaryButton disabled={!name.trim()} loading={saving} onPress={() => void save()}>
-        Start group
+        {t('groupCreate.startGroup')}
       </PrimaryButton>
     </ScrollView>
   );

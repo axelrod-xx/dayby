@@ -4,9 +4,12 @@ import { useRef, useState } from 'react';
 import { Alert, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n } from '@/src/lib/i18n/I18nProvider';
 
 export default function CameraScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const cameraRef = useRef<CameraView>(null);
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [microphonePermission, requestMicrophonePermission] = useMicrophonePermissions();
@@ -21,7 +24,7 @@ export default function CameraScreen() {
     const microphone = muted ? { granted: true } : await requestMicrophonePermission();
 
     if (!camera.granted || !microphone.granted) {
-      Alert.alert('Permission needed', 'dayby needs camera access and microphone access unless muted.');
+      Alert.alert(t('camera.permissionTitle'), t('camera.permissionBody'));
     }
   };
 
@@ -42,7 +45,7 @@ export default function CameraScreen() {
         router.push({ pathname: '/trim', params: { uri: result.uri, muted: muted ? '1' : '0' } } as unknown as Href);
       }
     } catch (error) {
-      Alert.alert('Recording failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('camera.alert.recordingFailed'), resolveErrorMessage(error, t));
     } finally {
       setIsRecording(false);
     }
@@ -56,20 +59,20 @@ export default function CameraScreen() {
     return (
       <View style={styles.permission}>
         <Pressable onPress={() => router.back()} hitSlop={12} style={styles.permissionBack}>
-          <Text style={styles.backText}>Cancel</Text>
+          <Text style={styles.backText}>{t('camera.cancel')}</Text>
         </Pressable>
         <View style={styles.permissionHero}>
-          <Text style={styles.permissionKicker}>Camera</Text>
-          <Text style={styles.title}>Capture today.</Text>
-          <Text style={styles.copy}>Record up to 10 seconds. You will keep only 2 next.</Text>
+          <Text style={styles.permissionKicker}>{t('camera.kicker')}</Text>
+          <Text style={styles.title}>{t('camera.title')}</Text>
+          <Text style={styles.copy}>{t('camera.copy')}</Text>
         </View>
         <View style={styles.permissionActions}>
           <PrimaryButton onPress={() => void requestPermissions()} variant="accent">
-            Allow camera
+            {t('camera.allowCamera')}
           </PrimaryButton>
         </View>
         <Pressable onPress={() => setMuted((current) => !current)}>
-          <Text style={styles.muteText}>{muted ? 'Muted recording selected' : 'Record with sound'}</Text>
+          <Text style={styles.muteText}>{muted ? t('camera.mutedSelected') : t('camera.recordWithSound')}</Text>
         </Pressable>
       </View>
     );
@@ -80,22 +83,22 @@ export default function CameraScreen() {
       <CameraView ref={cameraRef} mode="video" mute={muted} style={styles.camera} videoQuality="720p" />
       <View style={styles.topBar}>
         <Pressable disabled={isRecording} onPress={() => router.back()} hitSlop={12} style={styles.cancelButton}>
-          <Text style={[styles.cancelText, isRecording && styles.cancelTextDisabled]}>Cancel</Text>
+          <Text style={[styles.cancelText, isRecording && styles.cancelTextDisabled]}>{t('camera.cancel')}</Text>
         </Pressable>
         <Pressable onPress={() => setMuted((current) => !current)} style={styles.muteButton}>
-          <Text style={styles.muteButtonText}>{muted ? 'Muted' : 'Sound'}</Text>
+          <Text style={styles.muteButtonText}>{muted ? t('common.muted') : t('common.sound')}</Text>
         </Pressable>
       </View>
       <View style={styles.overlay}>
         <View>
-          <Text style={styles.captureTitle}>{isRecording ? 'Recording' : 'Today'}</Text>
-          <Text style={styles.captureCopy}>Vertical only. Keep 2 sec next.</Text>
+          <Text style={styles.captureTitle}>{isRecording ? t('camera.recording') : t('camera.today')}</Text>
+          <Text style={styles.captureCopy}>{t('camera.captureCopy')}</Text>
         </View>
       </View>
       {isRecording ? (
         <View style={styles.recordingPill}>
           <View style={styles.liveDot} />
-          <Text style={styles.recordingText}>10 sec max</Text>
+          <Text style={styles.recordingText}>{t('camera.maxSeconds')}</Text>
         </View>
       ) : null}
       <View pointerEvents={Platform.OS === 'web' ? undefined : 'none'} style={styles.formatGuide}>

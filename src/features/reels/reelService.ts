@@ -10,18 +10,10 @@ export type DailyMoment = {
   display_name: string;
   date: string;
   captured_at: string;
-  time_label: string;
   r2_key: string;
   has_audio: boolean;
   playback_url: string | null;
 };
-
-const timeLabel = (capturedAt: string) =>
-  new Intl.DateTimeFormat(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).format(new Date(capturedAt));
 
 export async function listDailyMoments(groupId: string, date: string): Promise<DailyMoment[]> {
   const client = requireSupabase();
@@ -75,10 +67,9 @@ export async function listDailyMoments(groupId: string, date: string): Promise<D
       group_id: row.group_id,
       user_id: row.user_id,
       is_mine: row.user_id === currentUser?.id,
-      display_name: user?.display_name ?? 'dayby friend',
+      display_name: user?.display_name ?? 'dayby',
       date: row.date,
       captured_at: row.captured_at,
-      time_label: timeLabel(row.captured_at),
       r2_key: r2Key,
       has_audio: asset?.has_audio ?? true,
       playback_url: playbackUrls.get(r2Key) ?? null,

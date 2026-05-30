@@ -63,7 +63,7 @@ The monthly memory is a sample of the group's atmosphere, not a ranking of the f
 - Memory-first, not editor-first.
 - The public-facing promise emphasizes daily 2-second memories becoming a 1-minute month.
 - The 10-second capture limit is a camera-time instruction, not the headline.
-- Daily Reel emphasizes time and person: `18:42 · RYO`.
+- Daily Reel emphasizes time and person: `18:42 / RYO`.
 - Bookmarking is private and quiet. It can influence curation, but it should never create a visible score.
 - Weekly Memory is intentionally secondary: visible, useful, not pushed.
 - Monthly Highlight emphasizes date, weekday, time, person, and group.

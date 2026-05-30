@@ -64,6 +64,14 @@ The app should not become a one-color blue wash. Use white surfaces, pale blue p
 - Avoid oversized type inside small controls.
 - Button text must fit without wrapping awkwardly.
 
+## Localization Layout
+
+- English, Japanese, and Korean must all fit the existing calm visual system.
+- Buttons and segmented controls should use `numberOfLines={1}` and `adjustsFontSizeToFit` where labels can expand.
+- Prefer short translated copy over literal long translations.
+- Do not increase hero scale to solve translation length. Keep hierarchy stable and tighten copy instead.
+- Date and time labels should use locale-aware formatting, while group timezone calculations stay machine-stable.
+
 ## Interaction Principles
 
 - Posting should remain a small daily action.

@@ -4,9 +4,12 @@ import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { createReport, reportReasons, type ReportReason } from '@/src/features/safety/reportService';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n, type TranslateFn } from '@/src/lib/i18n/I18nProvider';
 
 export default function ReportScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const { groupId, postId } = useLocalSearchParams<{ groupId?: string; postId?: string }>();
   const [reason, setReason] = useState<ReportReason>('uncomfortable');
   const [note, setNote] = useState('');
@@ -16,14 +19,14 @@ export default function ReportScreen() {
     try {
       setSaving(true);
       await createReport({ groupId, postId, reason, note });
-      Alert.alert('Report sent', 'Thanks. We will keep this space careful.', [
+      Alert.alert(t('safety.alert.sentTitle'), t('safety.alert.sentBody'), [
         {
-          text: 'OK',
+          text: t('common.ok'),
           onPress: () => router.back(),
         },
       ]);
     } catch (error) {
-      Alert.alert('Could not send report', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('safety.alert.failed'), resolveErrorMessage(error, t));
     } finally {
       setSaving(false);
     }
@@ -32,20 +35,20 @@ export default function ReportScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.kicker}>Safety</Text>
-        <Text style={styles.title}>Report</Text>
-        <Text style={styles.copy}>Tell us what feels off. dayby is for small groups, not pressure.</Text>
+        <Text style={styles.kicker}>{t('safety.kicker')}</Text>
+        <Text style={styles.title}>{t('safety.title')}</Text>
+        <Text style={styles.copy}>{t('safety.copy')}</Text>
       </View>
 
       <View style={styles.options}>
         {reportReasons.map((item) => {
-          const selected = item.value === reason;
+          const selected = item === reason;
           return (
             <Pressable
-              key={item.value}
-              onPress={() => setReason(item.value)}
+              key={item}
+              onPress={() => setReason(item)}
               style={({ pressed }) => [styles.option, selected && styles.optionSelected, pressed && styles.pressed]}>
-              <Text style={[styles.optionText, selected && styles.optionTextSelected]}>{item.label}</Text>
+              <Text style={[styles.optionText, selected && styles.optionTextSelected]}>{reasonLabel(item, t)}</Text>
               <View style={[styles.radio, selected && styles.radioSelected]}>
                 {selected ? <View style={styles.radioDot} /> : null}
               </View>
@@ -57,7 +60,7 @@ export default function ReportScreen() {
       <TextInput
         multiline
         onChangeText={setNote}
-        placeholder="Add a little context"
+        placeholder={t('safety.notePlaceholder')}
         placeholderTextColor="#8FAFC2"
         style={styles.input}
         textAlignVertical="top"
@@ -65,10 +68,23 @@ export default function ReportScreen() {
       />
 
       <PrimaryButton loading={saving} onPress={() => void submit()} variant="accent">
-        Send report
+        {t('safety.sendReport')}
       </PrimaryButton>
     </ScrollView>
   );
+}
+
+function reasonLabel(reason: ReportReason, t: TranslateFn) {
+  switch (reason) {
+    case 'uncomfortable':
+      return t('safety.reason.uncomfortable');
+    case 'privacy':
+      return t('safety.reason.privacy');
+    case 'harassment':
+      return t('safety.reason.harassment');
+    case 'other':
+      return t('safety.reason.other');
+  }
 }
 
 const styles = StyleSheet.create({

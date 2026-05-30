@@ -5,9 +5,12 @@ import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { listMyGroups } from '@/src/features/groups/groupService';
 import { createDailyPosts, listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
+import { resolveErrorMessage } from '@/src/lib/i18n/errors';
+import { useI18n, type TranslateFn } from '@/src/lib/i18n/I18nProvider';
 
 export default function PostToGroupsScreen() {
   const router = useRouter();
+  const { t } = useI18n();
   const { isNativeTrimmed, muted, processedAt, trimDurationMs, trimStartMs, uri } = useLocalSearchParams<{
     isNativeTrimmed?: string;
     muted?: string;
@@ -25,30 +28,30 @@ export default function PostToGroupsScreen() {
     listMyGroups()
       .then(listPostableGroups)
       .then(setGroups)
-      .catch((error) => Alert.alert('Could not load groups', error.message))
+      .catch((error) => Alert.alert(t('post.alert.loadGroupsFailed'), resolveErrorMessage(error, t)))
       .finally(() => setLoading(false));
-  }, []);
+  }, [t]);
 
   const availableGroups = useMemo(() => groups.filter((group) => !group.posted_today), [groups]);
   const postButtonLabel = useMemo(() => {
     if (posting) {
-      return 'Posting';
+      return t('post.button.posting');
     }
 
     if (selectedIds.size > 0) {
-      return `Post to ${selectedIds.size}`;
+      return t('post.button.postTo', { count: selectedIds.size });
     }
 
     if (groups.length === 0) {
-      return 'Create a group first';
+      return t('post.button.createGroupFirst');
     }
 
     if (availableGroups.length === 0) {
-      return 'Already posted today';
+      return t('post.button.alreadyPosted');
     }
 
-    return 'Select a group';
-  }, [availableGroups.length, groups.length, posting, selectedIds.size]);
+    return t('post.button.selectGroup');
+  }, [availableGroups.length, groups.length, posting, selectedIds.size, t]);
 
   const toggle = (group: PostableGroup) => {
     if (group.posted_today) {
@@ -68,7 +71,7 @@ export default function PostToGroupsScreen() {
 
   const post = async () => {
     if (!uri) {
-      Alert.alert('No video', 'Record a video first.');
+      Alert.alert(t('post.alert.noVideoTitle'), t('post.alert.noVideoBody'));
       return;
     }
 
@@ -94,7 +97,7 @@ export default function PostToGroupsScreen() {
         },
       } as unknown as Href);
     } catch (error) {
-      Alert.alert('Post failed', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(t('post.alert.failed'), resolveErrorMessage(error, t));
     } finally {
       setPosting(false);
     }
@@ -104,25 +107,27 @@ export default function PostToGroupsScreen() {
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.container}>
         <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backButton}>
-          <Text style={styles.backText}>Back</Text>
+          <Text style={styles.backText}>{t('post.back')}</Text>
         </Pressable>
 
         <View>
-          <Text style={styles.kicker}>Send moment</Text>
-          <Text style={styles.title}>Choose who keeps it.</Text>
-          <Text style={styles.copy}>One 2-second file, shared into the groups you pick.</Text>
+          <Text style={styles.kicker}>{t('post.kicker')}</Text>
+          <Text style={styles.title}>{t('post.title')}</Text>
+          <Text style={styles.copy}>{t('post.copy')}</Text>
         </View>
 
         <View style={styles.momentCard}>
-          <Text style={styles.momentKicker}>Ready to post</Text>
-          <Text style={styles.momentTitle}>{muted === '1' ? 'Muted export' : 'Original sound'}</Text>
-          <Text style={styles.momentMeta}>{Number(trimStartMs ?? 0) / 1000}s start / 2 sec kept</Text>
+          <Text style={styles.momentKicker}>{t('post.readyToPost')}</Text>
+          <Text style={styles.momentTitle}>{muted === '1' ? t('common.mutedExport') : t('common.originalSound')}</Text>
+          <Text style={styles.momentMeta}>
+            {t('post.momentMeta', { start: Number(trimStartMs ?? 0) / 1000 })}
+          </Text>
         </View>
 
         {isNativeTrimmed !== '1' ? (
           <View style={styles.notice}>
-            <Text style={styles.noticeTitle}>Dev preview</Text>
-            <Text style={styles.noticeCopy}>Native 2-second export is not enabled yet, so real uploads stay blocked.</Text>
+            <Text style={styles.noticeTitle}>{t('post.devPreviewTitle')}</Text>
+            <Text style={styles.noticeCopy}>{t('post.devPreviewCopy')}</Text>
           </View>
         ) : null}
 
@@ -130,11 +135,11 @@ export default function PostToGroupsScreen() {
           <ActivityIndicator color="#102033" />
         ) : groups.length === 0 ? (
           <View style={styles.empty}>
-            <Text style={styles.emptyTitle}>No groups yet</Text>
-            <Text style={styles.emptyCopy}>Create or join a group before posting today's moment.</Text>
+            <Text style={styles.emptyTitle}>{t('post.emptyTitle')}</Text>
+            <Text style={styles.emptyCopy}>{t('post.emptyCopy')}</Text>
             <View style={styles.emptyAction}>
               <PrimaryButton onPress={() => router.push('/groups/create' as Href)} variant="light">
-                Create group
+                {t('post.createGroup')}
               </PrimaryButton>
             </View>
           </View>
@@ -159,7 +164,9 @@ export default function PostToGroupsScreen() {
                     <View style={styles.groupText}>
                       <Text style={styles.groupName}>{group.name}</Text>
                       <Text style={styles.groupMeta}>
-                        {group.posted_today ? 'Already posted today' : `${group.member_role} / ready for today`}
+                        {group.posted_today
+                          ? t('post.groupMeta.posted')
+                          : t('post.groupMeta.ready', { role: roleLabel(group.member_role, t) })}
                       </Text>
                     </View>
                     <View style={[styles.check, selected && styles.checkSelected]}>
@@ -184,6 +191,17 @@ export default function PostToGroupsScreen() {
       </View>
     </View>
   );
+}
+
+function roleLabel(role: PostableGroup['member_role'], t: TranslateFn) {
+  switch (role) {
+    case 'owner':
+      return t('groups.role.owner');
+    case 'admin':
+      return t('groups.role.admin');
+    case 'member':
+      return t('groups.role.member');
+  }
 }
 
 const styles = StyleSheet.create({

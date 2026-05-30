@@ -32,7 +32,12 @@ export function PrimaryButton({
       {loading ? (
         <ActivityIndicator color={isLight ? '#102033' : '#FFFFFF'} />
       ) : (
-        <Text style={[textStyles.label, isLight ? textStyles.lightLabel : textStyles.darkLabel]}>{children}</Text>
+        <Text
+          adjustsFontSizeToFit
+          numberOfLines={1}
+          style={[textStyles.label, isLight ? textStyles.lightLabel : textStyles.darkLabel]}>
+          {children}
+        </Text>
       )}
     </Pressable>
   );
