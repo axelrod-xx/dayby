@@ -13,7 +13,7 @@ import {
 import type { GroupInvite, GroupMemberProfile } from '@/src/features/groups/types';
 import { listPostableGroups, type PostableGroup } from '@/src/features/posts/postService';
 import { previousDateString } from '@/src/features/reels/reelService';
-import { currentWeekStartString } from '@/src/features/weekly/weeklyService';
+import { currentWeekStartStringInTimeZone, yearMonthInTimeZone } from '@/src/lib/groupTime';
 
 export default function GroupDetailScreen() {
   const { groupId } = useLocalSearchParams<{ groupId: string }>();
@@ -22,10 +22,6 @@ export default function GroupDetailScreen() {
   const [invites, setInvites] = useState<GroupInvite[]>([]);
   const [loading, setLoading] = useState(true);
   const [creatingInvite, setCreatingInvite] = useState(false);
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
-  const weekStart = currentWeekStartString(now);
 
   const load = async () => {
     if (!groupId) {
@@ -102,6 +98,9 @@ export default function GroupDetailScreen() {
   }
 
   const canManageInvites = group.member_role === 'owner' || group.member_role === 'admin';
+  const yesterday = previousDateString(group.timezone);
+  const weekStart = currentWeekStartStringInTimeZone(group.timezone);
+  const { month: currentMonth, year: currentYear } = yearMonthInTimeZone(group.timezone);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -138,7 +137,7 @@ export default function GroupDetailScreen() {
             <Link
               href={{
                 pathname: '/daily/[groupId]/[date]',
-                params: { groupId: group.id, date: previousDateString() },
+                params: { groupId: group.id, date: yesterday },
               }}
               asChild>
               <PrimaryButton onPress={() => undefined} variant="light">
@@ -182,7 +181,7 @@ export default function GroupDetailScreen() {
           <Link
             href={{
               pathname: '/daily/[groupId]/[date]',
-              params: { groupId: group.id, date: previousDateString() },
+              params: { groupId: group.id, date: yesterday },
             }}
             asChild>
             <Text style={styles.inlineAction}>Open</Text>

@@ -98,7 +98,7 @@ export default function CameraScreen() {
           <Text style={styles.recordingText}>10 sec max</Text>
         </View>
       ) : null}
-      <View style={styles.formatGuide}>
+      <View pointerEvents={Platform.OS === 'web' ? undefined : 'none'} style={styles.formatGuide}>
         <View style={styles.formatCornerTopLeft} />
         <View style={styles.formatCornerTopRight} />
         <View style={styles.formatCornerBottomLeft} />
@@ -270,7 +270,6 @@ const styles = StyleSheet.create({
     top: 144,
     bottom: 148,
     borderRadius: 16,
-    pointerEvents: 'none',
   },
   formatCornerTopLeft: {
     position: 'absolute',

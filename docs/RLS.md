@@ -68,7 +68,13 @@
 ### reports
 
 - Insert: authenticated users.
-- Select/update: reporter for own report status or admin tooling later.
+- Select/update: reporter for own report status, and group owner/admin for reports attached to their group.
+
+### upload_url_requests
+
+- Select: user can see only their own upload URL request history.
+- Insert: user can record only their own upload URL request.
+- Update/delete: unavailable to the app.
 
 ## Backend-Only Operations
 

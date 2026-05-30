@@ -1,5 +1,6 @@
 import { requireSupabase } from '@/src/lib/supabase';
-import { requestPlaybackUrl } from '@/src/features/video/playbackService';
+import { requestPlaybackUrls } from '@/src/features/video/playbackService';
+import { previousDateStringInTimeZone } from '@/src/lib/groupTime';
 
 export type DailyMoment = {
   post_id: string;
@@ -54,27 +55,35 @@ export async function listDailyMoments(groupId: string, date: string): Promise<D
     throw error;
   }
 
-  const moments = await Promise.all(
-    (data ?? []).map(async (row) => {
-      const user = Array.isArray(row.users) ? row.users[0] : row.users;
-      const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
-      const r2Key = asset?.r2_key ?? '';
-
-      return {
-        post_id: row.id,
-        group_id: row.group_id,
-        user_id: row.user_id,
-        is_mine: row.user_id === currentUser?.id,
-        display_name: user?.display_name ?? 'dayby friend',
-        date: row.date,
-        captured_at: row.captured_at,
-        time_label: timeLabel(row.captured_at),
-        r2_key: r2Key,
-        has_audio: asset?.has_audio ?? true,
-        playback_url: await requestPlaybackUrl(r2Key),
-      } satisfies DailyMoment;
-    }),
+  const rows = data ?? [];
+  const playbackUrls = await requestPlaybackUrls(
+    rows
+      .map((row) => {
+        const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
+        return asset?.r2_key ?? '';
+      })
+      .filter(Boolean),
   );
+
+  const moments = rows.map((row) => {
+    const user = Array.isArray(row.users) ? row.users[0] : row.users;
+    const asset = Array.isArray(row.video_assets) ? row.video_assets[0] : row.video_assets;
+    const r2Key = asset?.r2_key ?? '';
+
+    return {
+      post_id: row.id,
+      group_id: row.group_id,
+      user_id: row.user_id,
+      is_mine: row.user_id === currentUser?.id,
+      display_name: user?.display_name ?? 'dayby friend',
+      date: row.date,
+      captured_at: row.captured_at,
+      time_label: timeLabel(row.captured_at),
+      r2_key: r2Key,
+      has_audio: asset?.has_audio ?? true,
+      playback_url: playbackUrls.get(r2Key) ?? null,
+    } satisfies DailyMoment;
+  });
 
   return moments;
 }
@@ -92,8 +101,4 @@ export async function removeDailyPost(input: { groupId: string; postId: string }
   }
 }
 
-export const previousDateString = () => {
-  const date = new Date();
-  date.setDate(date.getDate() - 1);
-  return date.toISOString().slice(0, 10);
-};
+export const previousDateString = (timeZone = 'UTC') => previousDateStringInTimeZone(timeZone);

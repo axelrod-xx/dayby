@@ -4,6 +4,7 @@ import {
   uploadVideoToSignedUrl,
 } from '@/src/features/video/uploadService';
 import { env } from '@/src/lib/env';
+import { dateStringInTimeZone } from '@/src/lib/groupTime';
 import { requireSupabase } from '@/src/lib/supabase';
 
 import { recordGroupActivity } from '../groups/groupService';
@@ -40,7 +41,7 @@ const uuid = () => {
   });
 };
 
-export const groupDateString = (date = new Date()) => date.toISOString().slice(0, 10);
+export const groupDateString = (date = new Date(), timeZone = 'UTC') => dateStringInTimeZone(date, timeZone);
 
 export async function listPostableGroups(groups: GroupWithMembership[]): Promise<PostableGroup[]> {
   const client = requireSupabase();
@@ -52,12 +53,13 @@ export async function listPostableGroups(groups: GroupWithMembership[]): Promise
     return [];
   }
 
-  const today = groupDateString();
+  const todayByGroup = new Map(groups.map((group) => [group.id, groupDateString(new Date(), group.timezone)]));
+  const dates = Array.from(new Set(todayByGroup.values()));
   const { data, error } = await client
     .from('daily_posts')
-    .select('group_id')
+    .select('group_id, date')
     .eq('user_id', user.id)
-    .eq('date', today)
+    .in('date', dates)
     .in(
       'group_id',
       groups.map((group) => group.id),
@@ -67,17 +69,17 @@ export async function listPostableGroups(groups: GroupWithMembership[]): Promise
     throw error;
   }
 
-  const postedIds = new Set((data ?? []).map((post) => post.group_id as string));
+  const postedKeys = new Set((data ?? []).map((post) => `${post.group_id as string}:${post.date as string}`));
 
   return groups.map((group) => ({
     ...group,
-    posted_today: postedIds.has(group.id),
+    posted_today: postedKeys.has(`${group.id}:${todayByGroup.get(group.id)}`),
   }));
 }
 
 async function createUploadKey(input: {
   uri: string;
-  sizeBytes?: number;
+  sizeBytes: number;
 }): Promise<string> {
   if (!env.enableR2Uploads) {
     if (__DEV__) {
@@ -113,6 +115,20 @@ export async function createDailyPosts(input: CreatePostsInput) {
     throw new Error('Choose at least one group.');
   }
 
+  const { data: selectedGroups, error: selectedGroupsError } = await client
+    .from('groups')
+    .select('id, timezone')
+    .in('id', input.groupIds);
+
+  if (selectedGroupsError) {
+    throw selectedGroupsError;
+  }
+
+  const timezoneByGroup = new Map((selectedGroups ?? []).map((group) => [group.id as string, group.timezone as string]));
+  if (timezoneByGroup.size !== input.groupIds.length) {
+    throw new Error('Could not confirm every group timezone before posting.');
+  }
+
   assertTwoSecondUploadReady({
     isNativeTrimmed: input.isNativeTrimmed,
     trimDurationMs: input.trimDurationMs,
@@ -120,7 +136,11 @@ export async function createDailyPosts(input: CreatePostsInput) {
 
   const sizeBytes = input.sizeBytes ?? (await getLocalVideoFileSize(input.uri));
 
-  if (sizeBytes && sizeBytes > 3_000_000) {
+  if (typeof sizeBytes !== 'number' || !Number.isFinite(sizeBytes)) {
+    throw new Error('Could not confirm the processed video size. Try recording again.');
+  }
+
+  if (sizeBytes > 3_000_000) {
     throw new Error('This 2-second video is too large. Try recording again with less motion or better lighting.');
   }
 
@@ -137,7 +157,7 @@ export async function createDailyPosts(input: CreatePostsInput) {
       duration_ms: 2000,
       has_audio: input.hasAudio,
       captured_at: input.capturedAt,
-      size_bytes: sizeBytes ?? null,
+      size_bytes: sizeBytes,
       trim_start_ms: input.trimStartMs,
       trim_duration_ms: input.trimDurationMs,
       is_native_trimmed: input.isNativeTrimmed,
@@ -150,12 +170,11 @@ export async function createDailyPosts(input: CreatePostsInput) {
     throw assetError;
   }
 
-  const today = groupDateString(new Date(input.capturedAt));
   const posts = input.groupIds.map((groupId) => ({
     asset_id: asset.id,
     group_id: groupId,
     user_id: user.id,
-    date: today,
+    date: groupDateString(new Date(input.capturedAt), timezoneByGroup.get(groupId) ?? 'UTC'),
     captured_at: input.capturedAt,
   }));
 

@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system/legacy';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 import { useMemo, useState } from 'react';
@@ -5,9 +6,11 @@ import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/src/components/PrimaryButton';
 import { recordGroupActivity } from '@/src/features/groups/groupService';
+import { requestPlaybackUrls } from '@/src/features/video/playbackService';
 
 type ExportActionsProps = {
   groupId: string;
+  r2Keys?: Array<string | null | undefined>;
   sourceUris?: Array<string | null | undefined>;
   videoUri?: string | null;
 };
@@ -20,22 +23,53 @@ const normalizeFileUri = (path: string) => {
   return `file://${path}`;
 };
 
-export function ExportActions({ groupId, sourceUris = [], videoUri }: ExportActionsProps) {
+const downloadRemoteSource = async (uri: string, index: number) => {
+  if (!uri.startsWith('http')) {
+    return uri;
+  }
+
+  const cacheDirectory = FileSystem.cacheDirectory;
+
+  if (!cacheDirectory) {
+    throw new Error('This device has no export cache directory available.');
+  }
+
+  const target = `${cacheDirectory}dayby-export-${Date.now()}-${index}.mp4`;
+  const downloaded = await FileSystem.downloadAsync(uri, target);
+  return downloaded.uri;
+};
+
+export function ExportActions({ groupId, r2Keys = [], sourceUris = [], videoUri }: ExportActionsProps) {
   const [generatedUri, setGeneratedUri] = useState<string | null>(videoUri ?? null);
   const [saving, setSaving] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const keys = useMemo(() => r2Keys.filter((key): key is string => Boolean(key)), [r2Keys]);
   const sources = useMemo(
     () => (videoUri ? [videoUri] : sourceUris.filter((source): source is string => Boolean(source))),
     [sourceUris, videoUri],
   );
+  const sourceCount = videoUri ? 1 : keys.length || sources.length;
 
   const unavailable = () => {
     Alert.alert(
       'Export is not ready yet',
-      sources.length === 0
+      sourceCount === 0
         ? 'Open this after uploaded clips have playback URLs. Your moments remain safe in the archive.'
         : 'Export needs a development build or device build with native video tools.',
     );
+  };
+
+  const resolveSources = async () => {
+    if (videoUri) {
+      return [videoUri];
+    }
+
+    if (keys.length === 0) {
+      return sources;
+    }
+
+    const playbackUrls = await requestPlaybackUrls(keys);
+    return keys.map((key) => playbackUrls.get(key)).filter((source): source is string => Boolean(source));
   };
 
   const prepareVideo = async () => {
@@ -43,21 +77,28 @@ export function ExportActions({ groupId, sourceUris = [], videoUri }: ExportActi
       return generatedUri;
     }
 
-    if (Platform.OS === 'web' || sources.length === 0) {
+    if (Platform.OS === 'web' || sourceCount === 0) {
       unavailable();
       return null;
     }
 
+    const remoteOrLocalSources = await resolveSources();
+    if (remoteOrLocalSources.length === 0) {
+      unavailable();
+      return null;
+    }
+
+    const localSources = await Promise.all(remoteOrLocalSources.map(downloadRemoteSource));
     const videoTrim = await import('react-native-video-trim');
     const output =
-      sources.length === 1
-        ? await videoTrim.compress(sources[0], {
+      localSources.length === 1
+        ? await videoTrim.compress(localSources[0], {
             bitrate: 1_200_000,
             frameRate: 30,
             outputExt: 'mp4',
             width: 720,
           })
-        : await videoTrim.merge(sources, { outputExt: 'mp4' });
+        : await videoTrim.merge(localSources, { outputExt: 'mp4' });
     const nextUri = normalizeFileUri(output.outputPath);
     setGeneratedUri(nextUri);
     return nextUri;
@@ -116,8 +157,8 @@ export function ExportActions({ groupId, sourceUris = [], videoUri }: ExportActi
     <View style={styles.container}>
       <Text style={styles.kicker}>Export</Text>
       <Text style={styles.copy}>
-        {sources.length > 0
-          ? `${sources.length} ${sources.length === 1 ? 'clip' : 'clips'} become a clean MP4 for Reels, TikTok, Stories, or LINE.`
+        {sourceCount > 0
+          ? `${sourceCount} ${sourceCount === 1 ? 'clip' : 'clips'} become a clean MP4 for Reels, TikTok, Stories, or LINE.`
           : 'Uploaded clips can be saved or shared from here once playback URLs are ready.'}
       </Text>
       <View style={styles.actions}>

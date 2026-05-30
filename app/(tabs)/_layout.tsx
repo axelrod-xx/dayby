@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs, usePathname, useRouter } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
@@ -34,7 +34,7 @@ function FloatingTabBar() {
   const isGroups = pathname.includes('/groups');
 
   return (
-    <View style={[styles.floatingWrap, { bottom: Math.max(bottom + 10, 20), pointerEvents: 'box-none' }]}>
+    <View pointerEvents={Platform.OS === 'web' ? undefined : 'box-none'} style={[styles.floatingWrap, { bottom: Math.max(bottom + 10, 20) }]}>
       <View style={styles.floatingBar}>
         <TabItem active={!isGroups} href="/(tabs)" icon="home" label="Home" />
         <Pressable

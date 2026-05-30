@@ -254,7 +254,13 @@ export default function DailyReelScreen() {
         </Link>
       </View>
 
-      {groupId ? <ExportActions groupId={groupId} sourceUris={moments.map((moment) => moment.playback_url)} /> : null}
+      {groupId ? (
+        <ExportActions
+          groupId={groupId}
+          r2Keys={moments.map((moment) => moment.r2_key)}
+          sourceUris={moments.map((moment) => moment.playback_url)}
+        />
+      ) : null}
     </ScrollView>
   );
 }

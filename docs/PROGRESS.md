@@ -15,6 +15,11 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - R2 signed upload URL smoke test passed with the development auth account.
 - EAS development env now has `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true`; uploads remain guarded by native trim success.
 - Daily, Weekly, and Monthly export actions now generate a clean MP4 on-device using native video merge/compress.
+- Playback URL fetching is batched for Daily, Weekly, and Monthly screens to avoid one Edge Function call per clip.
+- Remote export clips are downloaded to local cache before native merge/compress.
+- Group posting and group detail date links now use `groups.timezone` for today/yesterday/week/month boundaries.
+- Remote Supabase migration `harden_video_access` applied and verified for upload URL request logging plus reports admin RLS.
+- Supabase Edge Functions redeployed: `r2-upload-url` now requires signed content-length and request logging; `r2-download-url` supports batched `keys`.
 - Expo SDK 55 patch dependencies aligned and `npm audit` now reports zero vulnerabilities via a targeted `uuid` override for Expo's `xcode` toolchain.
 - Project documentation scaffold.
 - Expo + TypeScript + Expo Router scaffold.
@@ -199,6 +204,7 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - iOS IPA ready: `https://expo.dev/artifacts/eas/2AsCzYBveq3j6pWkftDcVM.ipa`
 - Android development build from latest commit `1ae92b3` finished: `f71b2ba2-bc39-4416-9fa4-49163101d2cb`.
 - Android APK ready: `https://expo.dev/artifacts/eas/wvN9JDgGteAT3TUBppZez6.apk`
+- Claude Code review fixes started: upload size enforcement, playback URL batching, group timezone dates, local export downloads, and reports admin RLS.
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 

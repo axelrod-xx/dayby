@@ -112,7 +112,11 @@ export default function MonthlyMemoryScreen() {
       </View>
 
       {params.groupId ? (
-        <ExportActions groupId={params.groupId} sourceUris={moments.map((moment) => moment.playback_url)} />
+        <ExportActions
+          groupId={params.groupId}
+          r2Keys={moments.map((moment) => moment.r2_key)}
+          sourceUris={moments.map((moment) => moment.playback_url)}
+        />
       ) : null}
     </ScrollView>
   );

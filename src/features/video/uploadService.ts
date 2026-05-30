@@ -10,7 +10,7 @@ type SignedUploadResponse = {
 
 export async function requestSignedVideoUpload(input: {
   contentType: 'video/mp4';
-  sizeBytes?: number;
+  sizeBytes: number;
 }): Promise<SignedUploadResponse> {
   if (!env.apiBaseUrl) {
     throw new Error('EXPO_PUBLIC_API_BASE_URL is required before uploading videos.');
@@ -41,14 +41,18 @@ export async function requestSignedVideoUpload(input: {
   return (await response.json()) as SignedUploadResponse;
 }
 
-export async function getLocalVideoFileSize(uri: string): Promise<number | undefined> {
+export async function getLocalVideoFileSize(uri: string): Promise<number> {
   const info = await FileSystem.getInfoAsync(uri);
 
   if (!info.exists) {
     throw new Error('Processed video file was not found on this device.');
   }
 
-  return typeof info.size === 'number' ? info.size : undefined;
+  if (typeof info.size !== 'number' || !Number.isFinite(info.size)) {
+    throw new Error('Could not confirm the processed video size. Try recording again.');
+  }
+
+  return info.size;
 }
 
 export async function uploadVideoToSignedUrl(input: {

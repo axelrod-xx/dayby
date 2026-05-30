@@ -20,6 +20,7 @@ Applied migrations:
 - `group_lifecycle_rpc`
 - `add_weekly_generated_video_type`
 - `bookmarks_and_monthly_highlights`
+- `harden_video_access`
 
 Local app values:
 
@@ -50,6 +51,8 @@ Supabase Edge Functions deployed with JWT verification:
 
 - `r2-upload-url`
 - `r2-download-url`
+
+`r2-upload-url` requires a client-confirmed `sizeBytes`, signs `content-length`, and records upload URL requests for a rolling daily limit. `r2-download-url` supports batched playback URL requests with `keys`.
 
 R2 secrets are configured in Supabase Edge Function secrets. Rotate the development R2 token before production because it was visible during setup.
 

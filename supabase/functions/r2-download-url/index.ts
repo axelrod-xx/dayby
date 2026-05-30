@@ -4,6 +4,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2.49.1';
 
 type RequestBody = {
   key?: string;
+  keys?: string[];
 };
 
 const corsHeaders = {
@@ -33,6 +34,7 @@ const client = new S3Client({
     secretAccessKey: readEnv('R2_SECRET_ACCESS_KEY'),
   },
 });
+const MAX_KEYS_PER_REQUEST = 50;
 
 Deno.serve(async (request) => {
   if (request.method === 'OPTIONS') {
@@ -66,30 +68,51 @@ Deno.serve(async (request) => {
     }
 
     const body = (await request.json()) as RequestBody;
-    if (!body.key?.startsWith('assets/')) {
+    const requestedKeys = Array.from(
+      new Set(Array.isArray(body.keys) ? body.keys : body.key ? [body.key] : []),
+    );
+
+    if (requestedKeys.length === 0 || requestedKeys.length > MAX_KEYS_PER_REQUEST) {
+      return Response.json({ error: 'Invalid key count' }, { status: 400, headers: corsHeaders });
+    }
+
+    if (requestedKeys.some((key) => !key.startsWith('assets/'))) {
       return Response.json({ error: 'Invalid key' }, { status: 400, headers: corsHeaders });
     }
 
-    const { data: asset, error: assetError } = await supabase
+    const { data: assets, error: assetError } = await supabase
       .from('video_assets')
-      .select('id')
-      .eq('r2_key', body.key)
-      .maybeSingle();
+      .select('r2_key')
+      .in('r2_key', requestedKeys);
 
-    if (assetError || !asset) {
+    if (assetError) {
       return Response.json({ error: 'Asset not found or not allowed' }, { status: 403, headers: corsHeaders });
     }
 
-    const command = new GetObjectCommand({
-      Bucket: bucket,
-      Key: body.key,
-    });
+    const allowedKeys = new Set((assets ?? []).map((asset) => asset.r2_key as string));
+    const downloadUrls = Object.fromEntries(
+      await Promise.all(
+        requestedKeys.map(async (key) => {
+          if (!allowedKeys.has(key)) {
+            return [key, null] as const;
+          }
 
-    const downloadUrl = await getSignedUrl(client, command, { expiresIn: 300 });
+          const command = new GetObjectCommand({
+            Bucket: bucket,
+            Key: key,
+          });
+          const downloadUrl = await getSignedUrl(client, command, { expiresIn: 300 });
+          return [key, downloadUrl] as const;
+        }),
+      ),
+    );
+
+    const singleKey = body.key && !Array.isArray(body.keys);
 
     return Response.json(
       {
-        downloadUrl,
+        downloadUrl: singleKey ? downloadUrls[body.key] : undefined,
+        downloadUrls,
         expiresIn: 300,
       },
       { headers: corsHeaders },

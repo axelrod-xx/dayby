@@ -34,6 +34,8 @@ const client = new S3Client({
     secretAccessKey: readEnv('R2_SECRET_ACCESS_KEY'),
   },
 });
+const MAX_UPLOAD_BYTES = 3_000_000;
+const MAX_DAILY_UPLOAD_URLS = 80;
 
 Deno.serve(async (request) => {
   if (request.method === 'OPTIONS') {
@@ -68,13 +70,42 @@ Deno.serve(async (request) => {
 
     const body = (await request.json()) as RequestBody;
     const contentType = body.contentType ?? 'video/mp4';
+    const sizeBytes = body.sizeBytes;
 
     if (contentType !== 'video/mp4') {
       return Response.json({ error: 'Only video/mp4 uploads are allowed' }, { status: 400, headers: corsHeaders });
     }
 
-    if (body.sizeBytes && body.sizeBytes > 3_000_000) {
+    if (typeof sizeBytes !== 'number' || !Number.isInteger(sizeBytes) || sizeBytes <= 0) {
+      return Response.json({ error: 'Video size is required before upload' }, { status: 400, headers: corsHeaders });
+    }
+
+    if (sizeBytes > MAX_UPLOAD_BYTES) {
       return Response.json({ error: 'Video is too large for MVP upload target' }, { status: 400, headers: corsHeaders });
+    }
+
+    const since = new Date(Date.now() - 86_400_000).toISOString();
+    const { count, error: countError } = await supabase
+      .from('upload_url_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .gte('created_at', since);
+
+    if (countError) {
+      return Response.json({ error: 'Could not check upload rate limit' }, { status: 500, headers: corsHeaders });
+    }
+
+    if ((count ?? 0) >= MAX_DAILY_UPLOAD_URLS) {
+      return Response.json({ error: 'Daily upload limit reached' }, { status: 429, headers: corsHeaders });
+    }
+
+    const { error: logError } = await supabase.from('upload_url_requests').insert({
+      size_bytes: sizeBytes,
+      user_id: user.id,
+    });
+
+    if (logError) {
+      return Response.json({ error: 'Could not record upload request' }, { status: 500, headers: corsHeaders });
     }
 
     const key = `assets/${user.id}/${crypto.randomUUID()}.mp4`;
@@ -82,6 +113,7 @@ Deno.serve(async (request) => {
       Bucket: bucket,
       Key: key,
       ContentType: contentType,
+      ContentLength: sizeBytes,
     });
 
     const uploadUrl = await getSignedUrl(client, command, { expiresIn: 60 });
