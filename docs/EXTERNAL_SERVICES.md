@@ -72,11 +72,12 @@ Development EAS builds now use `EXPO_PUBLIC_ENABLE_R2_UPLOADS=true`. The app sti
 
 Development builds:
 
-- Android with native trim: `https://expo.dev/artifacts/eas/a2HhNgdv8TMoGhhCXwZKxE.apk`
-- iOS simulator archive: `https://expo.dev/artifacts/eas/4T1yyw62ztqbZJ8t8PzEzK.tar.gz`
-- iOS real-device development build: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/a887a540-2a82-4ddf-8e66-985eb11ce719`
+- Latest Android development APK: `https://expo.dev/artifacts/eas/wvN9JDgGteAT3TUBppZez6.apk`
+- Latest Android build page: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/f71b2ba2-bc39-4416-9fa4-49163101d2cb`
+- Latest iOS real-device development IPA: `https://expo.dev/artifacts/eas/2AsCzYBveq3j6pWkftDcVM.ipa`
+- Latest iOS build page: `https://expo.dev/accounts/ryoaxelrod/projects/dayby/builds/0ce8d6b1-94b8-4e9a-83bf-510333ced2b3`
 
-The iOS real-device development build finished with an Ad Hoc profile for the registered iPhone.
+The latest builds were generated from commit `1ae92b3`. The iOS real-device development build finished with an Ad Hoc profile for the registered iPhone.
 
 ## GitHub
 

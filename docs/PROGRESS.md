@@ -195,6 +195,10 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - Deferred Expo Notifications for the MVP device review. The native app does not request notification permission until Apple Push capability is configured and the iOS Ad Hoc profile is regenerated.
 - Restored `docs/USER_ACTIONS.md` in readable Japanese with iOS/Android real-device test focus points.
 - Replaced the default Expo tab bar with a custom floating pill navigation and a centered `Keep` action, then tuned button labels toward action/experience language.
+- iOS development build from latest commit `1ae92b3` finished: `0ce8d6b1-94b8-4e9a-83bf-510333ced2b3`.
+- iOS IPA ready: `https://expo.dev/artifacts/eas/2AsCzYBveq3j6pWkftDcVM.ipa`
+- Android development build from latest commit `1ae92b3` finished: `f71b2ba2-bc39-4416-9fa4-49163101d2cb`.
+- Android APK ready: `https://expo.dev/artifacts/eas/wvN9JDgGteAT3TUBppZez6.apk`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
@@ -202,15 +206,12 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 
 - Validate Apple and Google providers after account setup.
 - Use dev email sign-in while Apple/Google provider setup is pending.
-- Install Android development APK and verify native 2-second trim on device.
-- Install iOS development build and verify native 2-second trim on device.
-- Install the follow-up iOS build after it finishes and re-test Trim drag selection plus the fixed Post action bar.
+- Install the latest Android APK and verify native 2-second trim on device.
+- Install the latest iOS development build and verify native 2-second trim on device.
 - Verify real R2 upload on device after native trim succeeds.
-- Check Android development build result and install the APK when complete.
 - Add server-generated Daily/Monthly MP4 cache later if on-device export is too slow.
 - Keep Weekly Memory visually secondary; Monthly remains the product promise.
 - Add automatic scheduled status transitions for Active / Quiet / Archived / Dormant.
-- Re-run `npm audit` and `npx expo install --check` when npm registry requests stop timing out.
 
 ## Blocked By External Setup
 
@@ -218,8 +219,7 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - Apple Sign in with Apple configuration.
 - Google OAuth configuration.
 - R2 server-side access key created and registered in Supabase Edge Function secrets. Rotate before production.
-- iOS and Android development builds for native camera verification.
-- iOS development build is ready; real-device camera/trim verification is still pending.
+- Real-device camera/trim/export verification is still pending.
 - iOS simulator build can be used for app compilation checks, but camera verification still needs a real device.
 
 ## Tool Limits Observed
