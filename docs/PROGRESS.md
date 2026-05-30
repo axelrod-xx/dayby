@@ -205,6 +205,10 @@ Phase 6/7 pivot: private bookmarks, complete archive, and monthly highlight.
 - Android development build from latest commit `1ae92b3` finished: `f71b2ba2-bc39-4416-9fa4-49163101d2cb`.
 - Android APK ready: `https://expo.dev/artifacts/eas/wvN9JDgGteAT3TUBppZez6.apk`
 - Claude Code review fixes started: upload size enforcement, playback URL batching, group timezone dates, local export downloads, and reports admin RLS.
+- iOS development build from review-fix commit `03ef3bd` finished: `444060b7-f4ac-4951-978c-0e404f0b4017`.
+- iOS IPA ready: `https://expo.dev/artifacts/eas/9qPJEdRfqyn4oXDWURDndk.ipa`
+- Android development build from review-fix commit `03ef3bd` finished: `07544b1b-e168-4733-8466-678c4dedf721`.
+- Android APK ready: `https://expo.dev/artifacts/eas/UuA3BpTWaUYmzPK9hVnzK.apk`
 - Supabase RLS enabled on `users`, `groups`, `group_members`, `group_invites`
 - Supabase RLS enabled on memory core tables.
 
